@@ -34,10 +34,11 @@ FROM base AS builder
 COPY --from=pruner /app/out/json/ ./
 # ... rồi source (cần có mặt TRƯỚC khi install để postinstall `prisma generate` chạy được)
 COPY --from=pruner /app/out/full/ ./
-# Dùng `npm install` (KHÔNG `npm ci`): package-lock.json gốc của monorepo đang lệch
-# so với package.json (npm ci đòi khớp tuyệt đối -> fail). `--legacy-peer-deps` vì repo
-# có xung đột peer-deps (MRP cũng dùng cờ này). Đánh đổi: kém reproducible hơn ci.
-RUN npm install --legacy-peer-deps --no-audit --no-fund
+# package-lock.json gốc của monorepo đang LỆCH nặng so với package.json → `npm ci` fail,
+# và `npm install` theo lock lệch cũng không cài đúng các dep mới khai báo (vd react-is).
+# Bỏ lockfile để npm resolve LẠI từ đầu theo package.json → cài đủ dep. `--legacy-peer-deps`
+# vì repo có xung đột peer-deps. Đánh đổi: kém reproducible, nhưng build đáng tin cậy hơn.
+RUN rm -f package-lock.json && npm install --legacy-peer-deps --no-audit --no-fund
 ARG PKG
 RUN npx turbo run build --filter="${PKG}"
 

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev -p 3018",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
     "test:e2e": "playwright test",
@@ -62,6 +62,7 @@
     "react": "^18",
     "react-day-picker": "^9.13.2",
     "react-dom": "^18",
+    "react-is": "^18.3.1",
     "recharts": "^3.7.0",
     "resend": "^6.9.2",
     "swagger-ui-react": "^5.31.2",

@@ -50,3 +50,6 @@ rebrand-report.json
 # Cache
 .cache/
 .eslintcache
+
+# Stray root app/ dirs renamed out of the way (shadow fix backups)
+**/app.shadow.bak/
