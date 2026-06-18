@@ -85,6 +85,9 @@ enum EmailStatus {
 enum ImportStatus {
   PENDING
   PROCESSING
+  DRY_RUN
+  PREVIEWING
+  EXECUTING
   COMPLETED
   FAILED
   ROLLED_BACK
@@ -340,6 +343,14 @@ model Tenant {
   internalApplications InternalApplication[]
   careerProfiles       CareerProfile[]
 
+  // Back-relations for tail models (added to satisfy Prisma validation)
+  kpiPeriods          KPIPeriod[]
+  kpiScores           KPIScore[]
+  disciplinaryRecords DisciplinaryRecord[]
+  salaryAdvances      SalaryAdvance[]
+  importSessions      ImportSession[]
+  systemSettings      SystemSetting[]
+
   @@map("tenants")
 }
 
@@ -443,6 +454,12 @@ model User {
 
   // Phase 7: Custom Roles
   customRoles UserCustomRole[]
+
+  // Back-relations for tail models (added to satisfy Prisma validation)
+  kpiPeriodsCreated KPIPeriod[]     @relation("KPICreator")
+  kpiScoresEntered  KPIScore[]      @relation("KPIEnterer")
+  advancesApproved  SalaryAdvance[] @relation("AdvanceApprover")
+  importSessions    ImportSession[] @relation("ImportUser")
 
   @@unique([tenantId, email])
   @@map("users")
@@ -708,6 +725,11 @@ model Employee {
   jobPostingsAsHiringManager InternalJobPosting[]    @relation("PostingHiringManager")
   internalApplications       InternalApplication[]
   careerProfile              CareerProfile?
+
+  // Back-relations for tail models (added to satisfy Prisma validation)
+  kpiScores           KPIScore[]
+  disciplinaryRecords DisciplinaryRecord[]
+  salaryAdvances      SalaryAdvance[]
 
   @@unique([tenantId, employeeCode])
   @@index([tenantId, status])
@@ -7202,15 +7224,6 @@ enum ImportType {
   PAYROLL
   DEPARTMENTS
   POSITIONS
-}
-
-enum ImportStatus {
-  DRY_RUN
-  PREVIEWING
-  EXECUTING
-  COMPLETED
-  FAILED
-  ROLLED_BACK
 }
 
 model ImportSession {
