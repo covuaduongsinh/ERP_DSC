@@ -3,7 +3,7 @@
 # Cấu hình cho Phát Triển / For Production Deployment
 # ============================================================
 
-version: '3.9'
+version: "3.9"
 
 services:
   # ─── Cơ sở dữ liệu / Database ────────────────────────────────
@@ -27,10 +27,10 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '2'
+          cpus: "2"
           memory: 2G
         reservations:
-          cpus: '1'
+          cpus: "1"
           memory: 1G
     logging:
       driver: json-file
@@ -58,10 +58,10 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '1'
+          cpus: "1"
           memory: 512M
         reservations:
-          cpus: '0.5'
+          cpus: "0.5"
           memory: 256M
     logging:
       driver: json-file
@@ -77,9 +77,9 @@ services:
     container_name: vierp-nats
     restart: unless-stopped
     ports:
-      - "4222:4222"   # Client
-      - "8222:8222"   # HTTP monitoring
-    command: ["--js", "--sd", "/data", "--http_port", "8222", "--max_connections", "64000"]
+      - "4222:4222" # Client
+      - "8222:8222" # HTTP monitoring
+    command: ["-js", "-sd", "/data", "-m", "8222"]
     volumes:
       - nats_data:/data
     healthcheck:
@@ -90,10 +90,10 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '2'
+          cpus: "2"
           memory: 1G
         reservations:
-          cpus: '1'
+          cpus: "1"
           memory: 512M
     logging:
       driver: json-file
@@ -132,10 +132,10 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '2'
+          cpus: "2"
           memory: 1.5G
         reservations:
-          cpus: '1'
+          cpus: "1"
           memory: 1G
     logging:
       driver: json-file
@@ -158,8 +158,8 @@ services:
       KONG_LOG_LEVEL: notice
       KONG_WORKER_PROCESSES: 4
     ports:
-      - "8000:8000"   # Proxy
-      - "8001:8001"   # Admin API
+      - "8000:8000" # Proxy
+      - "8001:8001" # Admin API
     volumes:
       - ./infrastructure/kong/kong.yml:/etc/kong/kong.yml:ro
     healthcheck:
@@ -173,10 +173,10 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '2'
+          cpus: "2"
           memory: 512M
         reservations:
-          cpus: '1'
+          cpus: "1"
           memory: 256M
     logging:
       driver: json-file
@@ -223,10 +223,10 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '1'
+          cpus: "1"
           memory: 512M
         reservations:
-          cpus: '0.5'
+          cpus: "0.5"
           memory: 256M
     logging:
       driver: json-file
@@ -268,10 +268,10 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '1'
+          cpus: "1"
           memory: 512M
         reservations:
-          cpus: '0.5'
+          cpus: "0.5"
           memory: 256M
     logging:
       driver: json-file
@@ -313,10 +313,10 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '1'
+          cpus: "1"
           memory: 512M
         reservations:
-          cpus: '0.5'
+          cpus: "0.5"
           memory: 256M
     logging:
       driver: json-file
@@ -358,10 +358,10 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '1'
+          cpus: "1"
           memory: 512M
         reservations:
-          cpus: '0.5'
+          cpus: "0.5"
           memory: 256M
     logging:
       driver: json-file
@@ -403,10 +403,10 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '1'
+          cpus: "1"
           memory: 512M
         reservations:
-          cpus: '0.5'
+          cpus: "0.5"
           memory: 256M
     logging:
       driver: json-file
@@ -448,10 +448,10 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '1'
+          cpus: "1"
           memory: 512M
         reservations:
-          cpus: '0.5'
+          cpus: "0.5"
           memory: 256M
     logging:
       driver: json-file
@@ -493,10 +493,10 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '1'
+          cpus: "1"
           memory: 512M
         reservations:
-          cpus: '0.5'
+          cpus: "0.5"
           memory: 256M
     logging:
       driver: json-file
@@ -538,10 +538,10 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '1'
+          cpus: "1"
           memory: 512M
         reservations:
-          cpus: '0.5'
+          cpus: "0.5"
           memory: 256M
     logging:
       driver: json-file
@@ -583,10 +583,10 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '1'
+          cpus: "1"
           memory: 512M
         reservations:
-          cpus: '0.5'
+          cpus: "0.5"
           memory: 256M
     logging:
       driver: json-file
@@ -628,10 +628,10 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '1'
+          cpus: "1"
           memory: 512M
         reservations:
-          cpus: '0.5'
+          cpus: "0.5"
           memory: 256M
     logging:
       driver: json-file
@@ -674,10 +674,10 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '1'
+          cpus: "1"
           memory: 512M
         reservations:
-          cpus: '0.5'
+          cpus: "0.5"
           memory: 256M
     logging:
       driver: json-file
@@ -705,10 +705,10 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.5'
+          cpus: "0.5"
           memory: 256M
         reservations:
-          cpus: '0.25'
+          cpus: "0.25"
           memory: 128M
     logging:
       driver: json-file
@@ -740,10 +740,10 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.5'
+          cpus: "0.5"
           memory: 256M
         reservations:
-          cpus: '0.25'
+          cpus: "0.25"
           memory: 128M
     logging:
       driver: json-file
