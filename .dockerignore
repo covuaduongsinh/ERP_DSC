@@ -1,0 +1,27 @@
+# Giữ build context nhẹ cho `turbo prune` (chỉ cần manifest + source, KHÔNG cần node_modules/builds)
+**/node_modules
+**/.next
+**/dist
+**/build
+**/.turbo
+**/coverage
+**/playwright-report
+**/test-results
+**/*.tsbuildinfo
+
+.git
+.github
+**/*.log
+
+# secrets & môi trường (KHÔNG đưa vào image)
+**/.env
+**/.env.*
+!**/.env.example
+
+# bản backup/shadow tạm
+**/app.shadow.bak
+**/*.bak
+
+# tài liệu / IDE (không cần khi build)
+**/.vscode
+**/.idea

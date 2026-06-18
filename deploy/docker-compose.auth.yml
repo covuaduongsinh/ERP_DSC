@@ -1,0 +1,71 @@
+# ============================================================
+# Override bổ sung biến NextAuth còn THIẾU trong docker-compose.prod.yml.
+# Compose gộp `environment` từ nhiều -f, nên file này chỉ THÊM, không sửa file gốc.
+#
+# Dùng:
+#   docker compose -f docker-compose.prod.yml -f deploy/docker-compose.auth.yml up -d
+#
+# Cần trong .env:  NEXTAUTH_SECRET, AUTH_SECRET, BASE_DOMAIN (vd erp.example.vn)
+# (next-auth v4 đọc NEXTAUTH_*, v5/beta đọc AUTH_* — set cả hai cho chắc.)
+# ============================================================
+services:
+  hrm:
+    environment:
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+      AUTH_SECRET: ${AUTH_SECRET:-${NEXTAUTH_SECRET}}
+      NEXTAUTH_URL: "https://hrm.${BASE_DOMAIN}"
+      AUTH_URL: "https://hrm.${BASE_DOMAIN}"
+  hrm-ai:
+    environment:
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+      AUTH_SECRET: ${AUTH_SECRET:-${NEXTAUTH_SECRET}}
+      NEXTAUTH_URL: "https://hrm-ai.${BASE_DOMAIN}"
+      AUTH_URL: "https://hrm-ai.${BASE_DOMAIN}"
+  hrm-unified:
+    environment:
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+      AUTH_SECRET: ${AUTH_SECRET:-${NEXTAUTH_SECRET}}
+      NEXTAUTH_URL: "https://hrm-unified.${BASE_DOMAIN}"
+      AUTH_URL: "https://hrm-unified.${BASE_DOMAIN}"
+  accounting:
+    environment:
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+      AUTH_SECRET: ${AUTH_SECRET:-${NEXTAUTH_SECRET}}
+      NEXTAUTH_URL: "https://ketoan.${BASE_DOMAIN}"
+      AUTH_URL: "https://ketoan.${BASE_DOMAIN}"
+  crm:
+    environment:
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+      AUTH_SECRET: ${AUTH_SECRET:-${NEXTAUTH_SECRET}}
+      NEXTAUTH_URL: "https://crm.${BASE_DOMAIN}"
+      AUTH_URL: "https://crm.${BASE_DOMAIN}"
+  ecommerce:
+    environment:
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+      AUTH_SECRET: ${AUTH_SECRET:-${NEXTAUTH_SECRET}}
+      NEXTAUTH_URL: "https://shop.${BASE_DOMAIN}"
+      AUTH_URL: "https://shop.${BASE_DOMAIN}"
+  mrp:
+    environment:
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+      AUTH_SECRET: ${AUTH_SECRET:-${NEXTAUTH_SECRET}}
+      NEXTAUTH_URL: "https://mrp.${BASE_DOMAIN}"
+      AUTH_URL: "https://mrp.${BASE_DOMAIN}"
+  otb:
+    environment:
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+      AUTH_SECRET: ${AUTH_SECRET:-${NEXTAUTH_SECRET}}
+      NEXTAUTH_URL: "https://otb.${BASE_DOMAIN}"
+      AUTH_URL: "https://otb.${BASE_DOMAIN}"
+  pm:
+    environment:
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+      AUTH_SECRET: ${AUTH_SECRET:-${NEXTAUTH_SECRET}}
+      NEXTAUTH_URL: "https://pm.${BASE_DOMAIN}"
+      AUTH_URL: "https://pm.${BASE_DOMAIN}"
+  excel-ai:
+    environment:
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+      AUTH_SECRET: ${AUTH_SECRET:-${NEXTAUTH_SECRET}}
+      NEXTAUTH_URL: "https://excel.${BASE_DOMAIN}"
+      AUTH_URL: "https://excel.${BASE_DOMAIN}"

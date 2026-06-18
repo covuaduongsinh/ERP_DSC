@@ -1,0 +1,58 @@
+# syntax=docker/dockerfile:1
+# ============================================================
+# VietERP — Universal monorepo Dockerfile (Turborepo)
+# Build BẤT KỲ app nào từ monorepo bằng `turbo prune` (xử lý gọn
+# workspace deps + lockfile), giữ node_modules đầy đủ và chạy
+# `npm start` của chính app => đúng cho mọi kiểu app:
+#   - Next standalone / next start         (HRM-AI, CRM, OTB...)
+#   - Next + custom server (tsc, socket.io) (MRP: node dist/server.js)
+#   - Next + @prisma/adapter-pg             (HRM: cần full node_modules)
+#   - NestJS                                (TPM-api-nestjs: node dist/main)
+#
+# Build:
+#   docker build -f infrastructure/docker/Dockerfile.turbo \
+#     --build-arg PKG=<package-name> -t <image> .
+# PKG = trường "name" trong apps/<App>/package.json
+#   (vd: crm, vierp-mrp, vierp-hrm, erp-accounting, vierp-pm, vierp-hrm-ai)
+# ============================================================
+ARG NODE_VERSION=20
+
+FROM node:${NODE_VERSION}-alpine AS base
+RUN apk add --no-cache libc6-compat openssl
+RUN npm install -g turbo@^2
+WORKDIR /app
+
+# ── 1) Prune: cắt monorepo còn đúng package đích + workspace deps của nó ──
+FROM base AS pruner
+COPY . .
+ARG PKG
+RUN turbo prune "${PKG}" --docker
+
+# ── 2) Builder: cài deps rồi build qua turbo ──
+FROM base AS builder
+# package.json(s) + lockfile (cho cache) ...
+COPY --from=pruner /app/out/json/ ./
+# ... rồi source (cần có mặt TRƯỚC khi install để postinstall `prisma generate` chạy được)
+COPY --from=pruner /app/out/full/ ./
+# Dùng `npm install` (KHÔNG `npm ci`): package-lock.json gốc của monorepo đang lệch
+# so với package.json (npm ci đòi khớp tuyệt đối -> fail). `--legacy-peer-deps` vì repo
+# có xung đột peer-deps (MRP cũng dùng cờ này). Đánh đổi: kém reproducible hơn ci.
+RUN npm install --legacy-peer-deps --no-audit --no-fund
+ARG PKG
+RUN npx turbo run build --filter="${PKG}"
+
+# ── 3) Runner: giữ deps + output, chạy start script của chính app ──
+FROM base AS runner
+ENV NODE_ENV=production \
+    NEXT_TELEMETRY_DISABLED=1 \
+    PORT=3000 \
+    HOSTNAME=0.0.0.0
+RUN addgroup --system --gid 1001 nodejs && adduser --system --uid 1001 appuser
+COPY --from=builder --chown=appuser:nodejs /app ./
+USER appuser
+ARG PKG
+ENV PKG=${PKG}
+EXPOSE 3000
+# Lưu ý: vài app hardcode cổng trong start (vd Accounting `next start -p 3007`).
+# Với các app đó, override CMD trong compose hoặc sửa start về PORT env.
+CMD ["sh", "-c", "npm run start --workspace \"$PKG\""]

@@ -1,0 +1,36 @@
+# ============================================================
+# VietERP — Caddy reverse proxy + auto HTTPS (Let's Encrypt)
+# Mỗi module = 1 subdomain. ĐỔI "erp.example.vn" thành tên miền thật,
+# và trỏ DNS (A record) tất cả subdomain về IP VPS trước khi chạy.
+#
+# Cách chạy (Caddy join chung mạng vierp-network để gọi thẳng tên service):
+#   docker network connect vierp-network <caddy_container>   # nếu chạy tách
+# hoặc thêm caddy vào docker-compose.prod.yml cùng networks: [vierp-network].
+# Khi đó upstream là <service>:3000 (cổng NỘI BỘ container), KHÔNG cần publish 30xx ra host.
+# ============================================================
+
+{
+	email admin@erp.example.vn   # email nhận cảnh báo chứng chỉ Let's Encrypt
+}
+
+# ── Các app HR / nhân sự ────────────────────────────────────
+hrm.erp.example.vn          { reverse_proxy hrm:3000 }
+hrm-ai.erp.example.vn       { reverse_proxy hrm-ai:3000 }
+hrm-unified.erp.example.vn  { reverse_proxy hrm-unified:3000 }
+
+# ── Kế toán / CRM / Sản xuất / Dự án ────────────────────────
+ketoan.erp.example.vn       { reverse_proxy accounting:3000 }
+crm.erp.example.vn          { reverse_proxy crm:3000 }
+mrp.erp.example.vn          { reverse_proxy mrp:3000 }
+otb.erp.example.vn          { reverse_proxy otb:3000 }
+pm.erp.example.vn           { reverse_proxy pm:3000 }
+
+# ── TMĐT / Excel AI / TPM / Tài liệu ────────────────────────
+shop.erp.example.vn         { reverse_proxy ecommerce:3000 }
+excel.erp.example.vn        { reverse_proxy excel-ai:3000 }
+tpm.erp.example.vn          { reverse_proxy tpm-web:3000 }
+docs.erp.example.vn         { reverse_proxy docs:3000 }
+
+# ── Hạ tầng: API Gateway (Kong) & SSO (Keycloak) ────────────
+api.erp.example.vn          { reverse_proxy kong:8000 }
+sso.erp.example.vn          { reverse_proxy keycloak:8080 }

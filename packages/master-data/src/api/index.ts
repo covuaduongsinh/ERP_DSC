@@ -4,15 +4,15 @@
 // Designed for Next.js API routes but framework-agnostic.
 // ============================================================
 
-import type { ApiResponse, PaginationMeta } from '@vierp/shared';
-import { publish } from '@vierp/events';
-import { EVENT_SUBJECTS } from '@vierp/shared';
-import { customerService } from '../services/customer.service';
-import { productService } from '../services/product.service';
-import { employeeService } from '../services/employee.service';
-import { supplierService } from '../services/supplier.service';
-import { MasterDataError } from '../services/base.service';
-import type { MasterDataEntity, MasterDataQuery, BulkResult } from '../types';
+import type { ApiResponse, PaginationMeta } from "@vierp/shared";
+import { publish } from "@vierp/events";
+import { EVENT_SUBJECTS } from "@vierp/shared";
+import { customerService } from "../services/customer.service";
+import { productService } from "../services/product.service";
+import { employeeService } from "../services/employee.service";
+import { supplierService } from "../services/supplier.service";
+import { MasterDataError } from "../services/base.service";
+import type { MasterDataEntity, MasterDataQuery, BulkResult } from "../types";
 
 // ==================== Service Registry ====================
 
@@ -36,7 +36,7 @@ const eventSubjects: Record<string, Record<string, string>> = {
  */
 export async function handleList(
   entity: MasterDataEntity,
-  query: MasterDataQuery
+  query: MasterDataQuery,
 ): Promise<ApiResponse<unknown[]>> {
   const service = getService(entity);
   const { data, meta } = await service.list(query);
@@ -49,13 +49,16 @@ export async function handleList(
 export async function handleGet(
   entity: MasterDataEntity,
   id: string,
-  tenantId: string
+  tenantId: string,
 ): Promise<ApiResponse<unknown>> {
   const service = getService(entity);
   const record = await service.get(id, tenantId);
 
   if (!record) {
-    return { success: false, error: { code: 'NOT_FOUND', message: `${entity} not found` } };
+    return {
+      success: false,
+      error: { code: "NOT_FOUND", message: `${entity} not found` },
+    };
   }
 
   return { success: true, data: record };
@@ -67,13 +70,19 @@ export async function handleGet(
 export async function handleGetByCode(
   entity: MasterDataEntity,
   code: string,
-  tenantId: string
+  tenantId: string,
 ): Promise<ApiResponse<unknown>> {
   const service = getService(entity);
   const record = await service.getByCode(code, tenantId);
 
   if (!record) {
-    return { success: false, error: { code: 'NOT_FOUND', message: `${entity} with code ${code} not found` } };
+    return {
+      success: false,
+      error: {
+        code: "NOT_FOUND",
+        message: `${entity} with code ${code} not found`,
+      },
+    };
   }
 
   return { success: true, data: record };
@@ -85,14 +94,17 @@ export async function handleGetByCode(
 export async function handleCreate(
   entity: MasterDataEntity,
   data: Record<string, unknown>,
-  context: { tenantId: string; userId: string }
+  context: { tenantId: string; userId: string },
 ): Promise<ApiResponse<unknown>> {
   try {
     const service = getService(entity);
-    const { record } = await service.create(data, { ...context, source: 'master-data' });
+    const { record } = await service.create(data, {
+      ...context,
+      source: "master-data",
+    });
 
     // Publish creation event so other modules can sync
-    await publishEntityEvent(entity, 'CREATED', record, context);
+    await publishEntityEvent(entity, "CREATED", record, context);
 
     return { success: true, data: record };
   } catch (error) {
@@ -107,13 +119,16 @@ export async function handleUpdate(
   entity: MasterDataEntity,
   id: string,
   data: Record<string, unknown>,
-  context: { tenantId: string; userId: string }
+  context: { tenantId: string; userId: string },
 ): Promise<ApiResponse<unknown>> {
   try {
     const service = getService(entity);
-    const { record } = await service.update(id, data, { ...context, source: 'master-data' });
+    const { record } = await service.update(id, data, {
+      ...context,
+      source: "master-data",
+    });
 
-    await publishEntityEvent(entity, 'UPDATED', record, context);
+    await publishEntityEvent(entity, "UPDATED", record, context);
 
     return { success: true, data: record };
   } catch (error) {
@@ -127,13 +142,16 @@ export async function handleUpdate(
 export async function handleDelete(
   entity: MasterDataEntity,
   id: string,
-  context: { tenantId: string; userId: string }
+  context: { tenantId: string; userId: string },
 ): Promise<ApiResponse<unknown>> {
   try {
     const service = getService(entity);
-    const { record } = await service.delete(id, { ...context, source: 'master-data' });
+    const { record } = await service.delete(id, {
+      ...context,
+      source: "master-data",
+    });
 
-    await publishEntityEvent(entity, 'DELETED', record, context);
+    await publishEntityEvent(entity, "DELETED", record, context);
 
     return { success: true, data: record };
   } catch (error) {
@@ -147,13 +165,16 @@ export async function handleDelete(
 export async function handleRestore(
   entity: MasterDataEntity,
   id: string,
-  context: { tenantId: string; userId: string }
+  context: { tenantId: string; userId: string },
 ): Promise<ApiResponse<unknown>> {
   try {
     const service = getService(entity);
-    const { record } = await service.restore(id, { ...context, source: 'master-data' });
+    const { record } = await service.restore(id, {
+      ...context,
+      source: "master-data",
+    });
 
-    await publishEntityEvent(entity, 'CREATED', record, context); // Publish as created to re-sync
+    await publishEntityEvent(entity, "CREATED", record, context); // Publish as created to re-sync
 
     return { success: true, data: record };
   } catch (error) {
@@ -166,7 +187,12 @@ export async function handleRestore(
  */
 export async function handleBulk(
   entity: MasterDataEntity,
-  operation: { action: string; records: unknown[]; tenantId: string; userId: string }
+  operation: {
+    action: string;
+    records: unknown[];
+    tenantId: string;
+    userId: string;
+  },
 ): Promise<ApiResponse<BulkResult>> {
   try {
     const service = getService(entity);
@@ -182,12 +208,18 @@ export async function handleBulk(
  */
 export async function handleStats(
   entity: MasterDataEntity,
-  tenantId: string
+  tenantId: string,
 ): Promise<ApiResponse<unknown>> {
   try {
     const service = getService(entity);
-    if (typeof service.getStats !== 'function') {
-      return { success: false, error: { code: 'NOT_SUPPORTED', message: `Stats not available for ${entity}` } };
+    if (typeof service.getStats !== "function") {
+      return {
+        success: false,
+        error: {
+          code: "NOT_SUPPORTED",
+          message: `Stats not available for ${entity}`,
+        },
+      };
     }
     const stats = await service.getStats(tenantId);
     return { success: true, data: stats };
@@ -201,7 +233,11 @@ export async function handleStats(
 function getService(entity: MasterDataEntity) {
   const service = services[entity];
   if (!service) {
-    throw new MasterDataError(`Unknown entity: ${entity}`, 'INVALID_ENTITY', 400);
+    throw new MasterDataError(
+      `Unknown entity: ${entity}`,
+      "INVALID_ENTITY",
+      400,
+    );
   }
   return service;
 }
@@ -210,7 +246,7 @@ async function publishEntityEvent(
   entity: MasterDataEntity,
   action: string,
   data: unknown,
-  context: { tenantId: string; userId: string }
+  context: { tenantId: string; userId: string },
 ): Promise<void> {
   const subjects = eventSubjects[entity];
   if (!subjects) return; // Supplier doesn't have event subjects yet
@@ -219,10 +255,13 @@ async function publishEntityEvent(
   if (!subject) return;
 
   try {
-    await publish(subject, data, { ...context, source: 'master-data' });
+    await publish(subject, data, { ...context, source: "master-data" });
   } catch (error) {
     // Don't fail the API call if event publishing fails
-    console.error(`[MASTER-DATA] Failed to publish ${entity}.${action} event:`, error);
+    console.error(
+      `[MASTER-DATA] Failed to publish ${entity}.${action} event:`,
+      error,
+    );
   }
 }
 
@@ -234,10 +273,10 @@ function handleServiceError(error: unknown): ApiResponse<never> {
     };
   }
 
-  console.error('[MASTER-DATA] Unexpected error:', error);
+  console.error("[MASTER-DATA] Unexpected error:", error);
   return {
     success: false,
-    error: { code: 'INTERNAL_ERROR', message: 'An unexpected error occurred' },
+    error: { code: "INTERNAL_ERROR", message: "An unexpected error occurred" },
   };
 }
 
@@ -257,9 +296,9 @@ export function createEntityRoutes(entity: MasterDataEntity) {
   return {
     GET: async (request: Request) => {
       const url = new URL(request.url);
-      const tenantId = request.headers.get('x-tenant-id') || '';
-      const id = url.searchParams.get('id');
-      const code = url.searchParams.get('code');
+      const tenantId = request.headers.get("x-tenant-id") || "";
+      const id = url.searchParams.get("id");
+      const code = url.searchParams.get("code");
 
       if (id) {
         const result = await handleGet(entity, id, tenantId);
@@ -273,13 +312,14 @@ export function createEntityRoutes(entity: MasterDataEntity) {
 
       const query: MasterDataQuery = {
         tenantId,
-        page: Number(url.searchParams.get('page')) || 1,
-        pageSize: Number(url.searchParams.get('pageSize')) || 20,
-        search: url.searchParams.get('search') || undefined,
-        status: url.searchParams.get('status') || undefined,
-        sortBy: url.searchParams.get('sortBy') || undefined,
-        sortOrder: (url.searchParams.get('sortOrder') as 'asc' | 'desc') || undefined,
-        category: url.searchParams.get('category') || undefined,
+        page: Number(url.searchParams.get("page")) || 1,
+        pageSize: Number(url.searchParams.get("pageSize")) || 20,
+        search: url.searchParams.get("search") || undefined,
+        status: url.searchParams.get("status") || undefined,
+        sortBy: url.searchParams.get("sortBy") || undefined,
+        sortOrder:
+          (url.searchParams.get("sortOrder") as "asc" | "desc") || undefined,
+        category: url.searchParams.get("category") || undefined,
       };
 
       const result = await handleList(entity, query);
@@ -287,15 +327,15 @@ export function createEntityRoutes(entity: MasterDataEntity) {
     },
 
     POST: async (request: Request) => {
-      const tenantId = request.headers.get('x-tenant-id') || '';
-      const userId = request.headers.get('x-user-id') || '';
-      const body = await request.json();
+      const tenantId = request.headers.get("x-tenant-id") || "";
+      const userId = request.headers.get("x-user-id") || "";
+      const body = (await request.json()) as Record<string, unknown>;
 
       // Check for bulk operation
       if (body.bulk) {
         const result = await handleBulk(entity, {
-          action: body.action,
-          records: body.records,
+          action: body.action as string,
+          records: body.records as unknown[],
           tenantId,
           userId,
         });
@@ -308,13 +348,13 @@ export function createEntityRoutes(entity: MasterDataEntity) {
 
     PUT: async (request: Request) => {
       const url = new URL(request.url);
-      const tenantId = request.headers.get('x-tenant-id') || '';
-      const userId = request.headers.get('x-user-id') || '';
-      const id = url.searchParams.get('id') || '';
-      const body = await request.json();
+      const tenantId = request.headers.get("x-tenant-id") || "";
+      const userId = request.headers.get("x-user-id") || "";
+      const id = url.searchParams.get("id") || "";
+      const body = (await request.json()) as Record<string, unknown>;
 
       // Handle restore
-      if (body._action === 'restore') {
+      if (body._action === "restore") {
         const result = await handleRestore(entity, id, { tenantId, userId });
         return Response.json(result, { status: result.success ? 200 : 400 });
       }
@@ -325,9 +365,9 @@ export function createEntityRoutes(entity: MasterDataEntity) {
 
     DELETE: async (request: Request) => {
       const url = new URL(request.url);
-      const tenantId = request.headers.get('x-tenant-id') || '';
-      const userId = request.headers.get('x-user-id') || '';
-      const id = url.searchParams.get('id') || '';
+      const tenantId = request.headers.get("x-tenant-id") || "";
+      const userId = request.headers.get("x-user-id") || "";
+      const id = url.searchParams.get("id") || "";
 
       const result = await handleDelete(entity, id, { tenantId, userId });
       return Response.json(result, { status: result.success ? 200 : 400 });
