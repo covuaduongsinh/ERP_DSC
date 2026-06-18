@@ -40,6 +40,12 @@ COPY --from=pruner /app/out/full/ ./
 # vì repo có xung đột peer-deps. Đánh đổi: kém reproducible, nhưng build đáng tin cậy hơn.
 RUN rm -f package-lock.json && npm install --legacy-peer-deps --no-audit --no-fund
 ARG PKG
+# NEXT_PUBLIC_* phải có LÚC BUILD để Next nhúng vào bundle phía client
+# (vd Supabase cho CRM). App không dùng thì để rỗng cũng vô hại.
+ARG NEXT_PUBLIC_SUPABASE_URL=""
+ARG NEXT_PUBLIC_SUPABASE_ANON_KEY=""
+ENV NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL}
+ENV NEXT_PUBLIC_SUPABASE_ANON_KEY=${NEXT_PUBLIC_SUPABASE_ANON_KEY}
 RUN npx turbo run build --filter="${PKG}"
 
 # ── 3) Runner: giữ deps + output, chạy start script của chính app ──

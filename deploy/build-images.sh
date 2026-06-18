@@ -15,6 +15,12 @@ set -euo pipefail
 IMAGE_TAG="${IMAGE_TAG:-latest}"
 DOCKERFILE="infrastructure/docker/Dockerfile.turbo"
 
+# Đọc các biến NEXT_PUBLIC_* (vd Supabase) từ .env để truyền LÚC BUILD (Next nhúng vào client).
+ENVFILE="${ENVFILE:-.env}"
+read_env() { grep -E "^$1=" "$ENVFILE" 2>/dev/null | head -1 | cut -d= -f2-; }
+SUPA_URL="$(read_env NEXT_PUBLIC_SUPABASE_URL)"
+SUPA_KEY="$(read_env NEXT_PUBLIC_SUPABASE_ANON_KEY)"
+
 # DIR(thư mục apps/) | PKG(name trong package.json) | IMG(tên image compose)
 ROWS=(
   "HRM-AI|vierp-hrm-ai|vierp-hrm-ai"
@@ -36,6 +42,8 @@ build_row() {
   local dir="$1" pkg="$2" img="$3"
   echo "==> [$dir] PKG=$pkg  ->  ghcr.io/nclamvn/$img:$IMAGE_TAG"
   docker build -f "$DOCKERFILE" --build-arg PKG="$pkg" \
+    --build-arg NEXT_PUBLIC_SUPABASE_URL="$SUPA_URL" \
+    --build-arg NEXT_PUBLIC_SUPABASE_ANON_KEY="$SUPA_KEY" \
     -t "ghcr.io/nclamvn/$img:$IMAGE_TAG" .
 }
 

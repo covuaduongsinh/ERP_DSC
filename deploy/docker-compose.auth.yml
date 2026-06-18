@@ -39,6 +39,10 @@ services:
       AUTH_SECRET: ${AUTH_SECRET:-${NEXTAUTH_SECRET}}
       NEXTAUTH_URL: "https://crm.${BASE_DOMAIN}"
       AUTH_URL: "https://crm.${BASE_DOMAIN}"
+      # CRM dùng Supabase cho xác thực (server-side đọc lúc chạy)
+      NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY}
+      NEXT_PUBLIC_APP_URL: "https://crm.${BASE_DOMAIN}"
   ecommerce:
     environment:
       NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
