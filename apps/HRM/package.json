@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "next dev -p 3001",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
     "db:generate": "prisma generate",
@@ -57,6 +57,7 @@
     "react": "^18",
     "react-dom": "^18",
     "react-hook-form": "^7.71.2",
+    "react-is": "^18.3.1",
     "recharts": "^3.7.0",
     "saslprep": "^1.0.3",
     "tailwind-merge": "^3.5.0",

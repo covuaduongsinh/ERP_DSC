@@ -15,6 +15,8 @@ services:
       AUTH_SECRET: ${AUTH_SECRET:-${NEXTAUTH_SECRET}}
       NEXTAUTH_URL: "https://hrm.${BASE_DOMAIN}"
       AUTH_URL: "https://hrm.${BASE_DOMAIN}"
+      # HRM dùng @prisma/adapter-pg (bỏ qua ?schema) -> phải có DATABASE riêng "hrm"
+      DATABASE_URL: postgresql://${POSTGRES_USER:-vierp}:${POSTGRES_PASSWORD}@postgres:5432/hrm
   hrm-ai:
     environment:
       NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
