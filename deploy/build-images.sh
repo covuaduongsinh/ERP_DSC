@@ -56,7 +56,7 @@ build_row() {
     extra+=( --network vierp-network )
     extra+=( --build-arg "PAYLOAD_SECRET=${COVUA_SECRET}" )
     extra+=( --build-arg "DATABASE_URI=postgresql://${PG_USER}:${PG_PASS}@postgres:5432/covua" )
-    extra+=( --build-arg "NEXT_PUBLIC_SERVER_URL=https://covua.${BASE_DOMAIN}" )
+    extra+=( --build-arg "NEXT_PUBLIC_SERVER_URL=https://clb.${BASE_DOMAIN}" )
   fi
   docker build -f "$DOCKERFILE" --build-arg PKG="$pkg" \
     --build-arg NEXT_PUBLIC_SUPABASE_URL="$SUPA_URL" \
