@@ -116,11 +116,15 @@ services:
       KC_HOSTNAME_STRICT: "false"
       KC_HTTP_ENABLED: "true"
       KC_PROXY: edge
+      # Issuer cố định = host công khai để token (cấp qua sso.) khớp khi userinfo
+      # gọi qua URL nội bộ (keycloak:8080) — nếu không sẽ lỗi userinfo 401.
+      KC_HOSTNAME: sso.${BASE_DOMAIN}
+      KC_HOSTNAME_STRICT_BACKCHANNEL: "false"
       KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN:-admin}
       KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
     ports:
       - "8080:8080"
-    command: start --optimized
+    command: start
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/health/ready"]
       interval: 10s
