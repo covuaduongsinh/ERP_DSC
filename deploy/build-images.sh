@@ -58,6 +58,9 @@ build_row() {
     extra+=( --build-arg "PAYLOAD_SECRET=${COVUA_SECRET}" )
     extra+=( --build-arg "DATABASE_URI=postgresql://${PG_USER}:${PG_PASS}@host.docker.internal:5432/covua" )
     extra+=( --build-arg "NEXT_PUBLIC_SERVER_URL=https://clb.${BASE_DOMAIN}" )
+    # Bật plugin S3 lúc build để importMap gồm S3ClientUploadHandler (giá trị chỉ cần có mặt)
+    extra+=( --build-arg "S3_BUCKET=covua-media" )
+    extra+=( --build-arg "S3_ENDPOINT=http://minio:9000" )
   fi
   docker build -f "$DOCKERFILE" --build-arg PKG="$pkg" \
     --build-arg NEXT_PUBLIC_SUPABASE_URL="$SUPA_URL" \

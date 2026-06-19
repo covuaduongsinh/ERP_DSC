@@ -55,6 +55,12 @@ ARG NEXT_PUBLIC_SERVER_URL=""
 ENV PAYLOAD_SECRET=${PAYLOAD_SECRET}
 ENV DATABASE_URI=${DATABASE_URI}
 ENV NEXT_PUBLIC_SERVER_URL=${NEXT_PUBLIC_SERVER_URL}
+# CoVua: bật plugin S3 LÚC BUILD (payload.config bật khi có S3_BUCKET+S3_ENDPOINT) để
+# `generate:importmap` gồm S3ClientUploadHandler — thiếu nó thì admin trắng lúc chạy.
+ARG S3_BUCKET=""
+ARG S3_ENDPOINT=""
+ENV S3_BUCKET=${S3_BUCKET}
+ENV S3_ENDPOINT=${S3_ENDPOINT}
 RUN npx turbo run build --filter="${PKG}"
 
 # ── 3) Runner: giữ deps + output, chạy start script của chính app ──
