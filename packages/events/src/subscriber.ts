@@ -114,6 +114,7 @@ function resolveStreamName(subject: string): string {
     'vierp.invoice': 'VIERP_INVOICES',
     'vierp.accounting': 'VIERP_ACCOUNTING',
     'vierp.supplier': 'VIERP_SUPPLIERS',
+    'covua': 'VIERP_COVUA',
   };
 
   // Match subject prefix to stream

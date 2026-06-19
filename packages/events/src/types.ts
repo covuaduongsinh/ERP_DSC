@@ -17,6 +17,7 @@ export enum Module {
   OTB = 'otb',
   TPM = 'tpm',
   PM = 'pm',
+  COVUA = 'covua',
 }
 
 /**

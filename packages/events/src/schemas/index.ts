@@ -9,6 +9,7 @@ import { AccountingEventSchemas } from './accounting.events';
 import { EcommerceEventSchemas } from './ecommerce.events';
 import { MRPEventSchemas } from './mrp.events';
 import { HRMEventSchemas } from './hrm.events';
+import { CoVuaEventSchemas } from './covua.events';
 
 // CRM Schemas
 export {
@@ -95,6 +96,19 @@ export type {
   AttendanceRecorded,
 } from './hrm.events';
 
+// CoVua (Cờ vua Dương Sinh) Schemas
+export {
+  TuitionPaymentReceivedSchema,
+  CoachUpsertedSchema,
+  LeadCapturedSchema,
+  CoVuaEventSchemas,
+} from './covua.events';
+export type {
+  TuitionPaymentReceived,
+  CoachUpserted,
+  LeadCaptured,
+} from './covua.events';
+
 /**
  * Unified event schema registry
  * Dùng để lookup schema theo event type
@@ -105,6 +119,7 @@ export const AllEventSchemas = {
   ...EcommerceEventSchemas,
   ...MRPEventSchemas,
   ...HRMEventSchemas,
+  ...CoVuaEventSchemas,
 } as const;
 
 export type AllEventTypes =
@@ -112,4 +127,5 @@ export type AllEventTypes =
   | keyof typeof AccountingEventSchemas
   | keyof typeof EcommerceEventSchemas
   | keyof typeof MRPEventSchemas
-  | keyof typeof HRMEventSchemas;
+  | keyof typeof HRMEventSchemas
+  | keyof typeof CoVuaEventSchemas;

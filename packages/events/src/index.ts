@@ -107,6 +107,19 @@ export type {
   AttendanceRecorded,
 } from './schemas/hrm.events';
 
+// CoVua (Cờ vua Dương Sinh) Event Schemas
+export {
+  TuitionPaymentReceivedSchema,
+  CoachUpsertedSchema,
+  LeadCapturedSchema,
+  CoVuaEventSchemas,
+} from './schemas/covua.events';
+export type {
+  TuitionPaymentReceived,
+  CoachUpserted,
+  LeadCaptured,
+} from './schemas/covua.events';
+
 // ─── Event Bus ──────────────────────────────────────────────
 export { EventBus, createEventBus } from './event-bus';
 
@@ -131,6 +144,12 @@ export {
   validatePayrollJournal,
   getAccountReconciliation,
 } from './flows/hrm-to-accounting';
+
+export {
+  mapTuitionPaymentToJournalEntry,
+  CoVuaToAccountingFlow,
+  validateTuitionJournal,
+} from './flows/covua-to-accounting';
 
 export {
   AllEventFlows,

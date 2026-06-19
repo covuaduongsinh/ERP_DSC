@@ -24,6 +24,12 @@ export {
   getAccountReconciliation,
 } from './hrm-to-accounting';
 
+export {
+  mapTuitionPaymentToJournalEntry,
+  CoVuaToAccountingFlow,
+  validateTuitionJournal,
+} from './covua-to-accounting';
+
 /**
  * All registered event flows
  * Các luồng sự kiện đã đăng ký
@@ -62,6 +68,15 @@ export const AllEventFlows = [
     target: 'accounting.journal.posted',
     mapper: (event: any) => require('./hrm-to-accounting').mapPayrollToJournalEntry(event),
     description: 'Auto-create journal entries from payroll processing',
+  },
+
+  // CoVua → Accounting (ghi nhận doanh thu học phí)
+  {
+    id: 'covua-to-accounting-payment-journal',
+    triggers: ['covua.payment.received'],
+    target: 'accounting.journal.posted',
+    mapper: (event: any) => require('./covua-to-accounting').mapTuitionPaymentToJournalEntry(event),
+    description: 'Auto-create revenue journal entries from tuition payments',
   },
 ];
 
