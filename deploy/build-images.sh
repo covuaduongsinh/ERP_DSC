@@ -50,12 +50,13 @@ build_row() {
   echo "==> [$dir] PKG=$pkg  ->  ghcr.io/nclamvn/$img:$IMAGE_TAG"
   local extra=()
   # CoVua build cần PAYLOAD_SECRET + DATABASE_URI (DB phải REACHABLE) + URL gốc.
-  # `--network vierp-network` để build container gọi được `postgres:5432`
+  # buildkit KHÔNG hỗ trợ --network <custom>; dùng --add-host host-gateway để build
+  # container gọi postgres qua cổng đã publish trên host (host.docker.internal:5432).
   # ⇒ PHẢI khởi động postgres TRƯỚC khi build covua.
   if [[ "$img" == "vierp-covua" ]]; then
-    extra+=( --network vierp-network )
+    extra+=( --add-host=host.docker.internal:host-gateway )
     extra+=( --build-arg "PAYLOAD_SECRET=${COVUA_SECRET}" )
-    extra+=( --build-arg "DATABASE_URI=postgresql://${PG_USER}:${PG_PASS}@postgres:5432/covua" )
+    extra+=( --build-arg "DATABASE_URI=postgresql://${PG_USER}:${PG_PASS}@host.docker.internal:5432/covua" )
     extra+=( --build-arg "NEXT_PUBLIC_SERVER_URL=https://clb.${BASE_DOMAIN}" )
   fi
   docker build -f "$DOCKERFILE" --build-arg PKG="$pkg" \
