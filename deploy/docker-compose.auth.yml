@@ -59,6 +59,8 @@ services:
       AUTH_SECRET: ${AUTH_SECRET:-${NEXTAUTH_SECRET}}
       NEXTAUTH_URL: "https://mrp.${BASE_DOMAIN}"
       AUTH_URL: "https://mrp.${BASE_DOMAIN}"
+      # DB riêng để không đụng bảng CRM/HRM
+      DATABASE_URL: postgresql://${POSTGRES_USER:-vierp}:${POSTGRES_PASSWORD}@postgres:5432/mrp
   otb:
     environment:
       NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
