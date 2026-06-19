@@ -1,0 +1,193 @@
+/* ============================================================
+   @ds/brand — Lớp CSS nhận diện Dương Sinh
+   Import file này vào globals.css của mỗi app:  @import "@ds/brand/theme.css";
+   Mọi giá trị khớp 1-1 với src/tokens.ts (nguồn duy nhất).
+   LƯU Ý: KHÔNG dùng màu cam. Tông màu xoay quanh navy + bổ trợ xanh.
+   ============================================================ */
+
+:root {
+  /* --- Màu --- */
+  --ds-primary: #2b3990; /* CHỦ ĐẠO — Xanh Navy. Cũng là màu nút CTA. */
+  --ds-primary-hover: #22307a; /* navy đậm hơn cho hover */
+  --ds-blue-light: #2275b4;
+  --ds-teal: #3dbb95;
+  --ds-green: #2da44a; /* trạng thái thành công, không phải CTA */
+
+  --ds-bg: #f8f9fc;
+  --ds-white: #ffffff;
+  --ds-text: #1a1a2e;
+  --ds-text-muted: #6b7280;
+  --ds-text-on-primary: #ffffff;
+
+  /* --- Trạng thái (KHÔNG phải nhận diện — chỉ cho badge/cảnh báo) ---
+     Nhận diện vẫn xoay quanh navy + xanh; amber/đỏ CHỈ biểu thị trạng thái. */
+  --ds-critical: #e0564e;
+  --ds-critical-bg: #fdeceb;
+  --ds-warning: #e08c2e;
+  --ds-warning-bg: #fbf1e3;
+  --ds-info: #2b3990;
+  --ds-info-bg: #eef0fa;
+  --ds-success: #2da44a;
+  --ds-success-bg: #e9f6ed;
+
+  /* --- Sắc độ navy mở rộng + bổ trợ (nhận diện) --- */
+  --ds-navy-deep: #1e2a6b; /* gradient tối / dải navy */
+  --ds-navy-ink: #151d49; /* navy đậm nhất — footer, viền bàn cờ */
+  --ds-teal-deep: #2a9c7c; /* hover teal / text teal trên nền sáng */
+  --ds-paper: #fcfcfe; /* trắng ngà */
+
+  /* --- Bề mặt nền nhạt (chip/badge/icon) --- */
+  --ds-navy-soft: #eef0fa;
+  --ds-teal-soft: #e7f6f0;
+  --ds-blue-soft: #e9f2f9;
+
+  /* --- Đường kẻ / divider --- */
+  --ds-line: #e6e8f0;
+  --ds-line-soft: #eef0f7;
+
+  /* --- Typography --- */
+  --ds-font-sans: var(--font-roboto), "Roboto", system-ui, sans-serif;
+  --ds-font-cond: var(--font-roboto-condensed), "Roboto Condensed", "Roboto", system-ui, sans-serif;
+
+  /* --- Spacing --- */
+  --ds-space-xs: 4px;
+  --ds-space-sm: 8px;
+  --ds-space-md: 16px;
+  --ds-space-lg: 24px;
+  --ds-space-xl: 32px;
+  --ds-space-2xl: 48px;
+
+  /* --- Border radius --- */
+  --ds-radius-xs: 6px;
+  --ds-radius-sm: 8px;
+  --ds-radius-md: 12px;
+  --ds-radius-lg: 16px;
+  --ds-radius-xl: 22px;
+  --ds-radius-2xl: 28px;
+  --ds-radius-pill: 999px;
+
+  /* --- Đổ bóng (cool, navy-tinted — không bóng đen gắt) --- */
+  --ds-shadow-xs: 0 1px 2px rgba(21, 29, 73, 0.06);
+  --ds-shadow-sm: 0 2px 8px rgba(21, 29, 73, 0.07);
+  --ds-shadow-md: 0 8px 24px rgba(21, 29, 73, 0.1);
+  --ds-shadow-lg: 0 18px 48px rgba(21, 29, 73, 0.16);
+  --ds-shadow-navy: 0 12px 30px rgba(43, 57, 144, 0.28); /* bóng nút CTA khi hover */
+
+  /* --- Chuyển động --- */
+  --ds-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ds-duration: 0.18s;
+}
+
+/* Base nhẹ — không áp đặt, app có thể ghi đè */
+body {
+  font-family: var(--ds-font-sans);
+  color: var(--ds-text);
+  background: var(--ds-bg);
+}
+
+/* Nút CTA chính Dương Sinh — NỀN NAVY, chữ trắng, bo pill, nâng nhẹ khi hover */
+.ds-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  background: var(--ds-primary);
+  color: var(--ds-text-on-primary);
+  padding: 13px 26px;
+  border: none;
+  border-radius: var(--ds-radius-pill);
+  font-family: var(--ds-font-sans);
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background var(--ds-duration), transform var(--ds-duration)
+      var(--ds-ease), box-shadow var(--ds-duration);
+}
+.ds-btn:hover {
+  background: var(--ds-primary-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--ds-shadow-navy);
+}
+.ds-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Nút phụ — viền navy mảnh, nền trong suốt */
+.ds-btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  background: transparent;
+  color: var(--ds-primary);
+  padding: 13px 26px;
+  border: none;
+  box-shadow: inset 0 0 0 1.6px var(--ds-primary);
+  border-radius: var(--ds-radius-pill);
+  font-family: var(--ds-font-sans);
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background var(--ds-duration), transform var(--ds-duration)
+      var(--ds-ease);
+}
+.ds-btn-outline:hover {
+  background: var(--ds-navy-soft);
+  transform: translateY(-2px);
+}
+.ds-btn-outline:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Overline — nhãn nhỏ IN HOA bằng Roboto Condensed */
+.ds-overline {
+  font-family: var(--ds-font-cond);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ds-primary);
+}
+.ds-overline--muted {
+  color: var(--ds-text-muted);
+}
+.ds-overline--teal {
+  color: var(--ds-teal-deep);
+}
+.ds-overline--light {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Họa tiết đặc trưng: ô vuông bàn cờ (đặt mờ làm nền trang trí) */
+.ds-chess-pattern {
+  background-image:
+    linear-gradient(45deg, var(--ds-primary) 25%, transparent 25%),
+    linear-gradient(-45deg, var(--ds-primary) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, var(--ds-primary) 75%),
+    linear-gradient(-45deg, transparent 75%, var(--ds-primary) 75%);
+  background-size: 20px 20px;
+  background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+  opacity: 0.08;
+}
+
+/* ============================================================
+   HỌA TIẾT (theo brand guide)
+   - .ds-chess-pattern (ở trên): ô cờ đơn giản, nền trang trí cơ bản
+   - Họa tiết phụ (lưới thoi/tam giác/chấm) → dùng component <PatternBg/>
+   - Watermark (cụm ô cờ góc) → dùng component <Watermark/>
+   - Họa tiết chính (cụm kim tự tháp) → class .ds-pyramid bên dưới
+   ============================================================ */
+
+/* Họa tiết chính: cụm hình thoi xếp chồng kim tự tháp — dùng làm điểm nhấn nhỏ
+   (ví dụ phía trên tiêu đề section). Đặt như khối nền của một phần tử trang trí. */
+.ds-pyramid {
+  width: 64px;
+  height: 48px;
+  color: var(--ds-primary);
+  /* 6 ô thoi xếp kim tự tháp 1-2-3, vẽ bằng conic/gradient sẽ phức tạp;
+     khuyến nghị dùng SVG inline. Class này chỉ giữ chỗ kích thước + màu. */
+}

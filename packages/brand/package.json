@@ -1,0 +1,28 @@
+{
+  "name": "@ds/brand",
+  "version": "0.3.1",
+  "private": true,
+  "description": "Bộ nhận diện thương hiệu Dương Sinh — màu, font, logo, họa tiết, watermark, token.",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./tokens": "./src/tokens.ts",
+    "./fonts": "./src/fonts.ts",
+    "./logo": "./src/Logo.tsx",
+    "./theme.css": "./src/theme.css",
+    "./assets/logo-full.svg": "./assets/logo-full.svg",
+    "./assets/logo-symbol.svg": "./assets/logo-symbol.svg",
+    "./watermark": "./src/Watermark.tsx",
+    "./pattern": "./src/PatternBg.tsx",
+    "./assets/watermark.svg": "./assets/watermark.svg",
+    "./assets/pattern.svg": "./assets/pattern.svg"
+  },
+  "peerDependencies": {
+    "next": ">=14",
+    "react": ">=18"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/node": "^22.10.0"
+  }
+}

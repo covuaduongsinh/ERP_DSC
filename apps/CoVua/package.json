@@ -1,0 +1,60 @@
+{
+  "name": "@ds/web",
+  "version": "0.1.0",
+  "private": true,
+  "description": "covuaduongsinh.com — hub site + Payload CMS",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build": "npm run generate:importmap && cross-env NODE_OPTIONS=\"--no-deprecation --max-old-space-size=8000\" next build",
+    "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev --port 3020",
+    "lint": "cross-env NODE_OPTIONS=--no-deprecation eslint .",
+    "type-check": "tsc --noEmit",
+    "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
+    "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
+    "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
+    "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
+    "test": "cross-env NODE_OPTIONS=--no-deprecation vitest run",
+    "test:watch": "cross-env NODE_OPTIONS=--no-deprecation vitest"
+  },
+  "dependencies": {
+    "@ds/brand": "*",
+    "@vierp/events": "*",
+    "@payloadcms/db-postgres": "3.79.1",
+    "@payloadcms/next": "3.79.1",
+    "@payloadcms/richtext-lexical": "3.79.1",
+    "@payloadcms/storage-s3": "3.79.1",
+    "@payloadcms/ui": "3.79.1",
+    "cross-env": "^7.0.3",
+    "dotenv": "16.4.7",
+    "graphql": "^16.8.1",
+    "lucide-react": "^1.17.0",
+    "nats": "^2.19.0",
+    "next": "15.4.11",
+    "next-intl": "^4.12.0",
+    "papaparse": "^5.5.3",
+    "payload": "3.79.1",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "sharp": "0.34.2",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@types/papaparse": "^5.5.2",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^4.7.0",
+    "autoprefixer": "^10.4.20",
+    "eslint": "^9.16.0",
+    "eslint-config-next": "15.4.11",
+    "jsdom": "^26.1.0",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.7.0",
+    "vitest": "^3.2.6"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "installCommand": "cd ../.. && pnpm install",
+  "buildCommand": "cd ../.. && pnpm turbo run build --filter=@ds/web",
+  "crons": [
+    {
+      "path": "/api/cron/reconcile-tuition",
+      "schedule": "0 1 * * *"
+    }
+  ]
+}
