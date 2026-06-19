@@ -1,38 +1,41 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
-import { verifyNotifUnsubscribeToken } from '@/lib/notifications/unsubscribe-token'
+import { NextRequest, NextResponse } from "next/server";
+import { prisma } from "@/lib/prisma";
+import { verifyNotifUnsubscribeToken } from "@/lib/notifications/unsubscribe-token";
 
 // Event type labels (Vietnamese)
 const EVENT_LABELS: Record<string, string> = {
-  'quote.accepted': 'Báo giá được chấp nhận',
-  'quote.rejected': 'Báo giá bị từ chối',
-  'quote.expiring': 'Báo giá sắp hết hạn',
-  'ticket.created': 'Ticket mới',
-  'ticket.assigned': 'Ticket được gán cho bạn',
-  'order.status_changed': 'Đơn hàng thay đổi trạng thái',
-  'campaign.sent': 'Chiến dịch gửi xong',
-}
+  "quote.accepted": "Báo giá được chấp nhận",
+  "quote.rejected": "Báo giá bị từ chối",
+  "quote.expiring": "Báo giá sắp hết hạn",
+  "ticket.created": "Ticket mới",
+  "ticket.assigned": "Ticket được gán cho bạn",
+  "order.status_changed": "Đơn hàng thay đổi trạng thái",
+  "campaign.sent": "Chiến dịch gửi xong",
+};
 
 // GET /api/notifications/unsubscribe?token=xxx&type=xxx
 export async function GET(req: NextRequest) {
-  const token = req.nextUrl.searchParams.get('token')
+  const token = req.nextUrl.searchParams.get("token");
 
   if (!token) {
-    return new NextResponse(renderHtml('Lỗi', 'Token không hợp lệ.'), {
+    return new NextResponse(renderHtml("Lỗi", "Token không hợp lệ."), {
       status: 400,
-      headers: { 'Content-Type': 'text/html; charset=utf-8' },
-    })
+      headers: { "Content-Type": "text/html; charset=utf-8" },
+    });
   }
 
-  const decoded = verifyNotifUnsubscribeToken(token)
+  const decoded = verifyNotifUnsubscribeToken(token);
   if (!decoded) {
-    return new NextResponse(renderHtml('Lỗi', 'Token không hợp lệ hoặc đã hết hạn.'), {
-      status: 400,
-      headers: { 'Content-Type': 'text/html; charset=utf-8' },
-    })
+    return new NextResponse(
+      renderHtml("Lỗi", "Token không hợp lệ hoặc đã hết hạn."),
+      {
+        status: 400,
+        headers: { "Content-Type": "text/html; charset=utf-8" },
+      },
+    );
   }
 
-  const { userId, eventType } = decoded
+  const { userId, eventType } = decoded;
 
   // Disable email for this event type
   await prisma.notificationPreference.upsert({
@@ -48,22 +51,22 @@ export async function GET(req: NextRequest) {
     update: {
       email: false,
     },
-  })
+  });
 
-  const eventLabel = EVENT_LABELS[eventType] || eventType
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3018'
+  const eventLabel = EVENT_LABELS[eventType] || eventType;
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3018";
 
   return new NextResponse(
     renderHtml(
-      'Đã tắt thông báo email',
+      "Đã tắt thông báo email",
       `Đã tắt thông báo email cho "<strong>${eventLabel}</strong>".<br><br>Bạn có thể bật lại trong <strong>Cài đặt → Thông báo</strong>.`,
-      `${appUrl}/settings`
+      `${appUrl}/settings`,
     ),
     {
       status: 200,
-      headers: { 'Content-Type': 'text/html; charset=utf-8' },
-    }
-  )
+      headers: { "Content-Type": "text/html; charset=utf-8" },
+    },
+  );
 }
 
 function renderHtml(title: string, message: string, backUrl?: string): string {
@@ -72,7 +75,7 @@ function renderHtml(title: string, message: string, backUrl?: string): string {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>${title} — VietERP CRM</title>
+  <title>${title} — Cờ vua Dương Sinh CRM</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -111,8 +114,8 @@ function renderHtml(title: string, message: string, backUrl?: string): string {
   <div class="card">
     <h1>${title}</h1>
     <p>${message}</p>
-    ${backUrl ? `<a href="${backUrl}" class="btn">Quay lại VietERP CRM</a>` : ''}
+    ${backUrl ? `<a href="${backUrl}" class="btn">Quay lại Cờ vua Dương Sinh CRM</a>` : ""}
   </div>
 </body>
-</html>`
+</html>`;
 }

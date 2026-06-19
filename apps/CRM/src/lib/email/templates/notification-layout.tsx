@@ -9,14 +9,14 @@ import {
   Preview,
   Section,
   Text,
-} from '@react-email/components'
-import * as React from 'react'
+} from "@react-email/components";
+import * as React from "react";
 
 interface NotificationLayoutProps {
-  preview: string
-  children: React.ReactNode
-  unsubscribeUrl?: string
-  settingsUrl?: string
+  preview: string;
+  children: React.ReactNode;
+  unsubscribeUrl?: string;
+  settingsUrl?: string;
 }
 
 /**
@@ -37,7 +37,7 @@ export function NotificationLayout({
         <Container style={container}>
           {/* Header */}
           <Section style={header}>
-            <Heading style={logo}>VietERP CRM</Heading>
+            <Heading style={logo}>Cờ vua Dương Sinh CRM</Heading>
           </Section>
 
           {/* Content */}
@@ -47,7 +47,8 @@ export function NotificationLayout({
           <Hr style={hr} />
           <Section style={footer}>
             <Text style={footerText}>
-              Bạn nhận email này vì đã bật thông báo email trong VietERP CRM.
+              Bạn nhận email này vì đã bật thông báo email trong Cờ vua Dương
+              Sinh CRM.
             </Text>
             <Text style={footerLinks}>
               {settingsUrl && (
@@ -55,7 +56,7 @@ export function NotificationLayout({
                   <Link href={settingsUrl} style={footerLink}>
                     Quản lý thông báo
                   </Link>
-                  {unsubscribeUrl && ' | '}
+                  {unsubscribeUrl && " | "}
                 </>
               )}
               {unsubscribeUrl && (
@@ -65,76 +66,77 @@ export function NotificationLayout({
               )}
             </Text>
             <Text style={footerCopy}>
-              &copy; {new Date().getFullYear()} VietERP CRM. All rights reserved.
+              &copy; {new Date().getFullYear()} Cờ vua Dương Sinh CRM. All
+              rights reserved.
             </Text>
           </Section>
         </Container>
       </Body>
     </Html>
-  )
+  );
 }
 
 const main: React.CSSProperties = {
-  backgroundColor: '#F9FAFB',
+  backgroundColor: "#F9FAFB",
   fontFamily:
     '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
-}
+};
 
 const container: React.CSSProperties = {
-  margin: '0 auto',
-  padding: '20px 0 48px',
-  maxWidth: '580px',
-}
+  margin: "0 auto",
+  padding: "20px 0 48px",
+  maxWidth: "580px",
+};
 
 const header: React.CSSProperties = {
-  padding: '24px 32px',
-}
+  padding: "24px 32px",
+};
 
 const logo: React.CSSProperties = {
-  color: '#2563EB',
-  fontSize: '20px',
+  color: "#2563EB",
+  fontSize: "20px",
   fontWeight: 700,
   margin: 0,
-}
+};
 
 const content: React.CSSProperties = {
-  backgroundColor: '#FFFFFF',
-  borderRadius: '8px',
-  border: '1px solid #E5E7EB',
-  padding: '32px',
-}
+  backgroundColor: "#FFFFFF",
+  borderRadius: "8px",
+  border: "1px solid #E5E7EB",
+  padding: "32px",
+};
 
 const hr: React.CSSProperties = {
-  borderColor: '#E5E7EB',
-  margin: '24px 0',
-}
+  borderColor: "#E5E7EB",
+  margin: "24px 0",
+};
 
 const footer: React.CSSProperties = {
-  padding: '0 32px',
-}
+  padding: "0 32px",
+};
 
 const footerText: React.CSSProperties = {
-  color: '#9CA3AF',
-  fontSize: '12px',
-  lineHeight: '18px',
-  margin: '0 0 8px',
-}
+  color: "#9CA3AF",
+  fontSize: "12px",
+  lineHeight: "18px",
+  margin: "0 0 8px",
+};
 
 const footerLinks: React.CSSProperties = {
-  color: '#9CA3AF',
-  fontSize: '12px',
-  lineHeight: '16px',
-  margin: '0 0 4px',
-}
+  color: "#9CA3AF",
+  fontSize: "12px",
+  lineHeight: "16px",
+  margin: "0 0 4px",
+};
 
 const footerCopy: React.CSSProperties = {
-  color: '#D1D5DB',
-  fontSize: '11px',
-  lineHeight: '16px',
-  margin: '8px 0 0',
-}
+  color: "#D1D5DB",
+  fontSize: "11px",
+  lineHeight: "16px",
+  margin: "8px 0 0",
+};
 
 const footerLink: React.CSSProperties = {
-  color: '#6B7280',
-  textDecoration: 'underline',
-}
+  color: "#6B7280",
+  textDecoration: "underline",
+};

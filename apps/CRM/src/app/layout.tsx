@@ -1,17 +1,17 @@
-import type { Metadata } from 'next'
-import { AppProviders } from './providers'
-import { Toaster } from '@/components/ui/toaster'
-import './globals.css'
+import type { Metadata } from "next";
+import { AppProviders } from "./providers";
+import { Toaster } from "@/components/ui/toaster";
+import "./globals.css";
 
 export const metadata: Metadata = {
-  title: 'VietERP CRM',
-  description: 'Quản lý khách hàng thông minh',
-}
+  title: "Cờ vua Dương Sinh CRM",
+  description: "Quản lý khách hàng thông minh",
+};
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
   return (
     <html lang="vi" suppressHydrationWarning>
@@ -22,5 +22,5 @@ export default function RootLayout({
         </AppProviders>
       </body>
     </html>
-  )
+  );
 }

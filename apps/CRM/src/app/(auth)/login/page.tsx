@@ -1,49 +1,49 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
-import { createClient } from '@/lib/supabase/client'
-import { useTranslation } from '@/i18n'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { createClient } from "@/lib/supabase/client";
+import { useTranslation } from "@/i18n";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export default function LoginPage() {
-  const { t } = useTranslation()
-  const router = useRouter()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const { t } = useTranslation();
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   async function handleLogin(e: React.FormEvent) {
-    e.preventDefault()
-    setLoading(true)
-    setError(null)
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
 
     try {
-      const supabase = createClient()
+      const supabase = createClient();
       const { error: authError } = await supabase.auth.signInWithPassword({
         email,
         password,
-      })
+      });
 
       if (authError) {
-        if (authError.message.includes('Invalid login credentials')) {
-          setError(t('auth.invalidCredentials'))
+        if (authError.message.includes("Invalid login credentials")) {
+          setError(t("auth.invalidCredentials"));
         } else {
-          setError(authError.message)
+          setError(authError.message);
         }
-        return
+        return;
       }
 
-      router.push('/dashboard')
-      router.refresh()
+      router.push("/dashboard");
+      router.refresh();
     } catch {
-      setError(t('auth.connectionError'))
+      setError(t("auth.connectionError"));
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   }
 
@@ -53,23 +53,26 @@ export default function LoginPage() {
         {/* Logo */}
         <div className="flex items-center justify-center mb-8">
           <span className="text-xl font-bold text-[var(--crm-text-primary)] font-[family-name:var(--font-heading)]">
-            VietERP CRM
+            Cờ vua Dương Sinh CRM
           </span>
         </div>
 
         {/* Card */}
         <div className="bg-[var(--crm-bg-card)] border border-[var(--crm-border)] rounded-lg p-6">
           <h1 className="text-lg font-semibold text-[var(--crm-text-primary)] mb-1">
-            {t('auth.login')}
+            {t("auth.login")}
           </h1>
           <p className="text-sm text-[var(--crm-text-secondary)] mb-4">
-            {t('auth.loginSubtitle')}
+            {t("auth.loginSubtitle")}
           </p>
 
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-[var(--crm-text-secondary)] text-sm">
-                {t('common.email')}
+              <Label
+                htmlFor="email"
+                className="text-[var(--crm-text-secondary)] text-sm"
+              >
+                {t("common.email")}
               </Label>
               <Input
                 id="email"
@@ -84,11 +87,14 @@ export default function LoginPage() {
 
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <Label htmlFor="password" className="text-[var(--crm-text-secondary)] text-sm">
-                  {t('auth.password')}
+                <Label
+                  htmlFor="password"
+                  className="text-[var(--crm-text-secondary)] text-sm"
+                >
+                  {t("auth.password")}
                 </Label>
                 <span className="text-xs text-[var(--crm-text-muted)] cursor-not-allowed">
-                  {t('auth.forgotPassword')}
+                  {t("auth.forgotPassword")}
                 </span>
               </div>
               <Input
@@ -102,45 +108,65 @@ export default function LoginPage() {
               />
             </div>
 
-            {error && (
-              <p className="text-sm text-red-400">{error}</p>
-            )}
+            {error && <p className="text-sm text-red-400">{error}</p>}
 
             <Button
               type="submit"
               disabled={loading}
               className="w-full bg-[#10B981] hover:bg-[#34D399] text-white font-medium"
             >
-              {loading ? t('common.processing') : t('auth.login')}
+              {loading ? t("common.processing") : t("auth.login")}
             </Button>
           </form>
 
           <p className="text-center text-sm text-[var(--crm-text-secondary)] mt-4">
-            {t('auth.noAccount')}{' '}
-            <Link href="/register" className="text-[#10B981] hover:text-[#34D399] font-medium">
-              {t('auth.register')}
+            {t("auth.noAccount")}{" "}
+            <Link
+              href="/register"
+              className="text-[#10B981] hover:text-[#34D399] font-medium"
+            >
+              {t("auth.register")}
             </Link>
           </p>
         </div>
 
         {/* Demo accounts */}
-        {process.env.NODE_ENV !== 'production' && (
+        {process.env.NODE_ENV !== "production" && (
           <div className="mt-4 bg-[var(--crm-bg-card)] border border-[var(--crm-border)] rounded-lg p-4">
-            <p className="text-xs font-medium text-[var(--crm-text-secondary)] mb-2">Demo accounts</p>
+            <p className="text-xs font-medium text-[var(--crm-text-secondary)] mb-2">
+              Demo accounts
+            </p>
             <div className="space-y-1.5">
               {[
-                { label: 'Admin', email: 'admin@your-domain.com', password: 'Admin@123456' },
-                { label: 'Manager', email: 'manager@your-domain.com', password: 'Manager@123456' },
-                { label: 'Member', email: 'member@your-domain.com', password: 'Member@123456' },
+                {
+                  label: "Admin",
+                  email: "admin@your-domain.com",
+                  password: "Admin@123456",
+                },
+                {
+                  label: "Manager",
+                  email: "manager@your-domain.com",
+                  password: "Manager@123456",
+                },
+                {
+                  label: "Member",
+                  email: "member@your-domain.com",
+                  password: "Member@123456",
+                },
               ].map((acc) => (
                 <button
                   key={acc.email}
                   type="button"
-                  onClick={() => { setEmail(acc.email); setPassword(acc.password) }}
+                  onClick={() => {
+                    setEmail(acc.email);
+                    setPassword(acc.password);
+                  }}
                   className="w-full flex items-center justify-between text-xs px-3 py-1.5 rounded border border-[var(--crm-border)] hover:border-[#10B981] hover:bg-[#10B981]/5 text-[var(--crm-text-secondary)] transition-colors cursor-pointer"
                 >
                   <span className="font-medium">{acc.label}</span>
-                  <span className="text-[var(--crm-text-muted)]">{acc.email}</span>
+                  <span className="text-[var(--crm-text-muted)]">
+                    {acc.email}
+                  </span>
                 </button>
               ))}
             </div>
@@ -148,9 +174,9 @@ export default function LoginPage() {
         )}
 
         <p className="text-center text-xs text-[var(--crm-text-muted)] mt-4">
-          VietERP CRM &mdash; Quản lý khách hàng thông minh
+          Cờ vua Dương Sinh CRM &mdash; Quản lý khách hàng thông minh
         </p>
       </div>
     </div>
-  )
+  );
 }
