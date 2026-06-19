@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import {
   Factory,
@@ -9,8 +9,8 @@ import {
   Mail,
   ExternalLink,
   RefreshCw,
-} from 'lucide-react'
-import { useIntegrationHealth } from '@/hooks/use-integrations'
+} from "lucide-react";
+import { useIntegrationHealth } from "@/hooks/use-integrations";
 
 const ICON_MAP: Record<string, React.ElementType> = {
   Factory,
@@ -19,46 +19,55 @@ const ICON_MAP: Record<string, React.ElementType> = {
   Megaphone,
   Table,
   Mail,
-}
+};
 
 export function IntegrationStatus() {
-  const { data, isLoading, refetch, isFetching } = useIntegrationHealth()
+  const { data, isLoading, refetch, isFetching } = useIntegrationHealth();
 
   if (isLoading) {
     return (
       <div className="glass-card-static p-3">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-sm font-medium text-[var(--crm-text-secondary)]">RTR Ecosystem</h3>
+          <h3 className="text-sm font-medium text-[var(--crm-text-secondary)]">
+            Hệ sinh thái Cờ vua Dương Sinh
+          </h3>
         </div>
         <div className="space-y-3">
           {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="h-8 rounded-lg bg-[var(--glass-bg)] animate-pulse" />
+            <div
+              key={i}
+              className="h-8 rounded-lg bg-[var(--glass-bg)] animate-pulse"
+            />
           ))}
         </div>
       </div>
-    )
+    );
   }
 
-  const modules = data?.modules ?? []
-  const connected = data?.connected ?? 0
-  const total = data?.total ?? 0
+  const modules = data?.modules ?? [];
+  const connected = data?.connected ?? 0;
+  const total = data?.total ?? 0;
 
   return (
     <div className="glass-card-static p-3">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-sm font-medium text-[var(--crm-text-secondary)]">RTR Ecosystem</h3>
+        <h3 className="text-sm font-medium text-[var(--crm-text-secondary)]">
+          Hệ sinh thái Cờ vua Dương Sinh
+        </h3>
         <button
           onClick={() => refetch()}
           className="p-1.5 rounded-md text-[var(--crm-text-secondary)] hover:text-[var(--crm-text-secondary)] hover:bg-[var(--crm-bg-subtle)] transition-colors"
           title="Kiểm tra lại"
         >
-          <RefreshCw className={`w-3.5 h-3.5 ${isFetching ? 'animate-spin' : ''}`} />
+          <RefreshCw
+            className={`w-3.5 h-3.5 ${isFetching ? "animate-spin" : ""}`}
+          />
         </button>
       </div>
 
       <div className="space-y-1.5">
         {modules.map((mod) => {
-          const Icon = ICON_MAP[mod.icon] || BarChart3
+          const Icon = ICON_MAP[mod.icon] || BarChart3;
           return (
             <div
               key={mod.name}
@@ -72,14 +81,20 @@ export function IntegrationStatus() {
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium text-[var(--crm-text-primary)]">{mod.label}</span>
-                  <span className="text-[10px] text-[var(--crm-text-secondary)]">{mod.description}</span>
+                  <span className="text-sm font-medium text-[var(--crm-text-primary)]">
+                    {mod.label}
+                  </span>
+                  <span className="text-[10px] text-[var(--crm-text-secondary)]">
+                    {mod.description}
+                  </span>
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <div className={`status-dot ${mod.online ? 'online' : 'offline'}`} />
+                <div
+                  className={`status-dot ${mod.online ? "online" : "offline"}`}
+                />
                 <span className="text-[10px] text-[var(--crm-text-secondary)]">
-                  {mod.online ? 'Connected' : 'Offline'}
+                  {mod.online ? "Connected" : "Offline"}
                 </span>
                 <a
                   href={mod.baseUrl}
@@ -92,7 +107,7 @@ export function IntegrationStatus() {
                 </a>
               </div>
             </div>
-          )
+          );
         })}
       </div>
 
@@ -102,5 +117,5 @@ export function IntegrationStatus() {
         </p>
       </div>
     </div>
-  )
+  );
 }
