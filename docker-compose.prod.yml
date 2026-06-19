@@ -808,7 +808,10 @@ services:
       # DB riêng "covua" trên Postgres self-host (Payload tự quản schema qua migrate)
       DATABASE_URI: postgresql://${POSTGRES_USER:-vierp}:${POSTGRES_PASSWORD}@postgres:5432/covua
       PAYLOAD_SECRET: ${COVUA_PAYLOAD_SECRET}
-      NEXT_PUBLIC_SERVER_URL: "https://covua.${BASE_DOMAIN}"
+      # Bootstrap schema LẦN ĐẦU trên DB rỗng: đặt COVUA_DB_PUSH=true (1 lần) trong .env,
+      # khởi động covua để Payload tạo schema, rồi TRẢ VỀ false và restart.
+      PAYLOAD_DB_PUSH: ${COVUA_DB_PUSH:-false}
+      NEXT_PUBLIC_SERVER_URL: "https://clb.${BASE_DOMAIN}"
       # Storage qua MinIO (S3-compatible, nội bộ); public URL phục vụ qua Caddy
       S3_ENDPOINT: http://minio:9000
       S3_ACCESS_KEY_ID: ${MINIO_ROOT_USER:-minioadmin}
@@ -822,8 +825,11 @@ services:
       # Event bus (Pha 4 — đồng bộ ERP)
       NATS_URL: nats://nats:4222
       MODULE_NAME: covua
-      # SSO Keycloak (Pha 3)
+      # SSO Keycloak (Pha 3): SSO_URL nội bộ (token/userinfo), SSO_PUBLIC_URL cho
+      # trình duyệt (authorize/logout) — BẮT BUỘC khi chạy sau Caddy, nếu thiếu thì
+      # redirect đăng nhập sẽ trỏ vào keycloak:8080 nội bộ và hỏng.
       SSO_URL: http://keycloak:8080
+      SSO_PUBLIC_URL: "https://sso.${BASE_DOMAIN}"
       SSO_REALM: ${SSO_REALM:-vierp}
       SSO_CLIENT_ID: ${COVUA_SSO_CLIENT_ID:-covua}
       SSO_CLIENT_SECRET: ${COVUA_SSO_CLIENT_SECRET}
