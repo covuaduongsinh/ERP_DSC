@@ -21,6 +21,12 @@ read_env() { grep -E "^$1=" "$ENVFILE" 2>/dev/null | head -1 | cut -d= -f2-; }
 SUPA_URL="$(read_env NEXT_PUBLIC_SUPABASE_URL)"
 SUPA_KEY="$(read_env NEXT_PUBLIC_SUPABASE_ANON_KEY)"
 
+# CoVua (Payload CMS) cần secret + DB lúc BUILD (có trang SSG đọc CMS).
+PG_USER="$(read_env POSTGRES_USER)"; PG_USER="${PG_USER:-vierp}"
+PG_PASS="$(read_env POSTGRES_PASSWORD)"
+COVUA_SECRET="$(read_env COVUA_PAYLOAD_SECRET)"
+BASE_DOMAIN="$(read_env BASE_DOMAIN)"; BASE_DOMAIN="${BASE_DOMAIN:-erp.example.vn}"
+
 # DIR(thư mục apps/) | PKG(name trong package.json) | IMG(tên image compose)
 ROWS=(
   "HRM-AI|vierp-hrm-ai|vierp-hrm-ai"
@@ -36,14 +42,26 @@ ROWS=(
   "docs|erp-docs|vierp-docs"
   "TPM-api-nestjs|vierp-tpm-api|vierp-tpm-api-nestjs"
   "TPM-web|@vierp/tpm-web|vierp-tpm-web"
+  "CoVua|@ds/web|vierp-covua"
 )
 
 build_row() {
   local dir="$1" pkg="$2" img="$3"
   echo "==> [$dir] PKG=$pkg  ->  ghcr.io/nclamvn/$img:$IMAGE_TAG"
+  local extra=()
+  # CoVua build cần PAYLOAD_SECRET + DATABASE_URI (DB phải REACHABLE) + URL gốc.
+  # `--network vierp-network` để build container gọi được `postgres:5432`
+  # ⇒ PHẢI khởi động postgres TRƯỚC khi build covua.
+  if [[ "$img" == "vierp-covua" ]]; then
+    extra+=( --network vierp-network )
+    extra+=( --build-arg "PAYLOAD_SECRET=${COVUA_SECRET}" )
+    extra+=( --build-arg "DATABASE_URI=postgresql://${PG_USER}:${PG_PASS}@postgres:5432/covua" )
+    extra+=( --build-arg "NEXT_PUBLIC_SERVER_URL=https://covua.${BASE_DOMAIN}" )
+  fi
   docker build -f "$DOCKERFILE" --build-arg PKG="$pkg" \
     --build-arg NEXT_PUBLIC_SUPABASE_URL="$SUPA_URL" \
     --build-arg NEXT_PUBLIC_SUPABASE_ANON_KEY="$SUPA_KEY" \
+    "${extra[@]}" \
     -t "ghcr.io/nclamvn/$img:$IMAGE_TAG" .
 }
 
