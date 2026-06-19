@@ -115,6 +115,7 @@ services:
       KC_DB_PASSWORD: ${POSTGRES_PASSWORD}
       KC_HOSTNAME_STRICT: "false"
       KC_HTTP_ENABLED: "true"
+      KC_HEALTH_ENABLED: "true"
       KC_PROXY: edge
       # Issuer cố định = host công khai để token (cấp qua sso.) khớp khi userinfo
       # gọi qua URL nội bộ (keycloak:8080) — nếu không sẽ lỗi userinfo 401.
