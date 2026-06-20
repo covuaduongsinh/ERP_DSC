@@ -206,10 +206,10 @@ Default credentials / Thông tin đăng nhập mặc định:
 
 ### 4. Explore a Module / Khám phá một module
 
-Start with **HRM**:
+Start with **HRM-unified**:
 
 ```
-http://localhost:3001
+http://localhost:3003
 ```
 
 **Key sections:**
@@ -224,7 +224,7 @@ http://localhost:3001
 Access OpenAPI documentation for each module:
 
 ```
-http://localhost:3001/api/docs      # HRM API docs
+http://localhost:3003/api/docs      # HRM-unified API docs
 http://localhost:3002/api/docs      # CRM API docs
 http://localhost:3007/api/docs      # Accounting API docs
 ```
