@@ -1,0 +1,11 @@
+# Generated / vendored files — Prettier KHÔNG được định dạng lại (npm/Next/TS quản lý).
+package-lock.json
+**/package-lock.json
+**/node_modules/
+**/.next/
+**/dist/
+**/build/
+**/coverage/
+**/*.tsbuildinfo
+**/payload-types.ts
+**/payload-generated-schema.ts
