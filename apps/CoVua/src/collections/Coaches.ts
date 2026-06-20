@@ -11,8 +11,7 @@ const canManageContent = hasRole('admin', 'manager', 'receptionist')
  */
 const canSeeSalary: FieldAccess = ({ req }) =>
   hasRole('admin', 'manager', 'accountant')({ req }) === true
-const canSetSalary: FieldAccess = ({ req }) =>
-  hasRole('admin', 'manager')({ req }) === true
+const canSetSalary: FieldAccess = ({ req }) => hasRole('admin', 'manager')({ req }) === true
 
 export const Coaches: CollectionConfig = {
   slug: 'coaches',
@@ -45,8 +44,7 @@ export const Coaches: CollectionConfig = {
       unique: true,
       index: true,
       admin: {
-        description:
-          'Khóa định danh để import khớp dòng (idempotent). Không trùng.',
+        description: 'Khóa định danh để import khớp dòng (idempotent). Không trùng.',
       },
     },
     {
@@ -157,6 +155,17 @@ export const Coaches: CollectionConfig = {
         description: 'Đơn giá/buổi đứng lớp — dùng tính bảng lương. 🔒 Chỉ tài chính xem.',
       },
       access: { read: canSeeSalary, update: canSetSalary },
+    },
+    {
+      // Liên kết canonical sang nhân sự HRM — để lương HLV theo buổi (covua.coach.
+      // session.completed) khớp về đúng nhân viên ở Accounting/HRM payroll.
+      name: 'employeeId',
+      type: 'text',
+      label: 'Mã nhân viên HRM',
+      admin: {
+        position: 'sidebar',
+        description: 'ID nhân viên bên HRM (master-data) để ghi lương HLV về đúng người.',
+      },
     },
   ],
 }

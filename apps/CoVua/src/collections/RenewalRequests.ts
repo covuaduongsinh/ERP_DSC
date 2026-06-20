@@ -1,14 +1,11 @@
-import type { CollectionConfig } from 'payload';
-import { canProcessRenewals } from '../access';
-import {
-  createRenewalForOwnChild,
-  readRenewalRequest,
-  staffOnly,
-} from '../access/parents';
-import { withBranchScope } from '../access/branch';
-import { codeField, RENEWAL_REQUEST_CODE_SPEC } from '../lib/codes/field';
-import { makeCodeHook } from '../lib/codes/makeCodeHook';
-import { lockCodeHook } from '../lib/codes/lockCodeHook';
+import type { CollectionConfig } from 'payload'
+import { canProcessRenewals } from '../access'
+import { createRenewalForOwnChild, readRenewalRequest, staffOnly } from '../access/parents'
+import { withBranchScope } from '../access/branch'
+import { codeField, RENEWAL_REQUEST_CODE_SPEC } from '../lib/codes/field'
+import { makeCodeHook } from '../lib/codes/makeCodeHook'
+import { lockCodeHook } from '../lib/codes/lockCodeHook'
+import { publishRenewalRequested } from '../lib/events/renewal-hooks'
 
 /**
  * Yêu cầu gia hạn học phí — phụ huynh gửi từ cổng, nhân viên xử lý tại /admin.
@@ -22,20 +19,14 @@ export const RenewalRequests: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'student',
-    defaultColumns: [
-      'code',
-      'student',
-      'parent',
-      'sessionsRemaining',
-      'status',
-      'createdAt',
-    ],
+    defaultColumns: ['code', 'student', 'parent', 'sessionsRemaining', 'status', 'createdAt'],
     group: 'Cổng phụ huynh',
   },
   timestamps: true,
   hooks: {
     beforeValidate: [lockCodeHook],
     beforeChange: [makeCodeHook(RENEWAL_REQUEST_CODE_SPEC)],
+    afterChange: [publishRenewalRequested],
   },
   access: {
     create: createRenewalForOwnChild,
@@ -103,4 +94,4 @@ export const RenewalRequests: CollectionConfig = {
       label: 'Ghi chú nhân viên',
     },
   ],
-};
+}

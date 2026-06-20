@@ -8,11 +8,6 @@ import { subscribe, publish } from "@vierp/events";
 import { EVENT_SUBJECTS } from "@vierp/shared";
 import type { GLJournalEntry } from "../gl-engine";
 import { validateJournalEntry } from "../gl-engine";
-import {
-  generateAPJournalEntry,
-  generateARJournalEntry,
-  calculateInvoice,
-} from "../invoice-engine";
 
 // ==================== Default VAS Account IDs ====================
 // These would be resolved from the Chart of Accounts at runtime
@@ -65,6 +60,7 @@ export async function startAccountingEventHandlers(): Promise<void> {
     subscribeToPayrollEvents(),
     // CoVua (Cờ vua Dương Sinh) events
     subscribeToCoVuaPaymentEvents(),
+    subscribeToCoVuaCoachSession(),
   ]);
 
   console.log(
@@ -273,9 +269,9 @@ async function subscribeToPayrollEvents(): Promise<void> {
 
       const grossSalary = (data.totalGrossSalary as number) || 0;
       const insuranceEmployee = (data.totalInsuranceEmployee as number) || 0;
-      const pitAmount = (data.totalPIT as number) || 0;
-      const netSalary = (data.totalNetSalary as number) || 0;
-      const insuranceEmployer = (data.totalInsuranceEmployer as number) || 0;
+      const _pitAmount = (data.totalPIT as number) || 0;
+      const _netSalary = (data.totalNetSalary as number) || 0;
+      const _insuranceEmployer = (data.totalInsuranceEmployer as number) || 0;
 
       // Journal 1: Salary expense
       // Debit: 622/627/641/642 (by department type)
@@ -399,6 +395,51 @@ async function subscribeToCoVuaPaymentEvents(): Promise<void> {
         sourceRef: data.paymentId as string,
         description: `Ghi nhận doanh thu học phí CoVua - ${ref}`,
         lines,
+      };
+
+      await postAutoJournal(journalEntry, event.tenantId, event.userId);
+    },
+  );
+}
+
+async function subscribeToCoVuaCoachSession(): Promise<void> {
+  // HLV dạy xong một buổi → ghi nhận chi phí lương theo buổi.
+  // Nợ 642 (CP quản lý — lương HLV) / Có 3341 (Phải trả NLĐ)
+  await subscribe(
+    "covua.coach.session.completed",
+    `${CONSUMER_PREFIX}-covua-coach-session`,
+    async (event) => {
+      const data = event.data as Record<string, unknown>;
+      const pay = Number(data.pay) || 0;
+      if (pay <= 0) return;
+      const ref = (data.sessionId as string) || "";
+      const who =
+        (data.employeeId as string) || (data.coachId as string) || "—";
+      console.log(
+        `[ACCOUNTING] CoVua coach session: GV ${who} buổi ${ref} = ${pay}`,
+      );
+
+      const journalEntry: GLJournalEntry = {
+        entryDate: data.date ? new Date(data.date as string) : new Date(),
+        journalType: "PAYROLL",
+        source: "SYSTEM",
+        sourceModule: "covua",
+        sourceRef: ref,
+        description: `Lương HLV theo buổi (CoVua) - GV ${who}, buổi ${ref}`,
+        lines: [
+          {
+            accountId: DEFAULT_ACCOUNTS.ADMIN_EXPENSE,
+            description: "Chi phí lương HLV theo buổi",
+            debitAmount: pay,
+            creditAmount: 0,
+          },
+          {
+            accountId: DEFAULT_ACCOUNTS.PAYROLL_PAYABLE,
+            description: "Lương HLV phải trả",
+            debitAmount: 0,
+            creditAmount: pay,
+          },
+        ],
       };
 
       await postAutoJournal(journalEntry, event.tenantId, event.userId);

@@ -1,11 +1,15 @@
-import type { CollectionConfig } from 'payload';
-import { staffOnly, readStudentForParent, staffOnlyFieldWrite } from '../access/parents';
-import { DATE_ONLY } from '../lib/admin-date';
-import { withBranchScope } from '../access/branch';
-import { buildAuditHooks } from '../lib/audit/log';
-import { codeField, STUDENT_CODE_SPEC } from '../lib/codes/field';
-import { makeCodeHook } from '../lib/codes/makeCodeHook';
-import { lockCodeHook } from '../lib/codes/lockCodeHook';
+import type { CollectionConfig } from 'payload'
+import { staffOnly, readStudentForParent, staffOnlyFieldWrite } from '../access/parents'
+import { DATE_ONLY } from '../lib/admin-date'
+import { withBranchScope } from '../access/branch'
+import { buildAuditHooks } from '../lib/audit/log'
+import { codeField, STUDENT_CODE_SPEC } from '../lib/codes/field'
+import { makeCodeHook } from '../lib/codes/makeCodeHook'
+import { lockCodeHook } from '../lib/codes/lockCodeHook'
+import { publishStudentUpdated } from '../lib/events/sync-hooks'
+
+// Tách audit hooks ra biến để nối publishStudentUpdated vào afterChange mà KHÔNG đè audit.
+const studentsAuditHooks = buildAuditHooks('students')
 
 /**
  * Học viên — schema GĐ4 (access control: Claude Code).
@@ -19,13 +23,7 @@ export const Students: CollectionConfig = {
   admin: {
     group: 'Học viên & Phụ huynh',
     useAsTitle: 'fullName',
-    defaultColumns: [
-      'code',
-      'fullName',
-      'capChinh',
-      'location',
-      'enrollmentStatus',
-    ],
+    defaultColumns: ['code', 'fullName', 'capChinh', 'location', 'enrollmentStatus'],
     components: {
       beforeListTable: ['/components/admin/export/ExportButtons#ExportButtons'],
     },
@@ -42,9 +40,10 @@ export const Students: CollectionConfig = {
     delete: withBranchScope(staffOnly),
   },
   hooks: {
-    ...buildAuditHooks('students'),
+    ...studentsAuditHooks,
     beforeValidate: [lockCodeHook],
     beforeChange: [makeCodeHook(STUDENT_CODE_SPEC)],
+    afterChange: [...(studentsAuditHooks.afterChange ?? []), publishStudentUpdated],
   },
   fields: [
     codeField,
@@ -150,4 +149,4 @@ export const Students: CollectionConfig = {
       },
     },
   ],
-};
+}

@@ -1,8 +1,12 @@
-import type { CollectionConfig } from 'payload';
-import { staffOnly } from '../access/parents';
-import { withBranchScope } from '../access/branch';
-import { buildAuditHooks } from '../lib/audit/log';
-import { DATE_ONLY } from '../lib/admin-date';
+import type { CollectionConfig } from 'payload'
+import { staffOnly } from '../access/parents'
+import { withBranchScope } from '../access/branch'
+import { buildAuditHooks } from '../lib/audit/log'
+import { DATE_ONLY } from '../lib/admin-date'
+import { publishCoachSessionCompleted } from '../lib/events/coach-payroll-hooks'
+
+// Tách audit hooks ra biến để nối publishCoachSessionCompleted vào afterChange mà KHÔNG đè audit.
+const classSessionsAuditHooks = buildAuditHooks('class-sessions')
 
 /**
  * Buổi học (ClassSession) — MỘT lần MỘT lớp diễn ra vào MỘT ngày dương lịch.
@@ -44,7 +48,10 @@ export const ClassSessions: CollectionConfig = {
     update: withBranchScope(staffOnly, 'location'),
     delete: withBranchScope(staffOnly, 'location'),
   },
-  hooks: buildAuditHooks('class-sessions'),
+  hooks: {
+    ...classSessionsAuditHooks,
+    afterChange: [...(classSessionsAuditHooks.afterChange ?? []), publishCoachSessionCompleted],
+  },
   fields: [
     {
       name: 'lop',
@@ -59,14 +66,17 @@ export const ClassSessions: CollectionConfig = {
       label: 'Cơ sở',
       relationTo: 'locations',
       admin: {
-        description: 'Cơ sở của buổi — trục phân quyền. Buổi gắn lớp lấy từ lớp; buổi lịch sử lấy từ HV.',
+        description:
+          'Cơ sở của buổi — trục phân quyền. Buổi gắn lớp lấy từ lớp; buổi lịch sử lấy từ HV.',
       },
     },
     {
       name: 'buoi',
       type: 'text',
       label: 'Mã buổi (lịch sử)',
-      admin: { description: 'Nhãn khối/đợt lịch sử (vd C16, B119). Trống với buổi tạo mới theo lớp.' },
+      admin: {
+        description: 'Nhãn khối/đợt lịch sử (vd C16, B119). Trống với buổi tạo mới theo lớp.',
+      },
     },
     {
       name: 'date',
@@ -184,4 +194,4 @@ export const ClassSessions: CollectionConfig = {
       },
     },
   ],
-};
+}

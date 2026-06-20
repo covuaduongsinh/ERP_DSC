@@ -1,7 +1,8 @@
-import type { CollectionConfig } from 'payload';
-import { staffOnly, readByStudentRelation } from '../access/parents';
-import { withBranchScope } from '../access/branch';
-import { DATE_ONLY } from '../lib/admin-date';
+import type { CollectionConfig } from 'payload'
+import { staffOnly, readByStudentRelation } from '../access/parents'
+import { withBranchScope } from '../access/branch'
+import { DATE_ONLY } from '../lib/admin-date'
+import { publishAttendanceRecorded } from '../lib/events/sync-hooks'
 
 /**
  * Điểm danh (tùy chọn) — schema GĐ4 (access control: Claude Code).
@@ -30,6 +31,9 @@ export const Attendance: CollectionConfig = {
     read: withBranchScope(readByStudentRelation(), 'student.location'),
     update: withBranchScope(staffOnly, 'student.location'),
     delete: withBranchScope(staffOnly, 'student.location'),
+  },
+  hooks: {
+    afterChange: [publishAttendanceRecorded],
   },
   fields: [
     {
@@ -158,4 +162,4 @@ export const Attendance: CollectionConfig = {
       },
     },
   ],
-};
+}
