@@ -100,9 +100,13 @@ model Contact {
   audienceMembers AudienceMember[]
   campaignSends   CampaignSend[]
   documents       Document[]
+  children        ContactChild[]
 
   country        String? // ISO 3166-1 alpha-2
   externalHrmId  String?
+  // Liên kết chống trùng: id Customer canonical (@vierp/master-data) + id Parent bên CLB
+  customerId     String?
+  clbParentId  String?
   score          Int       @default(0)
   lastActivityAt DateTime?
 
@@ -115,6 +119,24 @@ model Contact {
   @@index([companyId])
   @@index([ownerId])
   @@index([status])
+  @@index([customerId])
+}
+
+/// Con của phụ huynh (Contact). CLB là SoR cho học viên đã ghi danh — ở đây chỉ
+/// giữ thông tin tối thiểu phục vụ tuyển sinh + view 360°, liên kết qua clbStudentId.
+model ContactChild {
+  id             String    @id @default(cuid())
+  contactId      String
+  contact        Contact   @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  fullName       String
+  dob            DateTime?
+  level          String? // cấp/Elo hiển thị (đọc-cache từ CLB)
+  clbStudentId String? // id Học viên bên CLB sau khi chốt
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@index([contactId])
+  @@index([clbStudentId])
 }
 
 enum LeadSource {
@@ -208,6 +230,18 @@ model Deal {
 
   externalMrpWorkOrderId String?
   externalOtbBudgetRef   String?
+
+  // ── Tuyển sinh đào tạo (dealType = "ADMISSION") ──
+  // Lớp/cơ sở tham chiếu id bên CLB (CLB là SoR cho lớp học).
+  childAge             String?
+  interestedClassId    String?
+  interestedLocationId String?
+  trialDate            DateTime?
+  // Dấu vết chuyển đổi sang CLB (chống tạo trùng khi chốt "Đã chốt").
+  clbParentId        String?
+  clbStudentId       String?
+  clbEnrollmentId    String?
+  convertedAt          DateTime?
 
   ownerId   String
   owner     User     @relation("DealOwner", fields: [ownerId], references: [id])
@@ -342,6 +376,7 @@ model Product {
   exportNotes String?
 
   externalMrpPartId String?
+  masterProductId   String? // id Product canonical (@vierp/master-data) — chống trùng sách giữa CRM/CLB/Ecommerce
 
   quoteItems        QuoteItem[]
   orderItems        OrderItem[]
@@ -654,6 +689,7 @@ enum UserRole {
   MANAGER
   MEMBER
   VIEWER
+  RECEPTIONIST // Lễ tân: chăm & chốt lead tuyển sinh đào tạo
 }
 
 // ═══════════════════════════════════════

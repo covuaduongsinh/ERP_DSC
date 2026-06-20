@@ -13,6 +13,7 @@ This document describes the schema structure of each module in VietERP Platform.
 ### Multi-Tenancy Entities
 
 #### Tenant / Đối tượng Tenant
+
 ```
 - id (String) — Unique identifier (CUID)
 - name (String) — Tenant name
@@ -25,6 +26,7 @@ This document describes the schema structure of each module in VietERP Platform.
 ```
 
 #### User / Người dùng
+
 ```
 - id (String) — Unique identifier
 - email (String) — Email address
@@ -44,6 +46,7 @@ Relationships:
 ### Master Data Entities
 
 #### Customer / Khách hàng
+
 ```
 - id (String) — Unique identifier
 - code (String) — Customer code (unique per tenant)
@@ -67,6 +70,7 @@ Indexes:
 ```
 
 #### Product / Sản phẩm
+
 ```
 - id (String) — Unique identifier
 - code (String) — Product SKU (unique per tenant)
@@ -87,6 +91,7 @@ Indexes:
 ```
 
 #### Employee / Nhân viên
+
 ```
 - id (String) — Unique identifier
 - code (String) — Employee ID (unique per tenant)
@@ -108,6 +113,7 @@ Indexes:
 ```
 
 #### Supplier / Nhà cung cấp
+
 ```
 - id (String) — Unique identifier
 - code (String) — Supplier code (unique per tenant)
@@ -132,6 +138,7 @@ Indexes:
 ```
 
 #### Warehouse / Kho hàng
+
 ```
 - id (String) — Unique identifier
 - code (String) — Warehouse code (unique per tenant)
@@ -148,6 +155,7 @@ Indexes:
 ```
 
 #### Unit of Measure / Đơn vị đo
+
 ```
 - id (String) — Unique identifier
 - code (String) — Unit code (unique per tenant)
@@ -166,6 +174,7 @@ Indexes:
 ### System Entities
 
 #### AuditLog / Bản ghi Kiểm toán
+
 ```
 - id (String) — Unique identifier
 - action (String) — CREATE | UPDATE | DELETE | RESTORE
@@ -187,6 +196,7 @@ Indexes:
 ```
 
 #### MasterDataChangeLog / Bản ghi Thay đổi Dữ liệu Chính
+
 ```
 - id (String) — Unique identifier
 - entity (String) — customer, product, employee, supplier
@@ -206,6 +216,7 @@ Indexes:
 ```
 
 #### FeatureFlag / Cờ Tính năng
+
 ```
 - id (String) — Unique identifier
 - key (String) — Feature flag key (unique)
@@ -228,6 +239,7 @@ Indexes:
 ### Chart of Accounts
 
 #### Account / Tài khoản
+
 ```
 - id (String) — Unique identifier
 - accountNumber (String) — VAS account code (111, 1111, 131)
@@ -269,6 +281,7 @@ Indexes:
 ### Fiscal Periods
 
 #### FiscalYear / Năm Tài chính
+
 ```
 - id (String) — Unique identifier
 - year (Int) — Year number (2026)
@@ -286,6 +299,7 @@ Indexes:
 ```
 
 #### FiscalPeriod / Kỳ Kế toán
+
 ```
 - id (String) — Unique identifier
 - fiscalYearId (String) — Fiscal year reference
@@ -310,6 +324,7 @@ Indexes:
 ### Journal Entries
 
 #### JournalEntry / Bút toán
+
 ```
 - id (String) — Unique identifier
 - entryNumber (String) — Auto-generated: JV-2026-000001
@@ -339,6 +354,7 @@ Indexes:
 ```
 
 #### JournalLine / Dòng Bút toán
+
 ```
 - id (String) — Unique identifier
 - journalEntryId (String) — Entry reference
@@ -365,6 +381,7 @@ Indexes:
 ### Invoices
 
 #### APInvoice / Hoá đơn Mua hàng
+
 ```
 - id (String) — Unique identifier
 - invoiceNumber (String) — Supplier invoice number (unique per tenant)
@@ -392,6 +409,7 @@ Indexes:
 ```
 
 #### ARInvoice / Hoá đơn Bán hàng
+
 ```
 - id (String) — Unique identifier
 - invoiceNumber (String) — Invoice number (unique per tenant)
@@ -425,6 +443,7 @@ Indexes:
 **Location:** `apps/CRM/prisma/schema.prisma`
 
 #### Lead / Cơ hội tiềm năng
+
 ```
 - id (String) — Unique identifier
 - leadNumber (String) — Auto-generated lead code
@@ -444,6 +463,7 @@ Indexes:
 ```
 
 #### Contact / Liên hệ
+
 ```
 - id (String) — Unique identifier
 - firstName, lastName (String)
@@ -464,6 +484,7 @@ Indexes:
 ```
 
 #### Opportunity / Cơ hội bán hàng
+
 ```
 - id (String) — Unique identifier
 - opportunityName (String) — Opportunity name
@@ -481,6 +502,7 @@ Indexes:
 ```
 
 #### Activity / Hoạt động
+
 ```
 - id (String) — Unique identifier
 - activityType (ActivityType) — CALL | EMAIL | MEETING | TASK | NOTE
@@ -499,6 +521,7 @@ Indexes:
 ```
 
 #### Campaign / Chiến dịch
+
 ```
 - id (String) — Unique identifier
 - campaignName (String)
@@ -520,6 +543,7 @@ Indexes:
 **Location:** `apps/Ecommerce/prisma/schema.prisma`
 
 #### Product / Sản phẩm
+
 ```
 - id (String) — Unique identifier
 - sku (String) — Stock keeping unit (unique)
@@ -543,6 +567,7 @@ Indexes:
 ```
 
 #### Order / Đơn hàng
+
 ```
 - id (String) — Unique identifier
 - orderNumber (String) — Order number (unique per tenant)
@@ -567,6 +592,7 @@ Indexes:
 ```
 
 #### OrderItem / Hàng trong Đơn hàng
+
 ```
 - id (String) — Unique identifier
 - orderId (String)
@@ -583,6 +609,7 @@ Relationships:
 ```
 
 #### Cart / Giỏ hàng
+
 ```
 - id (String) — Unique identifier
 - customerId (String)
@@ -597,6 +624,7 @@ Relationships:
 ```
 
 #### Payment / Thanh toán
+
 ```
 - id (String) — Unique identifier
 - orderId (String)
@@ -612,6 +640,7 @@ Relationships:
 ```
 
 #### Shipment / Vận chuyển
+
 ```
 - id (String) — Unique identifier
 - orderId (String)
@@ -631,9 +660,10 @@ Relationships:
 
 ## HRM Schema / Schema Quản lý Nhân sự
 
-**Location:** `apps/HRM/prisma/schema.prisma`
+**Location:** `apps/HRM-unified/prisma/schema.prisma`
 
 #### Department / Phòng ban
+
 ```
 - id (String) — Unique identifier
 - code (String) — Department code (unique per tenant)
@@ -654,6 +684,7 @@ Indexes:
 ```
 
 #### Position / Chức danh
+
 ```
 - id (String) — Unique identifier
 - code (String) — Position code (unique per tenant)
@@ -668,6 +699,7 @@ Indexes:
 ```
 
 #### Attendance / Chấm công
+
 ```
 - id (String) — Unique identifier
 - employeeId (String)
@@ -688,6 +720,7 @@ Indexes:
 ```
 
 #### Payroll / Bảng lương
+
 ```
 - id (String) — Unique identifier
 - payrollPeriod (String) — Year-month (2026-03)
@@ -710,6 +743,7 @@ Indexes:
 ```
 
 #### Leave / Phép nghỉ
+
 ```
 - id (String) — Unique identifier
 - employeeId (String)
@@ -736,6 +770,7 @@ Indexes:
 **Location:** `apps/MRP/prisma/schema.prisma`
 
 #### BOM (Bill of Materials) / Danh sách Vật liệu
+
 ```
 - id (String) — Unique identifier
 - code (String) — BOM code (unique per tenant)
@@ -755,6 +790,7 @@ Indexes:
 ```
 
 #### ProductionOrder / Lệnh sản xuất
+
 ```
 - id (String) — Unique identifier
 - poNumber (String) — PO number (unique per tenant)
@@ -775,6 +811,7 @@ Indexes:
 ```
 
 #### QualityCheck / Kiểm chất lượng
+
 ```
 - id (String) — Unique identifier
 - productionOrderId (String)
@@ -791,6 +828,7 @@ Relationships:
 ```
 
 #### Inventory / Tồn kho
+
 ```
 - id (String) — Unique identifier
 - productId (String)
@@ -809,6 +847,7 @@ Indexes:
 ```
 
 #### Machine / Máy móc
+
 ```
 - id (String) — Unique identifier
 - code (String) — Machine code (unique per tenant)
@@ -830,6 +869,7 @@ Indexes:
 ## Enum Types Reference
 
 ### EntityStatus
+
 ```
 ACTIVE — Đang hoạt động
 INACTIVE — Không hoạt động
@@ -838,6 +878,7 @@ TERMINATED — Chấm dứt
 ```
 
 ### UserRole
+
 ```
 ADMIN — Quản trị viên
 MANAGER — Quản lý
@@ -846,6 +887,7 @@ VIEWER — Chỉ xem
 ```
 
 ### Tier
+
 ```
 BASIC — Gói cơ bản
 PRO — Gói chuyên nghiệp
@@ -855,6 +897,7 @@ ENTERPRISE — Gói doanh nghiệp
 ## Foreign Key Relationships / Quan hệ Khóa ngoài
 
 All relationships include:
+
 - ON DELETE CASCADE for dependent records
 - ON DELETE RESTRICT for master records
 - Proper indexing on foreign keys for performance

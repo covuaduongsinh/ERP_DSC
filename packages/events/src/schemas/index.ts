@@ -4,12 +4,12 @@
 // ============================================================
 
 // Local imports for building AllEventSchemas
-import { CRMEventSchemas } from './crm.events';
-import { AccountingEventSchemas } from './accounting.events';
-import { EcommerceEventSchemas } from './ecommerce.events';
-import { MRPEventSchemas } from './mrp.events';
-import { HRMEventSchemas } from './hrm.events';
-import { CoVuaEventSchemas } from './covua.events';
+import { CRMEventSchemas } from "./crm.events";
+import { AccountingEventSchemas } from "./accounting.events";
+import { EcommerceEventSchemas } from "./ecommerce.events";
+import { MRPEventSchemas } from "./mrp.events";
+import { HRMEventSchemas } from "./hrm.events";
+import { CLBEventSchemas } from "./clb.events";
 
 // CRM Schemas
 export {
@@ -19,14 +19,14 @@ export {
   DealWonSchema,
   DealLostSchema,
   CRMEventSchemas,
-} from './crm.events';
+} from "./crm.events";
 export type {
   LeadCreated,
   LeadScored,
   LeadConverted,
   DealWon,
   DealLost,
-} from './crm.events';
+} from "./crm.events";
 
 // Accounting Schemas
 export {
@@ -36,14 +36,14 @@ export {
   PaymentReceivedSchema,
   JournalEntryPostedSchema,
   AccountingEventSchemas,
-} from './accounting.events';
+} from "./accounting.events";
 export type {
   InvoiceCreated,
   InvoiceApproved,
   InvoicePaid,
   PaymentReceived,
   JournalEntryPosted,
-} from './accounting.events';
+} from "./accounting.events";
 
 // Ecommerce Schemas
 export {
@@ -53,14 +53,14 @@ export {
   OrderCancelledSchema,
   PaymentCompletedSchema,
   EcommerceEventSchemas,
-} from './ecommerce.events';
+} from "./ecommerce.events";
 export type {
   OrderPlaced,
   OrderShipped,
   OrderDelivered,
   OrderCancelled,
   PaymentCompleted,
-} from './ecommerce.events';
+} from "./ecommerce.events";
 
 // MRP Schemas
 export {
@@ -70,14 +70,14 @@ export {
   StockLowSchema,
   QualityCheckPassedSchema,
   MRPEventSchemas,
-} from './mrp.events';
+} from "./mrp.events";
 export type {
   ProductionOrderCreated,
   ProductionCompleted,
   InventoryUpdated,
   StockLow,
   QualityCheckPassed,
-} from './mrp.events';
+} from "./mrp.events";
 
 // HRM Schemas
 export {
@@ -87,27 +87,27 @@ export {
   PayrollProcessedSchema,
   AttendanceRecordedSchema,
   HRMEventSchemas,
-} from './hrm.events';
+} from "./hrm.events";
 export type {
   EmployeeOnboarded,
   LeaveRequested,
   LeaveApproved,
   PayrollProcessed,
   AttendanceRecorded,
-} from './hrm.events';
+} from "./hrm.events";
 
-// CoVua (Cờ vua Dương Sinh) Schemas
+// CLB (Cờ vua Dương Sinh) Schemas
 export {
   TuitionPaymentReceivedSchema,
   CoachUpsertedSchema,
   LeadCapturedSchema,
-  CoVuaEventSchemas,
-} from './covua.events';
+  CLBEventSchemas,
+} from "./clb.events";
 export type {
   TuitionPaymentReceived,
   CoachUpserted,
   LeadCaptured,
-} from './covua.events';
+} from "./clb.events";
 
 /**
  * Unified event schema registry
@@ -119,7 +119,7 @@ export const AllEventSchemas = {
   ...EcommerceEventSchemas,
   ...MRPEventSchemas,
   ...HRMEventSchemas,
-  ...CoVuaEventSchemas,
+  ...CLBEventSchemas,
 } as const;
 
 export type AllEventTypes =
@@ -128,4 +128,4 @@ export type AllEventTypes =
   | keyof typeof EcommerceEventSchemas
   | keyof typeof MRPEventSchemas
   | keyof typeof HRMEventSchemas
-  | keyof typeof CoVuaEventSchemas;
+  | keyof typeof CLBEventSchemas;

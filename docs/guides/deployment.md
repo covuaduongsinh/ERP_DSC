@@ -6,11 +6,11 @@ Complete guide for deploying VietERP to development, staging, and production env
 
 ## Deployment Environments / Môi trường triển khai
 
-| Environment | Database | Cache | Events | Auth | Monitoring |
-|-------------|----------|-------|--------|------|-----------|
-| **Development** | PostgreSQL (Docker) | Redis (Docker) | NATS (Docker) | Keycloak (Docker) | Basic logging |
-| **Staging** | RDS/Cloud SQL | Managed Redis | Managed NATS | Keycloak | CloudWatch/Stackdriver |
-| **Production** | RDS/Cloud SQL (Multi-AZ) | Managed Redis (HA) | Managed NATS (Clustered) | Keycloak (HA) | Full APM stack |
+| Environment     | Database                 | Cache              | Events                   | Auth              | Monitoring             |
+| --------------- | ------------------------ | ------------------ | ------------------------ | ----------------- | ---------------------- |
+| **Development** | PostgreSQL (Docker)      | Redis (Docker)     | NATS (Docker)            | Keycloak (Docker) | Basic logging          |
+| **Staging**     | RDS/Cloud SQL            | Managed Redis      | Managed NATS             | Keycloak          | CloudWatch/Stackdriver |
+| **Production**  | RDS/Cloud SQL (Multi-AZ) | Managed Redis (HA) | Managed NATS (Clustered) | Keycloak (HA)     | Full APM stack         |
 
 ## 1. Docker Compose / Docker Compose
 
@@ -37,7 +37,7 @@ docker compose down -v
 Create `docker-compose.production.yml`:
 
 ```yaml
-version: '3.8'
+version: "3.8"
 
 services:
   # Database with backups enabled
@@ -137,8 +137,8 @@ services:
       KONG_LOG_LEVEL: warn
       KONG_PLUGINS: bundled,rate-limiting,cors,jwt
     ports:
-      - "8000:8000"   # Proxy
-      - "8001:8001"   # Admin
+      - "8000:8000" # Proxy
+      - "8001:8001" # Admin
     depends_on:
       postgres:
         condition: service_healthy
@@ -151,14 +151,14 @@ services:
     networks:
       - vierp-network
 
-  # HRM Module
-  hrm:
+  # HRM Module (unified)
+  hrm-unified:
     build:
       context: .
-      dockerfile: apps/HRM/Dockerfile
+      dockerfile: apps/HRM-unified/Dockerfile
       args:
         NODE_ENV: production
-    container_name: vierp-hrm-prod
+    container_name: vierp-hrm-unified-prod
     environment:
       NODE_ENV: production
       DATABASE_URL: postgresql://${DB_USER}:${DB_PASSWORD}@postgres:5432/${DB_NAME}
@@ -304,10 +304,10 @@ keycloak:
       memory: 2Gi
 
 modules:
-  hrm:
+  hrm-unified:
     enabled: true
     replicas: 3
-    image: vierp/hrm:1.0.0
+    image: vierp/hrm-unified:1.0.0
     resources:
       requests:
         cpu: 250m
@@ -395,8 +395,8 @@ monitoring:
 
 ```yaml
 # infrastructure/aws/vierp-stack.yaml
-AWSTemplateFormatVersion: '2010-09-09'
-Description: 'VietERP Platform on AWS'
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "VietERP Platform on AWS"
 
 Parameters:
   Environment:
@@ -421,9 +421,9 @@ Resources:
     Type: AWS::RDS::DBCluster
     Properties:
       Engine: aurora-postgresql
-      EngineVersion: '16.0'
+      EngineVersion: "16.0"
       MasterUsername: !Ref DBMasterUsername
-      MasterUserPassword: !Sub '{{resolve:secretsmanager:vierp-db-password}}'
+      MasterUserPassword: !Sub "{{resolve:secretsmanager:vierp-db-password}}"
       DatabaseName: vierp_prod
       StorageEncrypted: true
       BackupRetentionPeriod: 30
@@ -436,7 +436,7 @@ Resources:
     Type: AWS::ElastiCache::ReplicationGroup
     Properties:
       Engine: redis
-      EngineVersion: '7.0'
+      EngineVersion: "7.0"
       ReplicationGroupDescription: VietERP Cache
       CacheNodeType: cache.r6g.xlarge
       NumCacheClusters: 3
@@ -469,22 +469,22 @@ Resources:
       NetworkMode: awsvpc
       RequiresCompatibilities:
         - FARGATE
-      Cpu: '256'
-      Memory: '512'
+      Cpu: "256"
+      Memory: "512"
       ExecutionRoleArn: !GetAtt ECSTaskExecutionRole.Arn
       TaskRoleArn: !GetAtt ECSTaskRole.Arn
       ContainerDefinitions:
         - Name: hrm
-          Image: !Sub '${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/vierp/hrm:latest'
+          Image: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/vierp/hrm:latest"
           PortMappings:
             - ContainerPort: 3001
           Environment:
             - Name: DATABASE_URL
-              Value: !Sub 'postgresql://${DBMasterUsername}:password@${DBCluster.Endpoint.Address}:5432/vierp_prod'
+              Value: !Sub "postgresql://${DBMasterUsername}:password@${DBCluster.Endpoint.Address}:5432/vierp_prod"
             - Name: REDIS_URL
               Value: !GetAtt RedisCluster.PrimaryEndPoint.Address
             - Name: NATS_URL
-              Value: !Sub 'nats://${NATSMQ.Broker}:4222'
+              Value: !Sub "nats://${NATSMQ.Broker}:4222"
           LogConfiguration:
             LogDriver: awslogs
             Options:
@@ -501,7 +501,7 @@ Resources:
           - Effect: Allow
             Principal:
               Service: ecs-tasks.amazonaws.com
-            Action: 'sts:AssumeRole'
+            Action: "sts:AssumeRole"
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
 
@@ -513,7 +513,7 @@ Resources:
           - Effect: Allow
             Principal:
               Service: ecs-tasks.amazonaws.com
-            Action: 'sts:AssumeRole'
+            Action: "sts:AssumeRole"
 
 Outputs:
   LoadBalancerURL:
@@ -744,9 +744,9 @@ spec:
     privateKeySecretRef:
       name: letsencrypt-prod
     solvers:
-    - http01:
-        ingress:
-          class: nginx
+      - http01:
+          ingress:
+            class: nginx
 
 ---
 apiVersion: networking.k8s.io/v1
@@ -758,20 +758,20 @@ metadata:
 spec:
   ingressClassName: nginx
   tls:
-  - hosts:
-    - erp.vierp.vn
-    secretName: vierp-tls
+    - hosts:
+        - erp.vierp.vn
+      secretName: vierp-tls
   rules:
-  - host: erp.vierp.vn
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: vierp-api
-            port:
-              number: 8000
+    - host: erp.vierp.vn
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: vierp-api
+                port:
+                  number: 8000
 ```
 
 Install cert-manager:
@@ -805,6 +805,7 @@ kubectl port-forward -n monitoring svc/prometheus-grafana 3000:80
 ```
 
 Create dashboards for:
+
 - Pod resource usage
 - API response times
 - Database connection pool
@@ -859,17 +860,17 @@ spec:
     maxWeight: 50
     stepWeight: 10
     metrics:
-    - name: request-success-rate
-      thresholdRange:
-        min: 99
-      interval: 1m
+      - name: request-success-rate
+        thresholdRange:
+          min: 99
+        interval: 1m
     webhooks:
-    - name: acceptance-test
-      url: http://flagger-loadtester/
-      timeout: 5s
-      metadata:
-        type: smoke
-        cmd: "curl -sd 'test' http://hrm-canary:3001/api/health"
+      - name: acceptance-test
+        url: http://flagger-loadtester/
+        timeout: 5s
+        metadata:
+          type: smoke
+          cmd: "curl -sd 'test' http://hrm-canary:3001/api/health"
 ```
 
 ## Backup & Disaster Recovery / Sao lưu & Phục hồi thảm họa

@@ -7,17 +7,19 @@
 //   });
 // ============================================================
 
-import { AckPolicy, DeliverPolicy } from 'nats';
-import { getJetStream, getJetStreamManager, sc } from './connection';
-import type { EventEnvelope } from '@vierp/shared';
+import { AckPolicy, DeliverPolicy } from "nats";
+import { getJetStream, getJetStreamManager, sc } from "./connection";
+import type { EventEnvelope } from "@vierp/shared";
 
-export type EventHandler<T = unknown> = (event: EventEnvelope<T>) => Promise<void>;
+export type EventHandler<T = unknown> = (
+  event: EventEnvelope<T>,
+) => Promise<void>;
 
 interface SubscribeOptions {
   /** Filter by tenant (optional) */
   tenantId?: string;
   /** Start from: 'new' (only future) or 'all' (replay from beginning) */
-  startFrom?: 'new' | 'all';
+  startFrom?: "new" | "all";
   /** Max number of inflight messages before ack */
   maxInflight?: number;
   /** Ack wait timeout in milliseconds */
@@ -35,7 +37,7 @@ export async function subscribe<T = unknown>(
   subject: string,
   consumerName: string,
   handler: EventHandler<T>,
-  options: SubscribeOptions = {}
+  options: SubscribeOptions = {},
 ): Promise<{ unsubscribe: () => void }> {
   const js = await getJetStream();
   const jsm = await getJetStreamManager();
@@ -51,9 +53,8 @@ export async function subscribe<T = unknown>(
       durable_name: consumerName,
       filter_subject: subject,
       ack_policy: AckPolicy.Explicit,
-      deliver_policy: options.startFrom === 'all'
-        ? DeliverPolicy.All
-        : DeliverPolicy.New,
+      deliver_policy:
+        options.startFrom === "all" ? DeliverPolicy.All : DeliverPolicy.New,
       max_ack_pending: options.maxInflight || 10,
       ack_wait: (options.ackWaitMs || 30000) * 1_000_000, // Convert to nanoseconds
     });
@@ -105,16 +106,16 @@ export async function subscribe<T = unknown>(
  */
 function resolveStreamName(subject: string): string {
   const mapping: Record<string, string> = {
-    'vierp.customer': 'VIERP_CUSTOMERS',
-    'vierp.product': 'VIERP_PRODUCTS',
-    'vierp.employee': 'VIERP_EMPLOYEES',
-    'vierp.order': 'VIERP_ORDERS',
-    'vierp.inventory': 'VIERP_INVENTORY',
-    'vierp.production': 'VIERP_PRODUCTION',
-    'vierp.invoice': 'VIERP_INVOICES',
-    'vierp.accounting': 'VIERP_ACCOUNTING',
-    'vierp.supplier': 'VIERP_SUPPLIERS',
-    'covua': 'VIERP_COVUA',
+    "vierp.customer": "VIERP_CUSTOMERS",
+    "vierp.product": "VIERP_PRODUCTS",
+    "vierp.employee": "VIERP_EMPLOYEES",
+    "vierp.order": "VIERP_ORDERS",
+    "vierp.inventory": "VIERP_INVENTORY",
+    "vierp.production": "VIERP_PRODUCTION",
+    "vierp.invoice": "VIERP_INVOICES",
+    "vierp.accounting": "VIERP_ACCOUNTING",
+    "vierp.supplier": "VIERP_SUPPLIERS",
+    clb: "VIERP_CLB",
   };
 
   // Match subject prefix to stream

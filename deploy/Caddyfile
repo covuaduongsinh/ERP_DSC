@@ -13,9 +13,7 @@
 	email admin@erp.example.vn   # email nhận cảnh báo chứng chỉ Let's Encrypt
 }
 
-# ── Các app HR / nhân sự ────────────────────────────────────
-hrm.erp.example.vn          { reverse_proxy hrm:3000 }
-hrm-ai.erp.example.vn       { reverse_proxy hrm-ai:3000 }
+# ── App HR / nhân sự (HRM-unified) ──────────────────────────
 hrm-unified.erp.example.vn  { reverse_proxy hrm-unified:3000 }
 
 # ── Kế toán / CRM / Sản xuất / Dự án ────────────────────────
@@ -32,7 +30,7 @@ tpm.erp.example.vn          { reverse_proxy tpm-web:3000 }
 docs.erp.example.vn         { reverse_proxy docs:3000 }
 
 # ── Cờ vua Dương Sinh (Next 15 + Payload CMS) ───────────────
-covua.erp.example.vn        { reverse_proxy covua:3000 }
+clb.erp.example.vn        { reverse_proxy clb:3000 }
 # MinIO S3 API — phục vụ ảnh public (path-style: /<bucket>/<key>); S3_PUBLIC_URL trỏ vào đây
 minio.erp.example.vn        { reverse_proxy minio:9000 }
 # MinIO Console (quản trị object storage) — tùy chọn, nên giới hạn IP nội bộ

@@ -152,7 +152,7 @@ Nền tảng ERP mã nguồn mở toàn diện cho doanh nghiệp Việt Nam.
 Comprehensive open-source ERP platform for Vietnamese enterprises.
 
 ## Modules (14 ứng dụng / applications)
-- HRM, HRM-AI, HRM-Unified — Quản lý nhân sự
+- HRM-Unified — Quản lý nhân sự (tích hợp AI)
 - CRM — Quản lý khách hàng
 - MRP — Quản lý sản xuất
 - Accounting — Kế toán (TT200)

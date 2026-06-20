@@ -8,11 +8,11 @@ name: Deploy Pipeline
 on:
   push:
     branches: [main]
-    tags: ['v*']
+    tags: ["v*"]
   workflow_dispatch:
     inputs:
       environment:
-        description: 'Deploy environment'
+        description: "Deploy environment"
         required: true
         type: choice
         options:
@@ -21,7 +21,7 @@ on:
       services:
         description: 'Services to deploy (comma-separated, or "all")'
         required: false
-        default: 'all'
+        default: "all"
 
 env:
   REGISTRY: registry.erp.vn
@@ -64,7 +64,7 @@ jobs:
 
           SERVICES=""
           declare -A SERVICE_PATHS=(
-            ["HRM"]="apps/HRM packages/shared packages/database packages/auth packages/events"
+            ["HRM-unified"]="apps/HRM-unified packages/shared packages/database packages/auth packages/events"
             ["CRM"]="apps/CRM packages/shared packages/database packages/auth"
             ["MRP"]="apps/MRP packages/shared packages/database packages/events"
             ["Accounting"]="apps/Accounting packages/shared packages/database packages/events"
@@ -82,7 +82,7 @@ jobs:
           done
 
           if [[ -z "$SERVICES" || "${{ inputs.services }}" == "all" ]]; then
-            SERVICES="HRM,CRM,MRP,Accounting,PM,Ecommerce"
+            SERVICES="HRM-unified,CRM,MRP,Accounting,PM,Ecommerce"
           fi
 
           echo "services=$SERVICES" >> $GITHUB_OUTPUT
@@ -112,7 +112,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
+          cache: "npm"
       - run: npm ci
       - run: npx turbo lint typecheck test
 

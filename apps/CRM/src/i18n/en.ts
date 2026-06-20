@@ -20,6 +20,13 @@ const en = {
   "nav.profile": "Profile",
   "nav.collapse": "Collapse",
   "nav.expand": "Expand",
+  "nav.group.admissions": "Admissions",
+  "nav.group.bookstore": "Bookstore",
+  "nav.group.customers": "Customers",
+  "nav.admissions.funnel": "Admissions funnel",
+  "nav.admissions.leads": "Leads",
+  "nav.admissions.students": "Students",
+  "nav.admissions.analytics": "Admissions analytics",
 
   // Common
   "common.search": "Search",

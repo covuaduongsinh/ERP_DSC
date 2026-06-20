@@ -9,8 +9,39 @@ const nextConfig = {
   reactStrictMode: true,
   typescript: { ignoreBuildErrors: true },
   eslint: { ignoreDuringBuilds: true },
+  // Bật instrumentation hook (Next 14) để chạy NATS event subscriber lúc khởi động.
   experimental: {
     optimizePackageImports: ['lucide-react', 'recharts', 'date-fns'],
+    instrumentationHook: true,
+  },
+  // instrumentation kéo @vierp/events (+ @vierp/shared, @vierp/master-data) — TS source —
+  // vào graph build, nên cần Next transpile chúng.
+  transpilePackages: ['@vierp/events', '@vierp/shared', '@vierp/master-data'],
+  // CRM có middleware.ts (edge) ⇒ Next biên dịch instrumentation.ts cho CẢ runtime edge.
+  // @vierp/events → nats dùng built-in Node (crypto/net/tls…) và CHỈ chạy ở Node
+  // (guard NEXT_RUNTIME==='nodejs', không bao giờ thực thi ở edge). Stub các built-in
+  // này về rỗng cho bản edge để webpack biên dịch được (không "can't resolve 'crypto'").
+  webpack: (config, { nextRuntime }) => {
+    if (nextRuntime === 'edge') {
+      config.resolve = config.resolve || {}
+      config.resolve.fallback = {
+        ...(config.resolve.fallback || {}),
+        crypto: false,
+        net: false,
+        tls: false,
+        dns: false,
+        fs: false,
+        path: false,
+        os: false,
+        zlib: false,
+        http: false,
+        https: false,
+        stream: false,
+        url: false,
+        string_decoder: false,
+      }
+    }
+    return config
   },
   async headers() {
     return [

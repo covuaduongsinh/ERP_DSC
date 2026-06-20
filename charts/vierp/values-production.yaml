@@ -3,36 +3,6 @@ global:
   imageTag: v1.0.0
 
 apps:
-  hrm:
-    replicas: 3
-    resources:
-      requests:
-        cpu: 200m
-        memory: 512Mi
-      limits:
-        cpu: 1000m
-        memory: 1Gi
-    hpa:
-      enabled: true
-      minReplicas: 2
-      maxReplicas: 5
-      targetCPUUtilizationPercentage: 70
-
-  hrm_ai:
-    replicas: 3
-    resources:
-      requests:
-        cpu: 500m
-        memory: 1Gi
-      limits:
-        cpu: 2000m
-        memory: 2Gi
-    hpa:
-      enabled: true
-      minReplicas: 2
-      maxReplicas: 8
-      targetCPUUtilizationPercentage: 70
-
   hrm_unified:
     replicas: 3
     resources:

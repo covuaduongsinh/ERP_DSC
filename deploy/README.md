@@ -18,7 +18,7 @@ Dành cho **Công ty CP Cờ vua Dương Sinh**. VPS khuyến nghị: **Hetzner 
 - **Phát hiện gốc**: `package-lock.json` của monorepo **lệch** với package.json ⇒ `npm ci` fail.
   Dockerfile.turbo dùng `npm install --legacy-peer-deps` để dung sai (đánh đổi: kém reproducible).
 
-> Chưa verify từng app còn lại (HRM, MRP, HRM-AI, OTB, PM, ExcelAI, TPM-\*). Universal Dockerfile được
+> Chưa verify từng app còn lại (HRM-unified, MRP, OTB, PM, ExcelAI, TPM-\*). Universal Dockerfile được
 > thiết kế cho chúng, nhưng vài app có lưu ý code riêng (xem **Caveat**) — "hoàn thiện dần" theo từng app.
 
 ## File trong thư mục này
@@ -36,7 +36,7 @@ Dành cho **Công ty CP Cờ vua Dương Sinh**. VPS khuyến nghị: **Hetzner 
 ### 1. Tạo server (Hetzner Console)
 
 - Type **CAX31**, image **Ubuntu 24.04**, thêm SSH key, **bật Backups** (+20%).
-- Trỏ DNS A record cho từng subdomain (`hrm.`, `ketoan.`, `crm.`, `mrp.`, `pm.`, `sso.`, `api.`…) về IP server.
+- Trỏ DNS A record cho từng subdomain (`hrm-unified.`, `ketoan.`, `crm.`, `mrp.`, `pm.`, `sso.`, `api.`…) về IP server.
 
 ### 2. Bootstrap hệ điều hành
 
@@ -59,7 +59,7 @@ nano .env   # POSTGRES_PASSWORD, KEYCLOAK_ADMIN_PASSWORD, NEXTAUTH_SECRET, AUTH_
 ```bash
 bash deploy/build-images.sh              # build tất cả (tuần tự, tránh OOM)
 # hoặc vài app theo tên thư mục:
-bash deploy/build-images.sh CRM Accounting HRM PM
+bash deploy/build-images.sh CRM Accounting HRM-unified PM
 ```
 
 > Mỗi image ~1.6–1.8GB (universal giữ full node_modules). 13 app ≈ 20GB+ — CAX31 160GB vẫn dư.
@@ -101,11 +101,11 @@ docker run -d --name caddy --restart unless-stopped \
    `npm install --legacy-peer-deps` ở gốc repo rồi commit `package-lock.json` đã đồng bộ.
 2. **Cổng app**: vài app hardcode cổng trong `start` (vd Accounting `next start -p 3007`,
    MRP `node dist/server.js`). Nếu container nghe sai cổng 3000 → override `command`/`PORT` cho app đó trong compose.
-3. **HRM-AI / HRM-unified**: theo ghi nhớ vận hành ([[vierp-run-gotchas]]) còn lỗi code khi build/run:
+3. **HRM-unified**: theo ghi nhớ vận hành ([[vierp-run-gotchas]]) còn lỗi code khi build/run:
    thư mục `app/` thừa che `src/app/` và `require('@prismy/sso')` → cần commit các bản vá đó trước.
 4. **TPM-api-nestjs**: NestJS (`node dist/main`) — universal Dockerfile xử lý qua `npm start`, nhưng chưa verify.
 5. **App workspace-coupled khác** (Ecommerce/docs): cùng lớp Accounting, kỳ vọng OK nhờ 3 fix trên — verify khi build.
 6. **packageManager noise**: log build có `"packageManager": "yarn@npm@..."` — cảnh báo cosmetic của Next, không chặn build.
 7. **NextAuth**: `docker-compose.prod.yml` gốc không truyền secret/URL → đã bù bằng `deploy/docker-compose.auth.yml`
    (cần `NEXTAUTH_SECRET`, `AUTH_SECRET`, `BASE_DOMAIN` trong `.env`).
-8. **Prisma/DB**: app dùng `@prisma/adapter-pg` (HRM) bỏ qua `?schema=` → cần **database riêng**; app `@prisma/client` v5 dùng `?schema=<app>` trên DB chung.
+8. **Prisma/DB**: app dùng `@prisma/adapter-pg` (HRM-unified) bỏ qua `?schema=` → cần **database riêng**; app `@prisma/client` v5 dùng `?schema=<app>` trên DB chung.

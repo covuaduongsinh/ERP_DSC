@@ -104,10 +104,8 @@ pull_images() {
 
     # Apps to pull
     APPS=(
-        "hrm-ai"
         "hrm-unified"
         "tpm-api-nestjs"
-        "hrm"
         "accounting"
         "crm"
         "ecommerce"
@@ -141,10 +139,8 @@ build_images() {
     cd "$REPO_ROOT"
 
     APPS=(
-        "HRM-AI"
         "HRM-unified"
         "TPM-api-nestjs"
-        "HRM"
         "Accounting"
         "CRM"
         "Ecommerce"
@@ -235,10 +231,8 @@ health_check() {
         "vierp-nats"
         "vierp-keycloak"
         "vierp-kong"
-        "vierp-hrm-ai"
         "vierp-hrm-unified"
         "vierp-tpm-api"
-        "vierp-hrm"
         "vierp-accounting"
         "vierp-crm"
         "vierp-ecommerce"
@@ -316,10 +310,8 @@ show_summary() {
     log_info "  - NATS:                 nats://localhost:4222"
     log_info ""
     log_info "Microservices (behind Kong Gateway / Đằng sau Kong Gateway):"
-    log_info "  - HRM-AI:               http://localhost:8000/hrm-ai"
     log_info "  - HRM Unified:          http://localhost:8000/hrm-unified"
     log_info "  - TPM API:              http://localhost:8000/tpm-api"
-    log_info "  - HRM:                  http://localhost:8000/hrm"
     log_info "  - Accounting:           http://localhost:8000/accounting"
     log_info "  - CRM:                  http://localhost:8000/crm"
     log_info "  - Ecommerce:            http://localhost:8000/ecommerce"

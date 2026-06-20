@@ -29,7 +29,7 @@ cd apps/YourModule
 npm init -y
 
 # Or copy from existing module template
-cp -r apps/HRM/* apps/YourModule/
+cp -r apps/HRM-unified/* apps/YourModule/
 ```
 
 ### 2. Module Structure / Cấu trúc module
@@ -213,16 +213,16 @@ Use shared `@vierp/auth` package:
 
 ```typescript
 // app/api/v1/your-resource/route.ts
-import { NextRequest, NextResponse } from 'next/server';
-import { withAuth } from '@vierp/auth';
-import { requirePermission } from '@vierp/auth';
+import { NextRequest, NextResponse } from "next/server";
+import { withAuth } from "@vierp/auth";
+import { requirePermission } from "@vierp/auth";
 
 export const GET = withAuth(async (req: NextRequest, context: any) => {
   // User already authenticated by middleware
   const { user, tenantId } = context;
 
   // Check specific permission
-  await requirePermission(user, 'read:your-resource');
+  await requirePermission(user, "read:your-resource");
 
   return NextResponse.json({ data: [] });
 });
@@ -231,14 +231,14 @@ export const POST = withAuth(
   async (req: NextRequest, context: any) => {
     const { user, tenantId } = context;
 
-    await requirePermission(user, 'create:your-resource');
+    await requirePermission(user, "create:your-resource");
 
     const body = await req.json();
     // Create logic
 
     return NextResponse.json({ success: true }, { status: 201 });
   },
-  { method: 'POST' }
+  { method: "POST" },
 );
 ```
 
@@ -248,7 +248,7 @@ Use `@vierp/events` for publishing domain events:
 
 ```typescript
 // src/lib/events.ts
-import { publishEvent } from '@vierp/events';
+import { publishEvent } from "@vierp/events";
 
 export async function createYourResource(data: CreatePayload) {
   // Create in database
@@ -256,7 +256,7 @@ export async function createYourResource(data: CreatePayload) {
 
   // Publish event for other modules to consume
   await publishEvent({
-    type: 'your-module.resource.created',
+    type: "your-module.resource.created",
     aggregateId: resource.id,
     tenantId: resource.tenantId,
     userId: userId,
@@ -266,7 +266,7 @@ export async function createYourResource(data: CreatePayload) {
     },
     metadata: {
       timestamp: new Date(),
-      source: 'your-module',
+      source: "your-module",
     },
   });
 
@@ -278,14 +278,14 @@ Subscribe to events:
 
 ```typescript
 // src/lib/event-listeners.ts
-import { subscribeToEvents } from '@vierp/events';
+import { subscribeToEvents } from "@vierp/events";
 
 export function setupEventListeners() {
   // Listen to accounting module events
-  subscribeToEvents('accounting.*', async (event) => {
-    console.log('Accounting event received:', event);
+  subscribeToEvents("accounting.*", async (event) => {
+    console.log("Accounting event received:", event);
 
-    if (event.type === 'accounting.invoice.created') {
+    if (event.type === "accounting.invoice.created") {
       // Handle invoice created event
       await handleInvoiceCreated(event.data);
     }
@@ -299,7 +299,7 @@ Use `@vierp/cache` for Redis integration:
 
 ```typescript
 // src/lib/cache.ts
-import { cache } from '@vierp/cache';
+import { cache } from "@vierp/cache";
 
 export async function getYourResourceWithCache(id: string) {
   const cacheKey = `your-resource:${id}`;
@@ -328,12 +328,12 @@ RESTful API with Zod validation:
 
 ```typescript
 // src/schemas/your-resource.ts
-import { z } from 'zod';
+import { z } from "zod";
 
 export const createYourResourceSchema = z.object({
-  name: z.string().min(1, 'Name required'),
-  email: z.string().email('Invalid email'),
-  status: z.enum(['active', 'inactive']).optional(),
+  name: z.string().min(1, "Name required"),
+  email: z.string().email("Invalid email"),
+  status: z.enum(["active", "inactive"]).optional(),
 });
 
 export type CreateYourResourceInput = z.infer<typeof createYourResourceSchema>;
@@ -341,17 +341,20 @@ export type CreateYourResourceInput = z.infer<typeof createYourResourceSchema>;
 
 ```typescript
 // app/api/v1/your-resource/route.ts
-import { NextRequest, NextResponse } from 'next/server';
-import { withAuth } from '@vierp/auth';
-import { handleValidationError, handleServerError } from '@vierp/api-middleware';
-import { createYourResourceSchema } from '@/schemas/your-resource';
-import * as service from '@/services/your-resource.service';
+import { NextRequest, NextResponse } from "next/server";
+import { withAuth } from "@vierp/auth";
+import {
+  handleValidationError,
+  handleServerError,
+} from "@vierp/api-middleware";
+import { createYourResourceSchema } from "@/schemas/your-resource";
+import * as service from "@/services/your-resource.service";
 
 export const GET = withAuth(async (req: NextRequest, { tenantId }) => {
   try {
     const { searchParams } = new URL(req.url);
-    const page = parseInt(searchParams.get('page') || '1');
-    const limit = parseInt(searchParams.get('limit') || '20');
+    const page = parseInt(searchParams.get("page") || "1");
+    const limit = parseInt(searchParams.get("limit") || "20");
 
     const result = await service.list(tenantId, { page, limit });
 
@@ -384,11 +387,14 @@ export const POST = withAuth(async (req: NextRequest, { tenantId, userId }) => {
 
 ```typescript
 // src/services/your-resource.service.ts
-import { prisma } from '@/lib/prisma';
-import { publishEvent } from '@vierp/events';
-import type { CreateYourResourceInput } from '@/schemas/your-resource';
+import { prisma } from "@/lib/prisma";
+import { publishEvent } from "@vierp/events";
+import type { CreateYourResourceInput } from "@/schemas/your-resource";
 
-export async function list(tenantId: string, options: { page: number; limit: number }) {
+export async function list(
+  tenantId: string,
+  options: { page: number; limit: number },
+) {
   const skip = (options.page - 1) * options.limit;
 
   const [items, total] = await Promise.all([
@@ -396,7 +402,7 @@ export async function list(tenantId: string, options: { page: number; limit: num
       where: { tenantId },
       skip,
       take: options.limit,
-      orderBy: { createdAt: 'desc' },
+      orderBy: { createdAt: "desc" },
     }),
     prisma.yourResource.count({ where: { tenantId } }),
   ]);
@@ -415,7 +421,7 @@ export async function list(tenantId: string, options: { page: number; limit: num
 export async function create(
   tenantId: string,
   userId: string,
-  input: CreateYourResourceInput
+  input: CreateYourResourceInput,
 ) {
   const resource = await prisma.yourResource.create({
     data: {
@@ -427,12 +433,12 @@ export async function create(
 
   // Publish domain event
   await publishEvent({
-    type: 'your-module.resource.created',
+    type: "your-module.resource.created",
     aggregateId: resource.id,
     tenantId,
     userId,
     data: resource,
-    metadata: { timestamp: new Date(), source: 'your-module' },
+    metadata: { timestamp: new Date(), source: "your-module" },
   });
 
   return resource;
@@ -445,29 +451,29 @@ export async function create(
 
 ```typescript
 // tests/unit/services.test.ts
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { create, list } from '@/services/your-resource.service';
+import { describe, it, expect, beforeEach, vi } from "vitest";
+import { create, list } from "@/services/your-resource.service";
 
-describe('YourResource Service', () => {
+describe("YourResource Service", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it('should create a new resource', async () => {
-    const result = await create('tenant-1', 'user-1', {
-      name: 'Test Resource',
-      email: 'test@example.com',
+  it("should create a new resource", async () => {
+    const result = await create("tenant-1", "user-1", {
+      name: "Test Resource",
+      email: "test@example.com",
     });
 
-    expect(result).toHaveProperty('id');
-    expect(result.name).toBe('Test Resource');
+    expect(result).toHaveProperty("id");
+    expect(result.name).toBe("Test Resource");
   });
 
-  it('should list resources with pagination', async () => {
-    const result = await list('tenant-1', { page: 1, limit: 20 });
+  it("should list resources with pagination", async () => {
+    const result = await list("tenant-1", { page: 1, limit: 20 });
 
-    expect(result).toHaveProperty('data');
-    expect(result).toHaveProperty('pagination');
+    expect(result).toHaveProperty("data");
+    expect(result).toHaveProperty("pagination");
     expect(Array.isArray(result.data)).toBe(true);
   });
 });
@@ -477,32 +483,32 @@ describe('YourResource Service', () => {
 
 ```typescript
 // tests/e2e/api.spec.ts
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
-const BASE_URL = 'http://localhost:3015';
-const API_TOKEN = 'test-bearer-token';
+const BASE_URL = "http://localhost:3015";
+const API_TOKEN = "test-bearer-token";
 
-test.describe('YourResource API', () => {
-  test('should create and retrieve resource', async ({ request }) => {
+test.describe("YourResource API", () => {
+  test("should create and retrieve resource", async ({ request }) => {
     // Create
     const createRes = await request.post(`${BASE_URL}/api/v1/your-resource`, {
       headers: { Authorization: `Bearer ${API_TOKEN}` },
       data: {
-        name: 'Test Resource',
-        email: 'test@example.com',
+        name: "Test Resource",
+        email: "test@example.com",
       },
     });
 
     expect(createRes.status()).toBe(201);
     const created = await createRes.json();
-    expect(created).toHaveProperty('id');
+    expect(created).toHaveProperty("id");
 
     // Retrieve
     const getRes = await request.get(
       `${BASE_URL}/api/v1/your-resource/${created.id}`,
       {
         headers: { Authorization: `Bearer ${API_TOKEN}` },
-      }
+      },
     );
 
     expect(getRes.status()).toBe(200);

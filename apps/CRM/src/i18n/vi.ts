@@ -20,6 +20,13 @@ const vi = {
   "nav.profile": "Hồ sơ",
   "nav.collapse": "Thu gọn",
   "nav.expand": "Mở rộng",
+  "nav.group.admissions": "Tuyển sinh",
+  "nav.group.bookstore": "Hiệu sách",
+  "nav.group.customers": "Khách hàng",
+  "nav.admissions.funnel": "Phễu tuyển sinh",
+  "nav.admissions.leads": "Lead / Hồ sơ",
+  "nav.admissions.students": "Học viên",
+  "nav.admissions.analytics": "Phân tích tuyển sinh",
 
   // Common
   "common.search": "Tìm kiếm",

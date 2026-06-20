@@ -1,0 +1,293 @@
+{
+  "metadata": {
+    "title": "Dương Sinh",
+    "description": "Website Cờ vua Dương Sinh — Vui Trí Tuệ"
+  },
+  "common": {
+    "brandName": "Dương Sinh",
+    "slogan": "Vui Trí Tuệ",
+    "ctaConsult": "Đăng ký tư vấn",
+    "viewAll": "Xem tất cả",
+    "buyNow": "Mua sách",
+    "readMore": "Đọc thêm",
+    "register": "Đăng ký",
+    "levelPrefix": "Cấp",
+    "classImagePlaceholder": "Ảnh lớp học · placeholder",
+    "coachImagePlaceholder": "Ảnh HLV · placeholder",
+    "directions": "Chỉ đường",
+    "viewDetail": "Xem chi tiết",
+    "hotline": "Hotline",
+    "email": "Email",
+    "facebook": "Facebook",
+    "locations": "Cơ sở",
+    "comingSoon": "Sắp có nội dung",
+    "menuOpen": "Mở menu",
+    "menuClose": "Đóng menu"
+  },
+  "nav": {
+    "home": "Trang chủ",
+    "training": "Đào tạo",
+    "openingSchedule": "Lịch khai giảng",
+    "coaches": "Huấn luyện viên",
+    "locations": "Cơ sở",
+    "blog": "Blog",
+    "contact": "Liên hệ"
+  },
+  "home": {
+    "metaTitle": "Cờ vua Dương Sinh — Vui Trí Tuệ",
+    "metaDescription": "Trung tâm đào tạo cờ vua Dương Sinh — lộ trình {roadmap}, lớp học cho mọi lứa tuổi, sách nổi bật và đăng ký tư vấn miễn phí.",
+    "heroOverline": "Học viện cờ vua cho trẻ · Hà Nội",
+    "heroTitle": "Vui trí tuệ — mỗi nước cờ",
+    "heroTitleEm": "nuôi dưỡng tư duy",
+    "heroSubtitle": "Dương Sinh đồng hành cùng con trên lộ trình 6 cấp Tốt → Vua: rèn tư duy sắc bén, kiên nhẫn và bản lĩnh qua từng ván cờ.",
+    "heroCtaTrial": "Đăng ký học thử miễn phí",
+    "trustLevelsLabel": "cấp độ lộ trình",
+    "trustSmallClass": "Lớp nhỏ, đồng hành sát sao từng con",
+    "trustBranches": "2 cơ sở tại Hà Nội",
+    "heroBadgePhilosophy": "triết lý đồng hành",
+    "heroBadgeRoadmap": "lộ trình 6 cấp",
+    "roadmapTitle": "Lộ trình đào tạo",
+    "roadmapSubtitle": "Từng bước chinh phục bàn cờ",
+    "roadmapLead": "Sáu cấp độ mang tên quân cờ — từ Tốt nhập môn đến Vua bản lĩnh — xây nền tảng vững chắc rồi nâng cao kỹ năng thi đấu.",
+    "roadmapCta": "Xem chương trình đào tạo",
+    "classesTitle": "Lớp học nổi bật",
+    "classesSubtitle": "Lớp đang mở tại các cơ sở",
+    "classesLead": "Phân lớp theo độ tuổi và trình độ, mỗi lớp tối đa 8–10 con để thầy cô đồng hành sát sao.",
+    "classesEmpty": "Chưa có lớp học nào. Vui lòng quay lại sau.",
+    "booksTitle": "Sách nổi bật",
+    "booksHeading": "Bộ sách theo lộ trình",
+    "booksSubtitle": "Giáo trình biên soạn riêng theo từng cấp {roadmap} — đặt mua tại duongsinhbook.com.",
+    "booksEmpty": "Chưa có sách nổi bật.",
+    "blogTitle": "Bài viết mới",
+    "blogSubtitle": "Tin tức & kiến thức",
+    "blogLead": "Câu chuyện học cờ, mẹo đồng hành cùng con và hoạt động mới nhất từ Dương Sinh.",
+    "blogEmpty": "Chưa có bài viết nào.",
+    "consultTitle": "Đăng ký tư vấn miễn phí",
+    "consultSubtitle": "Để lại thông tin, đội ngũ Dương Sinh sẽ liên hệ tư vấn lộ trình phù hợp cho con bạn."
+  },
+  "form": {
+    "fullName": "Họ tên phụ huynh",
+    "fullNamePlaceholder": "Nguyễn Văn A",
+    "phone": "Số điện thoại",
+    "phonePlaceholder": "09xx xxx xxx",
+    "childAge": "Độ tuổi con",
+    "childAgePlaceholder": "Ví dụ: 6 tuổi",
+    "location": "Cơ sở quan tâm",
+    "locationPlaceholder": "Chọn cơ sở",
+    "note": "Ghi chú",
+    "notePlaceholder": "Câu hỏi hoặc thời gian tiện liên hệ...",
+    "submit": "Gửi đăng ký",
+    "submitting": "Đang gửi...",
+    "submitAgain": "Gửi đăng ký khác",
+    "cardOverline": "Đăng ký tư vấn miễn phí",
+    "cardTitle": "Đặt lịch học thử cho con",
+    "cardDesc": "Để lại thông tin, đội ngũ Dương Sinh sẽ liên hệ tư vấn lộ trình phù hợp nhất cho con bạn.",
+    "perk1": "Buổi học thử hoàn toàn miễn phí",
+    "perk2": "Tư vấn lộ trình theo độ tuổi của con",
+    "perk3": "Lớp nhỏ, giáo viên đồng hành sát sao",
+    "successTitle": "Đã gửi đăng ký!",
+    "successMessage": "Cảm ơn bạn. Đội ngũ Dương Sinh sẽ liên hệ trong thời gian sớm nhất.",
+    "successEchoMessage": "Cảm ơn {name}. Đội ngũ Dương Sinh sẽ liên hệ số {phone} trong thời gian sớm nhất.",
+    "trialFor": "Đăng ký học thử lớp {className}",
+    "trialSuccessMessage": "Đã ghi nhận! Dương Sinh sẽ liên hệ để sắp xếp buổi học thử cho con.",
+    "errorTitle": "Gửi không thành công",
+    "errorMessage": "Đã có lỗi xảy ra. Vui lòng thử lại sau hoặc gọi hotline trên trang Liên hệ.",
+    "privacyHint": "Thông tin của bạn được bảo mật và chỉ dùng để tư vấn chương trình học.",
+    "errors": {
+      "fullNameRequired": "Vui lòng nhập họ tên",
+      "fullNameMin": "Họ tên phải có ít nhất 2 ký tự",
+      "phoneRequired": "Vui lòng nhập số điện thoại",
+      "phoneInvalid": "Số điện thoại không hợp lệ (ví dụ: 09xx xxx xxx)"
+    }
+  },
+  "brandTest": {
+    "heading": "Kiểm tra @ds/brand — nền, font Roboto, CTA navy"
+  },
+  "footer": {
+    "tagline": "Học viện cờ vua cho trẻ — nơi mỗi nước cờ nuôi dưỡng tư duy, kiên nhẫn và bản lĩnh.",
+    "explore": "Khám phá",
+    "contact": "Liên hệ",
+    "addressPending": "Địa chỉ sẽ được cập nhật sớm."
+  },
+  "cta": {
+    "title": "Sẵn sàng cho con bắt đầu hành trình cờ vua?",
+    "desc": "Để lại thông tin hoặc liên hệ trực tiếp — Dương Sinh sẽ tư vấn lộ trình phù hợp nhất cho con bạn.",
+    "button": "Liên hệ ngay"
+  },
+  "training": {
+    "metaTitle": "Chương trình đào tạo",
+    "metaDescription": "Lộ trình cờ vua {roadmap} — phân lớp theo độ tuổi và học phí tại Dương Sinh.",
+    "title": "Chương trình đào tạo",
+    "subtitle": "Lộ trình {roadmap} — phù hợp mọi lứa tuổi",
+    "levelsTitle": "Lộ trình {count} cấp",
+    "levelsSubtitle": "Từng bước xây nền tảng và nâng cao kỹ năng cờ vua",
+    "stepOf": "Bước {current}/{total}",
+    "levels": {
+      "tot": "Cấp Nhập môn: làm quen bàn cờ, quy tắc di chuyển cơ bản và tư duy ban đầu. Phù hợp trẻ mới bắt đầu hành trình cờ vua.",
+      "ma": "Củng cố kiến thức nền, luyện chiến thuật sơ cấp và kết thúc đơn giản. Trẻ bắt đầu chơi cờ có hệ thống.",
+      "tuong": "Phát triển tư duy chiến lược, đọc bàn cờ và phối hợp quân. Bước chuyển từ kỹ năng cơ bản sang tư duy có kế hoạch.",
+      "xe": "Nâng cao tư duy chiến thuật trung cục, kết hợp tấn công và phòng thủ. Trẻ tự tin thi đấu nội bộ.",
+      "hau": "Chiến thuật phức tạp hơn, luyện thi đấu và phân tích ván cờ. Chuẩn bị tham gia giải đấu.",
+      "vua": "Hoàn thiện kỹ năng thi đấu, chiến thuật cao cấp và tư duy chiến lược toàn diện. Mục tiêu đạt thành tích giải đấu."
+    },
+    "tracks": {
+      "nhap_mon": "Nhập môn",
+      "co_ban": "Cơ bản",
+      "nang_cao": "Nâng cao"
+    },
+    "trackDesc": {
+      "nhap_mon": "Làm quen bàn cờ và luật chơi — bước khởi đầu của hành trình.",
+      "co_ban": "Xây nền tảng chiến thuật và tư duy có hệ thống qua các cấp Mã, Tượng, Xe.",
+      "nang_cao": "Chiến thuật phức tạp và luyện thi đấu ở cấp Hậu, Vua."
+    },
+    "ageGroupsTitle": "Phân lớp theo độ tuổi",
+    "ageGroupsSubtitle": "Chương trình được thiết kế phù hợp từng giai đoạn phát triển",
+    "ageGroupsEmpty": "Chưa có lớp trong nhóm tuổi này.",
+    "ageGroups": {
+      "mam_non_4_6": "Lớp vui học qua trò chơi, phát triển tập trung và tư duy logic cho trẻ mầm non 4-6 tuổi.",
+      "cap_1_cap_2": "Lớp dành cho học sinh Cấp 1 - Cấp 2, từ nền tảng tới nâng cao, hướng tới thi đấu."
+    },
+    "chips": ["6 cấp độ Tốt → Vua", "Mầm non đến thi đấu", "Lớp nhỏ 8–10 con"],
+    "ageRanges": {
+      "mam_non_4_6": "4–6 tuổi",
+      "cap_1_cap_2": "6–14 tuổi"
+    },
+    "ageGroupClassCount": "{count} lớp đang mở",
+    "pricing": {
+      "title": "Học phí & quyền lợi",
+      "subtitle": "Chọn gói học phù hợp với mục tiêu của con",
+      "popular": "Phổ biến",
+      "plans": [
+        {
+          "name": "Học thử",
+          "price": "Miễn phí",
+          "sessions": "1 buổi trải nghiệm",
+          "perks": [
+            "Đánh giá trình độ ban đầu",
+            "Tư vấn lộ trình theo độ tuổi",
+            "Không ràng buộc đăng ký"
+          ],
+          "cta": "Đăng ký học thử"
+        },
+        {
+          "name": "Tiêu chuẩn",
+          "price": "750.000đ",
+          "period": "/tháng",
+          "sessions": "8 buổi/tháng",
+          "featured": true,
+          "perks": [
+            "Lớp nhỏ 8–10 con",
+            "Giáo trình theo lộ trình 6 cấp",
+            "Báo cáo tiến độ định kỳ",
+            "Đồng hành qua cổng phụ huynh"
+          ],
+          "cta": "Đăng ký lớp"
+        },
+        {
+          "name": "Chuyên sâu",
+          "price": "1.050.000đ",
+          "period": "/tháng",
+          "sessions": "12 buổi/tháng",
+          "perks": [
+            "Tất cả quyền lợi gói Tiêu chuẩn",
+            "Luyện thi đấu & phân tích ván",
+            "Kèm sát theo nhóm trình độ",
+            "Ưu tiên suất giải nội bộ"
+          ],
+          "cta": "Đăng ký lớp"
+        }
+      ]
+    }
+  },
+  "schedule": {
+    "metaTitle": "Lịch khai giảng",
+    "metaDescription": "Lịch khai giảng và các lớp học sắp mở tại các cơ sở Cờ vua Dương Sinh.",
+    "title": "Lịch khai giảng",
+    "subtitle": "Các sự kiện và lớp học sắp khai giảng tại Dương Sinh",
+    "eventsTitle": "Sự kiện sắp diễn ra",
+    "eventsSubtitle": "Khai giảng, workshop và hoạt động cộng đồng",
+    "eventsEmpty": "Chưa có sự kiện sắp diễn ra. Vui lòng quay lại sau.",
+    "classesTitle": "Lớp học đang mở",
+    "classesSubtitle": "Lịch học và cơ sở của từng lớp",
+    "classesEmpty": "Chưa có lớp học nào. Vui lòng quay lại sau.",
+    "location": "Cơ sở",
+    "schedule": "Lịch học",
+    "classColumn": "Lớp",
+    "schedulePending": "Lịch học sẽ được cập nhật sớm.",
+    "locationsTitle": "Lịch học tại các cơ sở",
+    "locationsSubtitle": "Địa điểm và khung giờ học tại từng cơ sở của Dương Sinh",
+    "programsLabel": "Các lớp đang tuyển",
+    "viewMap": "Xem bản đồ",
+    "classCount": "{count} lớp",
+    "viewAllClasses": "Xem tất cả lớp đang mở",
+    "trialCta": "Đăng ký học thử",
+    "trialClose": "Đóng"
+  },
+  "coaches": {
+    "metaTitle": "Huấn luyện viên",
+    "metaDescription": "Đội ngũ huấn luyện viên Cờ vua Dương Sinh — kinh nghiệm, chứng chỉ và phương pháp giảng dạy.",
+    "title": "Huấn luyện viên",
+    "subtitle": "Đội ngũ HLV tận tâm, giàu kinh nghiệm thi đấu và giảng dạy",
+    "listTitle": "Hồ sơ huấn luyện viên",
+    "listSubtitle": "Thông tin được cập nhật từ hệ thống quản lý",
+    "empty": "Chưa có hồ sơ huấn luyện viên. Vui lòng quay lại sau.",
+    "roleFallback": "Huấn luyện viên",
+    "stats": {
+      "classSize": "8–10",
+      "coachesLabel": "huấn luyện viên",
+      "classSizeLabel": "học viên/lớp",
+      "levelsLabel": "cấp độ",
+      "branchesLabel": "cơ sở"
+    }
+  },
+  "locations": {
+    "metaTitle": "Cơ sở",
+    "metaDescription": "Ba cơ sở Cờ vua Dương Sinh — địa chỉ, bản đồ và số điện thoại liên hệ.",
+    "title": "Cơ sở",
+    "subtitle": "Ba cơ sở tại Hà Nội — thuận tiện cho phụ huynh lựa chọn",
+    "listTitle": "Hệ thống cơ sở",
+    "listSubtitle": "Địa chỉ, bản đồ và hotline từng cơ sở",
+    "empty": "Chưa có thông tin cơ sở. Vui lòng quay lại sau.",
+    "headquarters": "Trụ sở chính",
+    "branch": "Cơ sở",
+    "phone": "Điện thoại",
+    "mapTitle": "Bản đồ {name}",
+    "mapUnavailable": "Bản đồ sẽ được cập nhật sớm.",
+    "mapPlaceholder": "Bản đồ Google Maps · nhúng sau",
+    "contactCta": "Liên hệ",
+    "chips": ["3 cơ sở tại Hà Nội", "Gần trường & khu dân cư"]
+  },
+  "blog": {
+    "metaTitle": "Blog",
+    "metaDescription": "Tin tức, kiến thức cờ vua và hoạt động từ Cờ vua Dương Sinh.",
+    "title": "Blog",
+    "subtitle": "Tin tức, kiến thức và hoạt động từ Dương Sinh",
+    "listTitle": "Tất cả bài viết",
+    "listSubtitle": "Cập nhật mới nhất từ đội ngũ Dương Sinh",
+    "empty": "Chưa có bài viết nào. Vui lòng quay lại sau.",
+    "filterAll": "Tất cả",
+    "featured": "Bài nổi bật",
+    "relatedTitle": "Bài viết liên quan",
+    "readingTime": "{minutes} phút đọc",
+    "backToList": "Quay lại danh sách",
+    "author": "Tác giả",
+    "paginationLabel": "Phân trang bài viết",
+    "paginationPrev": "Trước",
+    "paginationNext": "Sau"
+  },
+  "contact": {
+    "metaTitle": "Liên hệ",
+    "metaDescription": "Liên hệ Cờ vua Dương Sinh — hotline, email, Facebook và đăng ký tư vấn miễn phí.",
+    "title": "Liên hệ",
+    "subtitle": "Chúng tôi sẵn sàng tư vấn lộ trình phù hợp cho con bạn",
+    "infoTitle": "Thông tin liên hệ",
+    "infoSubtitle": "Liên hệ trực tiếp với trung tâm Dương Sinh",
+    "company": "Đơn vị",
+    "hotline": "Hotline",
+    "email": "Email",
+    "facebook": "Facebook",
+    "website": "Website",
+    "formTitle": "Đăng ký tư vấn miễn phí",
+    "formSubtitle": "Để lại thông tin, đội ngũ Dương Sinh sẽ liên hệ trong thời gian sớm nhất."
+  }
+}

@@ -195,52 +195,6 @@ services:
   # MICROSERVICES / MICROSERVICE APPLICATIONS
   # ═══════════════════════════════════════════════════════════════
 
-  # Quản lý nhân sự AI / HRM AI Service
-  hrm-ai:
-    image: ghcr.io/nclamvn/vierp-hrm-ai:${IMAGE_TAG:-latest}
-    container_name: vierp-hrm-ai
-    restart: unless-stopped
-    environment:
-      NODE_ENV: production
-      PORT: 3000
-      DATABASE_URL: postgresql://${POSTGRES_USER:-vierp}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-vierp_prod}
-      REDIS_URL: redis://redis:6379
-      NATS_URL: nats://nats:4222
-      SSO_URL: http://keycloak:8080
-      SSO_REALM: ${SSO_REALM:-vierp}
-      SSO_CLIENT_ID: ${SSO_CLIENT_ID:-hrm-ai}
-      SSO_CLIENT_SECRET: ${SSO_CLIENT_SECRET}
-      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
-    ports:
-      - "3001:3000"
-    depends_on:
-      postgres:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-      nats:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
-      interval: 15s
-      timeout: 5s
-      retries: 5
-    deploy:
-      resources:
-        limits:
-          cpus: "1"
-          memory: 512M
-        reservations:
-          cpus: "0.5"
-          memory: 256M
-    logging:
-      driver: json-file
-      options:
-        max-size: "10m"
-        max-file: "3"
-    networks:
-      - vierp-network
-
   # Quản lý nhân sự thống nhất / HRM Unified Service
   hrm-unified:
     image: ghcr.io/nclamvn/vierp-hrm-unified:${IMAGE_TAG:-latest}
@@ -303,51 +257,6 @@ services:
       SSO_CLIENT_SECRET: ${SSO_CLIENT_SECRET}
     ports:
       - "3003:3000"
-    depends_on:
-      postgres:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-      nats:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
-      interval: 15s
-      timeout: 5s
-      retries: 5
-    deploy:
-      resources:
-        limits:
-          cpus: "1"
-          memory: 512M
-        reservations:
-          cpus: "0.5"
-          memory: 256M
-    logging:
-      driver: json-file
-      options:
-        max-size: "10m"
-        max-file: "3"
-    networks:
-      - vierp-network
-
-  # Quản lý nhân sự / HRM Service
-  hrm:
-    image: ghcr.io/nclamvn/vierp-hrm:${IMAGE_TAG:-latest}
-    container_name: vierp-hrm
-    restart: unless-stopped
-    environment:
-      NODE_ENV: production
-      PORT: 3000
-      DATABASE_URL: postgresql://${POSTGRES_USER:-vierp}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-vierp_prod}
-      REDIS_URL: redis://redis:6379
-      NATS_URL: nats://nats:4222
-      SSO_URL: http://keycloak:8080
-      SSO_REALM: ${SSO_REALM:-vierp}
-      SSO_CLIENT_ID: ${SSO_CLIENT_ID:-hrm}
-      SSO_CLIENT_SECRET: ${SSO_CLIENT_SECRET}
-    ports:
-      - "3004:3000"
     depends_on:
       postgres:
         condition: service_healthy
@@ -758,7 +667,7 @@ services:
     networks:
       - vierp-network
 
-  # ─── Object Storage / MinIO (S3-compatible) — media của CoVua ─
+  # ─── Object Storage / MinIO (S3-compatible) — media của CLB ─
   minio:
     image: minio/minio:latest
     container_name: vierp-minio
@@ -794,8 +703,8 @@ services:
     entrypoint: >
       /bin/sh -c "
       until mc alias set local http://minio:9000 '${MINIO_ROOT_USER:-minioadmin}' '${MINIO_ROOT_PASSWORD}'; do echo waiting-for-minio; sleep 2; done &&
-      mc mb --ignore-existing local/${COVUA_S3_BUCKET:-covua-media} &&
-      mc anonymous set download local/${COVUA_S3_BUCKET:-covua-media} &&
+      mc mb --ignore-existing local/${CLB_S3_BUCKET:-clb-media} &&
+      mc anonymous set download local/${CLB_S3_BUCKET:-clb-media} &&
       echo MinIO-bucket-ready
       "
     restart: "no"
@@ -803,41 +712,41 @@ services:
       - vierp-network
 
   # ─── Cờ vua Dương Sinh (Next 15 + Payload CMS) ───────────────
-  covua:
-    image: ghcr.io/nclamvn/vierp-covua:${IMAGE_TAG:-latest}
-    container_name: vierp-covua
+  clb:
+    image: ghcr.io/nclamvn/vierp-clb:${IMAGE_TAG:-latest}
+    container_name: vierp-clb
     restart: unless-stopped
     environment:
       NODE_ENV: production
       PORT: 3000
-      # DB riêng "covua" trên Postgres self-host (Payload tự quản schema qua migrate)
-      DATABASE_URI: postgresql://${POSTGRES_USER:-vierp}:${POSTGRES_PASSWORD}@postgres:5432/covua
-      PAYLOAD_SECRET: ${COVUA_PAYLOAD_SECRET}
-      # Bootstrap schema LẦN ĐẦU trên DB rỗng: đặt COVUA_DB_PUSH=true (1 lần) trong .env,
-      # khởi động covua để Payload tạo schema, rồi TRẢ VỀ false và restart.
-      PAYLOAD_DB_PUSH: ${COVUA_DB_PUSH:-false}
+      # DB riêng "clb" trên Postgres self-host (Payload tự quản schema qua migrate)
+      DATABASE_URI: postgresql://${POSTGRES_USER:-vierp}:${POSTGRES_PASSWORD}@postgres:5432/clb
+      PAYLOAD_SECRET: ${CLB_PAYLOAD_SECRET}
+      # Bootstrap schema LẦN ĐẦU trên DB rỗng: đặt CLB_DB_PUSH=true (1 lần) trong .env,
+      # khởi động clb để Payload tạo schema, rồi TRẢ VỀ false và restart.
+      PAYLOAD_DB_PUSH: ${CLB_DB_PUSH:-false}
       NEXT_PUBLIC_SERVER_URL: "https://clb.${BASE_DOMAIN}"
       # Storage qua MinIO (S3-compatible, nội bộ); public URL phục vụ qua Caddy
       S3_ENDPOINT: http://minio:9000
       S3_ACCESS_KEY_ID: ${MINIO_ROOT_USER:-minioadmin}
       S3_SECRET_ACCESS_KEY: ${MINIO_ROOT_PASSWORD}
-      S3_BUCKET: ${COVUA_S3_BUCKET:-covua-media}
-      S3_REGION: ${COVUA_S3_REGION:-ap-southeast-1}
+      S3_BUCKET: ${CLB_S3_BUCKET:-clb-media}
+      S3_REGION: ${CLB_S3_REGION:-ap-southeast-1}
       S3_PUBLIC_URL: "https://minio.${BASE_DOMAIN}"
       # Cổng phụ huynh (OTP) — tách khỏi staff
-      PARENT_SESSION_SECRET: ${COVUA_PARENT_SESSION_SECRET}
-      OTP_PROVIDER: ${COVUA_OTP_PROVIDER:-dev}
+      PARENT_SESSION_SECRET: ${CLB_PARENT_SESSION_SECRET}
+      OTP_PROVIDER: ${CLB_OTP_PROVIDER:-dev}
       # Event bus (Pha 4 — đồng bộ ERP)
       NATS_URL: nats://nats:4222
-      MODULE_NAME: covua
+      MODULE_NAME: clb
       # SSO Keycloak (Pha 3): SSO_URL nội bộ (token/userinfo), SSO_PUBLIC_URL cho
       # trình duyệt (authorize/logout) — BẮT BUỘC khi chạy sau Caddy, nếu thiếu thì
       # redirect đăng nhập sẽ trỏ vào keycloak:8080 nội bộ và hỏng.
       SSO_URL: http://keycloak:8080
       SSO_PUBLIC_URL: "https://sso.${BASE_DOMAIN}"
       SSO_REALM: ${SSO_REALM:-vierp}
-      SSO_CLIENT_ID: ${COVUA_SSO_CLIENT_ID:-covua}
-      SSO_CLIENT_SECRET: ${COVUA_SSO_CLIENT_SECRET}
+      SSO_CLIENT_ID: ${CLB_SSO_CLIENT_ID:-clb}
+      SSO_CLIENT_SECRET: ${CLB_SSO_CLIENT_SECRET}
     ports:
       - "3014:3000"
     depends_on:

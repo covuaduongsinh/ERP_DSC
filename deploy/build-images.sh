@@ -8,7 +8,7 @@
 #
 # Chạy từ THƯ MỤC GỐC repo:
 #   bash deploy/build-images.sh            # build tất cả (tuần tự)
-#   bash deploy/build-images.sh CRM HRM    # build vài app theo TÊN THƯ MỤC
+#   bash deploy/build-images.sh CRM HRM-unified  # build vài app theo TÊN THƯ MỤC
 # ============================================================
 set -euo pipefail
 
@@ -21,17 +21,15 @@ read_env() { grep -E "^$1=" "$ENVFILE" 2>/dev/null | head -1 | cut -d= -f2-; }
 SUPA_URL="$(read_env NEXT_PUBLIC_SUPABASE_URL)"
 SUPA_KEY="$(read_env NEXT_PUBLIC_SUPABASE_ANON_KEY)"
 
-# CoVua (Payload CMS) cần secret + DB lúc BUILD (có trang SSG đọc CMS).
+# CLB (Payload CMS) cần secret + DB lúc BUILD (có trang SSG đọc CMS).
 PG_USER="$(read_env POSTGRES_USER)"; PG_USER="${PG_USER:-vierp}"
 PG_PASS="$(read_env POSTGRES_PASSWORD)"
-COVUA_SECRET="$(read_env COVUA_PAYLOAD_SECRET)"
+CLB_SECRET="$(read_env CLB_PAYLOAD_SECRET)"
 BASE_DOMAIN="$(read_env BASE_DOMAIN)"; BASE_DOMAIN="${BASE_DOMAIN:-erp.example.vn}"
 
 # DIR(thư mục apps/) | PKG(name trong package.json) | IMG(tên image compose)
 ROWS=(
-  "HRM-AI|vierp-hrm-ai|vierp-hrm-ai"
   "HRM-unified|erp-hrm|vierp-hrm-unified"
-  "HRM|vierp-hrm|vierp-hrm"
   "Accounting|erp-accounting|vierp-accounting"
   "CRM|crm|vierp-crm"
   "Ecommerce|erp-ecommerce|vierp-ecommerce"
@@ -42,24 +40,24 @@ ROWS=(
   "docs|erp-docs|vierp-docs"
   "TPM-api-nestjs|vierp-tpm-api|vierp-tpm-api-nestjs"
   "TPM-web|@vierp/tpm-web|vierp-tpm-web"
-  "CoVua|@ds/web|vierp-covua"
+  "CLB|@ds/web|vierp-clb"
 )
 
 build_row() {
   local dir="$1" pkg="$2" img="$3"
   echo "==> [$dir] PKG=$pkg  ->  ghcr.io/nclamvn/$img:$IMAGE_TAG"
   local extra=()
-  # CoVua build cần PAYLOAD_SECRET + DATABASE_URI (DB phải REACHABLE) + URL gốc.
+  # CLB build cần PAYLOAD_SECRET + DATABASE_URI (DB phải REACHABLE) + URL gốc.
   # buildkit KHÔNG hỗ trợ --network <custom>; dùng --add-host host-gateway để build
   # container gọi postgres qua cổng đã publish trên host (host.docker.internal:5432).
-  # ⇒ PHẢI khởi động postgres TRƯỚC khi build covua.
-  if [[ "$img" == "vierp-covua" ]]; then
+  # ⇒ PHẢI khởi động postgres TRƯỚC khi build clb.
+  if [[ "$img" == "vierp-clb" ]]; then
     extra+=( --add-host=host.docker.internal:host-gateway )
-    extra+=( --build-arg "PAYLOAD_SECRET=${COVUA_SECRET}" )
-    extra+=( --build-arg "DATABASE_URI=postgresql://${PG_USER}:${PG_PASS}@host.docker.internal:5432/covua" )
+    extra+=( --build-arg "PAYLOAD_SECRET=${CLB_SECRET}" )
+    extra+=( --build-arg "DATABASE_URI=postgresql://${PG_USER}:${PG_PASS}@host.docker.internal:5432/clb" )
     extra+=( --build-arg "NEXT_PUBLIC_SERVER_URL=https://clb.${BASE_DOMAIN}" )
     # Bật plugin S3 lúc build để importMap gồm S3ClientUploadHandler (giá trị chỉ cần có mặt)
-    extra+=( --build-arg "S3_BUCKET=covua-media" )
+    extra+=( --build-arg "S3_BUCKET=clb-media" )
     extra+=( --build-arg "S3_ENDPOINT=http://minio:9000" )
   fi
   docker build -f "$DOCKERFILE" --build-arg PKG="$pkg" \
