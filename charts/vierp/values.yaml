@@ -5,44 +5,6 @@ global:
   imagePullPolicy: IfNotPresent
 
 apps:
-  hrm:
-    enabled: true
-    replicas: 1
-    port: 3001
-    name: HRM
-    image: hrm
-    resources:
-      requests:
-        cpu: 100m
-        memory: 256Mi
-      limits:
-        cpu: 500m
-        memory: 512Mi
-    hpa:
-      enabled: false
-      minReplicas: 1
-      maxReplicas: 3
-      targetCPUUtilizationPercentage: 70
-
-  hrm_ai:
-    enabled: true
-    replicas: 1
-    port: 3002
-    name: HRM-AI
-    image: hrm-ai
-    resources:
-      requests:
-        cpu: 200m
-        memory: 512Mi
-      limits:
-        cpu: 1000m
-        memory: 1Gi
-    hpa:
-      enabled: false
-      minReplicas: 1
-      maxReplicas: 5
-      targetCPUUtilizationPercentage: 70
-
   hrm_unified:
     enabled: true
     replicas: 1

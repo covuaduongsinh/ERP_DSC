@@ -3,7 +3,7 @@
 # All services + infrastructure
 # ============================================================
 
-version: '3.9'
+version: "3.9"
 
 x-common-env: &common-env
   NODE_ENV: production
@@ -99,7 +99,7 @@ services:
       - "443:8443"
       - "8001:8001"
     depends_on:
-      - hrm
+      - hrm-unified
       - crm
       - mrp
       - accounting
@@ -108,12 +108,12 @@ services:
 
   # ── Application Services ────────────────────────────────────
 
-  hrm:
+  hrm-unified:
     build:
       context: ../../
       dockerfile: infrastructure/docker/Dockerfile
       args:
-        APP_NAME: HRM
+        APP_NAME: HRM-unified
     restart: unless-stopped
     environment:
       <<: *common-env

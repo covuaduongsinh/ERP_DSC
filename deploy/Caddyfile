@@ -13,9 +13,7 @@
 	email admin@erp.example.vn   # email nhận cảnh báo chứng chỉ Let's Encrypt
 }
 
-# ── Các app HR / nhân sự ────────────────────────────────────
-hrm.erp.example.vn          { reverse_proxy hrm:3000 }
-hrm-ai.erp.example.vn       { reverse_proxy hrm-ai:3000 }
+# ── App HR / nhân sự (HRM-unified) ──────────────────────────
 hrm-unified.erp.example.vn  { reverse_proxy hrm-unified:3000 }
 
 # ── Kế toán / CRM / Sản xuất / Dự án ────────────────────────

@@ -21,7 +21,6 @@ MRP          → http://localhost:3003
 PM           → http://localhost:3005
 Accounting   → http://localhost:3007
 Ecommerce    → http://localhost:3008
-HRM-AI       → http://localhost:3009
 ExcelAI      → http://localhost:3010
 OTB          → http://localhost:3011
 TPM          → http://localhost:3012
@@ -68,12 +67,12 @@ Use token in subsequent requests:
 
 ```typescript
 const headers = {
-  'Authorization': `Bearer ${accessToken}`,
-  'Content-Type': 'application/json',
+  Authorization: `Bearer ${accessToken}`,
+  "Content-Type": "application/json",
 };
 
-const response = await fetch('http://localhost:8000/api/v1/hrm/employees', {
-  method: 'GET',
+const response = await fetch("http://localhost:8000/api/v1/hrm/employees", {
+  method: "GET",
   headers,
 });
 ```
@@ -93,12 +92,12 @@ curl -X POST http://localhost:8000/api/v1/auth/refresh \
 For SDK and server-to-server integrations:
 
 ```typescript
-import { ERPClient } from '@vierp/sdk';
+import { ERPClient } from "@vierp/sdk";
 
 const client = new ERPClient({
-  baseUrl: 'https://api.vierp.vn',
-  apiKey: 'vierp_live_abc123xyz789...',
-  tenantId: 'tenant-id-here',
+  baseUrl: "https://api.vierp.vn",
+  apiKey: "vierp_live_abc123xyz789...",
+  tenantId: "tenant-id-here",
 });
 
 // All requests automatically include API key
@@ -106,6 +105,7 @@ const employees = await client.hrm.employees.list();
 ```
 
 API Key format:
+
 - Prefix: `vierp_live_` (production) or `vierp_test_` (testing)
 - Signed with HMAC-SHA256
 - Include in header: `X-API-Key: vierp_live_...`
@@ -196,20 +196,20 @@ curl -X GET http://localhost:8000/api/v1/crm/customers \
 
 ## HTTP Status Codes / Mã trạng thái HTTP
 
-| Code | Meaning | Example |
-|------|---------|---------|
-| **200** | OK | Successful GET, no content changes |
-| **201** | Created | Successful POST creating new resource |
-| **204** | No Content | Successful DELETE or empty response |
-| **400** | Bad Request | Validation error, malformed request |
-| **401** | Unauthorized | Missing or invalid authentication token |
-| **403** | Forbidden | Insufficient permissions for resource |
-| **404** | Not Found | Resource does not exist |
-| **409** | Conflict | Duplicate key (e.g., email already exists) |
-| **422** | Unprocessable Entity | Request semantically correct but invalid |
-| **429** | Too Many Requests | Rate limit exceeded |
-| **500** | Internal Server Error | Server error (not client's fault) |
-| **503** | Service Unavailable | Service temporarily unavailable |
+| Code    | Meaning               | Example                                    |
+| ------- | --------------------- | ------------------------------------------ |
+| **200** | OK                    | Successful GET, no content changes         |
+| **201** | Created               | Successful POST creating new resource      |
+| **204** | No Content            | Successful DELETE or empty response        |
+| **400** | Bad Request           | Validation error, malformed request        |
+| **401** | Unauthorized          | Missing or invalid authentication token    |
+| **403** | Forbidden             | Insufficient permissions for resource      |
+| **404** | Not Found             | Resource does not exist                    |
+| **409** | Conflict              | Duplicate key (e.g., email already exists) |
+| **422** | Unprocessable Entity  | Request semantically correct but invalid   |
+| **429** | Too Many Requests     | Rate limit exceeded                        |
+| **500** | Internal Server Error | Server error (not client's fault)          |
+| **503** | Service Unavailable   | Service temporarily unavailable            |
 
 ## Pagination / Phân trang
 
@@ -220,6 +220,7 @@ curl "http://localhost:8000/api/v1/crm/customers?page=2&limit=50"
 ```
 
 Parameters:
+
 - `page` (default: 1) - Page number, starting from 1
 - `limit` (default: 20, max: 100) - Items per page
 
@@ -272,12 +273,14 @@ curl "http://localhost:8000/api/v1/crm/customers?status=active&createdAt__gte=20
 API enforces rate limits per tenant:
 
 **Limits:**
+
 - Public endpoints: 100 requests/minute
 - API endpoints: 1000 requests/minute
 - Authentication: 10 requests/15 minutes
 - Webhooks: 30 requests/minute
 
 **Headers:**
+
 ```
 X-RateLimit-Limit: 1000
 X-RateLimit-Remaining: 999
@@ -314,27 +317,27 @@ Same key sent within 24 hours returns same response without duplicate creation.
 
 ### Common Error Codes / Mã lỗi chung
 
-| Code | HTTP | Description |
-|------|------|-------------|
-| `VALIDATION_ERROR` | 400 | Input validation failed |
-| `AUTHENTICATION_REQUIRED` | 401 | Missing or invalid token |
-| `INSUFFICIENT_PERMISSIONS` | 403 | User lacks required permissions |
-| `RESOURCE_NOT_FOUND` | 404 | Resource does not exist |
-| `RESOURCE_ALREADY_EXISTS` | 409 | Duplicate resource (unique constraint) |
-| `INVALID_OPERATION` | 422 | Business logic violation |
-| `RATE_LIMIT_EXCEEDED` | 429 | Too many requests |
-| `INTERNAL_SERVER_ERROR` | 500 | Server error |
-| `SERVICE_UNAVAILABLE` | 503 | Service temporarily down |
+| Code                       | HTTP | Description                            |
+| -------------------------- | ---- | -------------------------------------- |
+| `VALIDATION_ERROR`         | 400  | Input validation failed                |
+| `AUTHENTICATION_REQUIRED`  | 401  | Missing or invalid token               |
+| `INSUFFICIENT_PERMISSIONS` | 403  | User lacks required permissions        |
+| `RESOURCE_NOT_FOUND`       | 404  | Resource does not exist                |
+| `RESOURCE_ALREADY_EXISTS`  | 409  | Duplicate resource (unique constraint) |
+| `INVALID_OPERATION`        | 422  | Business logic violation               |
+| `RATE_LIMIT_EXCEEDED`      | 429  | Too many requests                      |
+| `INTERNAL_SERVER_ERROR`    | 500  | Server error                           |
+| `SERVICE_UNAVAILABLE`      | 503  | Service temporarily down               |
 
 ### Handling Errors in Code / Xử lý lỗi trong code
 
 ```typescript
-import { ERPError } from '@vierp/sdk';
+import { ERPError } from "@vierp/sdk";
 
 try {
   const customer = await client.crm.customers.create({
-    name: 'Company ABC',
-    email: 'contact@abc.vn',
+    name: "Company ABC",
+    email: "contact@abc.vn",
   });
 } catch (error) {
   if (error instanceof ERPError) {
@@ -343,9 +346,9 @@ try {
     console.log(`Details:`, error.details);
 
     // Handle specific errors
-    if (error.code === 'VALIDATION_ERROR') {
+    if (error.code === "VALIDATION_ERROR") {
       // Show validation errors to user
-      error.details?.forEach(detail => {
+      error.details?.forEach((detail) => {
         console.log(`Field ${detail.field}: ${detail.message}`);
       });
     } else if (error.statusCode === 429) {
@@ -393,17 +396,21 @@ curl -X POST http://localhost:8000/api/v1/webhooks \
 **Verify signature:**
 
 ```typescript
-import crypto from 'crypto';
+import crypto from "crypto";
 
-function verifyWebhookSignature(payload: string, signature: string, secret: string) {
+function verifyWebhookSignature(
+  payload: string,
+  signature: string,
+  secret: string,
+) {
   const hash = crypto
-    .createHmac('sha256', secret)
+    .createHmac("sha256", secret)
     .update(payload)
-    .digest('hex');
+    .digest("hex");
 
   return crypto.timingSafeEqual(
     Buffer.from(`sha256=${hash}`),
-    Buffer.from(signature)
+    Buffer.from(signature),
   );
 }
 ```
@@ -423,21 +430,21 @@ Complete documentation for each module:
 Type-safe TypeScript SDK simplifies API usage:
 
 ```typescript
-import { ERPClient } from '@vierp/sdk';
+import { ERPClient } from "@vierp/sdk";
 
 const client = new ERPClient({
-  baseUrl: 'https://api.vierp.vn',
+  baseUrl: "https://api.vierp.vn",
   apiKey: process.env.ERP_API_KEY,
-  tenantId: 'your-tenant-id',
+  tenantId: "your-tenant-id",
 });
 
 // Fully typed
-const customers = await client.crm.customers.list({ status: 'active' });
-const invoice = await client.accounting.invoices.get('inv-123');
+const customers = await client.crm.customers.list({ status: "active" });
+const invoice = await client.accounting.invoices.get("inv-123");
 const employee = await client.hrm.employees.create({
-  firstName: 'John',
-  lastName: 'Doe',
-  email: 'john@company.vn',
+  firstName: "John",
+  lastName: "Doe",
+  email: "john@company.vn",
 });
 ```
 
@@ -450,6 +457,7 @@ Access interactive API documentation:
 - **Production**: https://docs.vierp.vn
 
 Features:
+
 - Interactive endpoint testing
 - Real-time request/response examples
 - Schema documentation
@@ -487,6 +495,7 @@ Features:
 Current API version: **v1**
 
 VietERP follows semantic versioning:
+
 - Breaking changes → Major version (v2, v3)
 - New features → Minor version (v1.1, v1.2)
 - Bug fixes → Patch version (v1.0.1, v1.0.2)
@@ -503,6 +512,7 @@ Old versions supported for 12 months after deprecation announcement.
    - [MRP API](./mrp.md)
 
 2. Try SDK:
+
    ```bash
    npm install @vierp/sdk
    ```

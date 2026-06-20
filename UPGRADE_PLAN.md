@@ -42,11 +42,11 @@ Client → Kong Gateway → Next.js Apps (14) → PostgreSQL 16
 
 ### Package mới cần tạo
 
-| Package | Mục đích | Dependencies |
-|---|---|---|
-| `@vierp/metrics` | Prometheus metrics cho mọi app | prom-client |
-| `@vierp/rate-limit` | Redis-backed rate limiting | ioredis, rate-limiter-flexible |
-| `@vierp/openapi` | Auto-generate OpenAPI specs | zod-to-openapi, swagger-ui-react |
+| Package             | Mục đích                       | Dependencies                     |
+| ------------------- | ------------------------------ | -------------------------------- |
+| `@vierp/metrics`    | Prometheus metrics cho mọi app | prom-client                      |
+| `@vierp/rate-limit` | Redis-backed rate limiting     | ioredis, rate-limiter-flexible   |
+| `@vierp/openapi`    | Auto-generate OpenAPI specs    | zod-to-openapi, swagger-ui-react |
 
 ---
 
@@ -75,24 +75,24 @@ apps/Accounting/
 **Kịch bản test mẫu** — `chart-of-accounts.spec.ts`:
 
 ```typescript
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
-test.describe('Hệ thống tài khoản / Chart of Accounts', () => {
-  test('tạo tài khoản cấp 1 theo TT200', async ({ page }) => {
-    await page.goto('/accounting/chart-of-accounts');
+test.describe("Hệ thống tài khoản / Chart of Accounts", () => {
+  test("tạo tài khoản cấp 1 theo TT200", async ({ page }) => {
+    await page.goto("/accounting/chart-of-accounts");
     await page.click('[data-testid="btn-add-account"]');
-    await page.fill('[name="accountCode"]', '111');
-    await page.fill('[name="accountName"]', 'Tiền mặt');
-    await page.selectOption('[name="accountType"]', 'ASSET');
+    await page.fill('[name="accountCode"]', "111");
+    await page.fill('[name="accountName"]', "Tiền mặt");
+    await page.selectOption('[name="accountType"]', "ASSET");
     await page.click('[data-testid="btn-save"]');
-    await expect(page.locator('text=111 - Tiền mặt')).toBeVisible();
+    await expect(page.locator("text=111 - Tiền mặt")).toBeVisible();
   });
 
-  test('không cho phép mã tài khoản trùng', async ({ page }) => {
+  test("không cho phép mã tài khoản trùng", async ({ page }) => {
     // ...
   });
 
-  test('hiển thị cây tài khoản đúng cấu trúc', async ({ page }) => {
+  test("hiển thị cây tài khoản đúng cấu trúc", async ({ page }) => {
     // ...
   });
 });
@@ -120,16 +120,16 @@ apps/Ecommerce/
 
 **Mục tiêu**: Mỗi package ≥80% coverage
 
-| Package | Test files cần tạo | Ưu tiên |
-|---|---|---|
-| `packages/auth/` | auth.test.ts, rbac.test.ts, jwt.test.ts | P0 |
-| `packages/events/` | publisher.test.ts, subscriber.test.ts, dlq.test.ts | P0 |
-| `packages/cache/` | cache.test.ts, invalidation.test.ts | P0 |
-| `packages/database/` | client.test.ts, migrations.test.ts | P0 |
-| `packages/security/` | encryption.test.ts, sanitize.test.ts | P0 |
-| `packages/branding/` | config.test.ts, i18n.test.ts | P1 |
-| `packages/health/` | health-check.test.ts | P1 |
-| `packages/logger/` | logger.test.ts, correlation.test.ts | P1 |
+| Package              | Test files cần tạo                                 | Ưu tiên |
+| -------------------- | -------------------------------------------------- | ------- |
+| `packages/auth/`     | auth.test.ts, rbac.test.ts, jwt.test.ts            | P0      |
+| `packages/events/`   | publisher.test.ts, subscriber.test.ts, dlq.test.ts | P0      |
+| `packages/cache/`    | cache.test.ts, invalidation.test.ts                | P0      |
+| `packages/database/` | client.test.ts, migrations.test.ts                 | P0      |
+| `packages/security/` | encryption.test.ts, sanitize.test.ts               | P0      |
+| `packages/branding/` | config.test.ts, i18n.test.ts                       | P1      |
+| `packages/health/`   | health-check.test.ts                               | P1      |
+| `packages/logger/`   | logger.test.ts, correlation.test.ts                | P1      |
 
 ### 2.4 CI/CD Nâng cấp
 
@@ -138,40 +138,40 @@ apps/Ecommerce/
 ```yaml
 # Thêm vào ci.yml hiện tại:
 
-  coverage:
-    runs-on: ubuntu-latest
-    needs: [test]
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with: { node-version: '20' }
-      - run: npm ci --legacy-peer-deps
-      - run: npx turbo test -- --coverage --reporter=json
-      - uses: codecov/codecov-action@v4
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          fail_ci_if_error: true
-          # Ngưỡng tối thiểu / Minimum threshold
-          flags: unittests
+coverage:
+  runs-on: ubuntu-latest
+  needs: [test]
+  steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with: { node-version: "20" }
+    - run: npm ci --legacy-peer-deps
+    - run: npx turbo test -- --coverage --reporter=json
+    - uses: codecov/codecov-action@v4
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        fail_ci_if_error: true
+        # Ngưỡng tối thiểu / Minimum threshold
+        flags: unittests
 
-  security-audit:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - run: npm audit --audit-level=critical
-      - uses: aquasecurity/trivy-action@master
-        with:
-          scan-type: 'fs'
-          severity: 'CRITICAL,HIGH'
+security-audit:
+  runs-on: ubuntu-latest
+  steps:
+    - uses: actions/checkout@v4
+    - run: npm audit --audit-level=critical
+    - uses: aquasecurity/trivy-action@master
+      with:
+        scan-type: "fs"
+        severity: "CRITICAL,HIGH"
 
-  docker-build:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        app: [HRM-AI, HRM-unified, TPM-api-nestjs]
-    steps:
-      - uses: actions/checkout@v4
-      - run: docker build -f apps/${{ matrix.app }}/Dockerfile -t vierp/${{ matrix.app }}:test .
+docker-build:
+  runs-on: ubuntu-latest
+  strategy:
+    matrix:
+      app: [HRM-unified, TPM-api-nestjs]
+  steps:
+    - uses: actions/checkout@v4
+    - run: docker build -f apps/${{ matrix.app }}/Dockerfile -t vierp/${{ matrix.app }}:test .
 ```
 
 **File mới**: `.github/workflows/release.yml`
@@ -180,7 +180,7 @@ apps/Ecommerce/
 name: Release
 on:
   push:
-    tags: ['v*']
+    tags: ["v*"]
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -295,14 +295,14 @@ packages/openapi/
 
 ```typescript
 // apps/CRM/app/api/docs/route.ts
-import { generateOpenAPISpec } from '@vierp/openapi';
-import { NextResponse } from 'next/server';
+import { generateOpenAPISpec } from "@vierp/openapi";
+import { NextResponse } from "next/server";
 
 export async function GET() {
   const spec = await generateOpenAPISpec({
-    title: 'VietERP CRM API',
-    version: '1.0.0',
-    basePath: '/api',
+    title: "VietERP CRM API",
+    version: "1.0.0",
+    basePath: "/api",
   });
   return NextResponse.json(spec);
 }
@@ -314,30 +314,35 @@ export async function GET() {
 
 ```typescript
 // packages/metrics/src/index.ts
-import { Registry, Counter, Histogram, collectDefaultMetrics } from 'prom-client';
+import {
+  Registry,
+  Counter,
+  Histogram,
+  collectDefaultMetrics,
+} from "prom-client";
 
 const registry = new Registry();
 collectDefaultMetrics({ register: registry });
 
 export const httpRequestDuration = new Histogram({
-  name: 'vierp_http_request_duration_seconds',
-  help: 'Thời gian xử lý HTTP request',
-  labelNames: ['method', 'route', 'status_code', 'app'],
+  name: "vierp_http_request_duration_seconds",
+  help: "Thời gian xử lý HTTP request",
+  labelNames: ["method", "route", "status_code", "app"],
   buckets: [0.01, 0.05, 0.1, 0.5, 1, 2, 5],
   registers: [registry],
 });
 
 export const httpRequestTotal = new Counter({
-  name: 'vierp_http_requests_total',
-  help: 'Tổng số HTTP requests',
-  labelNames: ['method', 'route', 'status_code', 'app'],
+  name: "vierp_http_requests_total",
+  help: "Tổng số HTTP requests",
+  labelNames: ["method", "route", "status_code", "app"],
   registers: [registry],
 });
 
 export const dbQueryDuration = new Histogram({
-  name: 'vierp_db_query_duration_seconds',
-  help: 'Thời gian truy vấn database',
-  labelNames: ['operation', 'model', 'app'],
+  name: "vierp_db_query_duration_seconds",
+  help: "Thời gian truy vấn database",
+  labelNames: ["operation", "model", "app"],
   buckets: [0.001, 0.005, 0.01, 0.05, 0.1, 0.5, 1],
   registers: [registry],
 });
@@ -349,14 +354,18 @@ export { registry };
 
 ```typescript
 // middleware pattern cho Next.js apps
-import { httpRequestDuration, httpRequestTotal } from '@vierp/metrics';
+import { httpRequestDuration, httpRequestTotal } from "@vierp/metrics";
 
 export function withMetrics(handler) {
   return async (req, res) => {
     const end = httpRequestDuration.startTimer();
     const result = await handler(req, res);
     end({ method: req.method, route: req.url, status_code: res.statusCode });
-    httpRequestTotal.inc({ method: req.method, route: req.url, status_code: res.statusCode });
+    httpRequestTotal.inc({
+      method: req.method,
+      route: req.url,
+      status_code: res.statusCode,
+    });
     return result;
   };
 }
@@ -485,10 +494,10 @@ global:
   imageTag: latest
 
 apps:
-  hrm:
+  hrm-unified:
     enabled: true
     replicas: 2
-    port: 3001
+    port: 3003
     resources:
       requests: { cpu: 100m, memory: 256Mi }
       limits: { cpu: 500m, memory: 512Mi }
@@ -552,18 +561,18 @@ infrastructure/terraform/aws/
 
 ### 5.1 Thứ tự Triển khai
 
-| Tuần | Module | Enhancement | Độ phức tạp |
-|---|---|---|---|
-| 10 | PM | Thêm backend API (Prisma + API routes) | Trung bình |
-| 10 | Accounting | Báo cáo tài chính PDF tự động | Trung bình |
-| 11 | CRM | AI Lead Scoring (Anthropic API) | Cao |
-| 11 | Ecommerce | Tích hợp Shopee/Lazada API | Cao |
-| 12 | Cross-module | Unified Dashboard + Global Search | Cao |
-| 12 | Cross-module | NATS Event Flows (CRM→Accounting, MRP→Ecommerce) | Trung bình |
-| 13 | HRM | Chấm công GPS + overtime automation | Trung bình |
-| 13 | MRP | IoT MQTT connector prototype | Cao |
-| 14 | Cross-module | Notification Center (WebSocket) | Trung bình |
-| 14 | Cross-module | Audit Trail toàn hệ thống | Trung bình |
+| Tuần | Module       | Enhancement                                      | Độ phức tạp |
+| ---- | ------------ | ------------------------------------------------ | ----------- |
+| 10   | PM           | Thêm backend API (Prisma + API routes)           | Trung bình  |
+| 10   | Accounting   | Báo cáo tài chính PDF tự động                    | Trung bình  |
+| 11   | CRM          | AI Lead Scoring (Anthropic API)                  | Cao         |
+| 11   | Ecommerce    | Tích hợp Shopee/Lazada API                       | Cao         |
+| 12   | Cross-module | Unified Dashboard + Global Search                | Cao         |
+| 12   | Cross-module | NATS Event Flows (CRM→Accounting, MRP→Ecommerce) | Trung bình  |
+| 13   | HRM          | Chấm công GPS + overtime automation              | Trung bình  |
+| 13   | MRP          | IoT MQTT connector prototype                     | Cao         |
+| 14   | Cross-module | Notification Center (WebSocket)                  | Trung bình  |
+| 14   | Cross-module | Audit Trail toàn hệ thống                        | Trung bình  |
 
 ### 5.2 Inter-Module Event Flows
 
@@ -573,24 +582,29 @@ infrastructure/terraform/aws/
 // packages/events/src/schemas/
 export const EVENT_CATALOG = {
   // CRM → Accounting
-  'crm.deal.won': {
-    payload: { dealId: string, customerId: string, amount: number, currency: string },
-    target: 'accounting.invoice.create',
+  "crm.deal.won": {
+    payload: {
+      dealId: string,
+      customerId: string,
+      amount: number,
+      currency: string,
+    },
+    target: "accounting.invoice.create",
   },
   // MRP → Ecommerce
-  'mrp.production.completed': {
+  "mrp.production.completed": {
     payload: { productId: string, quantity: number, warehouseId: string },
-    target: 'ecommerce.inventory.update',
+    target: "ecommerce.inventory.update",
   },
   // HRM → Accounting
-  'hrm.payroll.approved': {
+  "hrm.payroll.approved": {
     payload: { month: string, totalAmount: number, employees: number },
-    target: 'accounting.journal.create',
+    target: "accounting.journal.create",
   },
   // Ecommerce → Accounting
-  'ecommerce.order.paid': {
+  "ecommerce.order.paid": {
     payload: { orderId: string, amount: number, paymentMethod: string },
-    target: 'accounting.revenue.record',
+    target: "accounting.revenue.record",
   },
 };
 ```
@@ -641,13 +655,13 @@ apps/docs/content/
 
 ### 6.2 Demo Instance
 
-| Thành phần | Chi tiết |
-|---|---|
-| URL | `demo.vierp.dev` |
-| Hosting | Docker Compose trên VPS (Hetzner/DigitalOcean) |
-| Data | Sample data 5 công ty mẫu với đầy đủ dữ liệu VN |
-| Reset | Tự động reset mỗi 24h |
-| Accounts | demo@vierp.dev / demo123 (read-only + limited write) |
+| Thành phần | Chi tiết                                             |
+| ---------- | ---------------------------------------------------- |
+| URL        | `demo.vierp.dev`                                     |
+| Hosting    | Docker Compose trên VPS (Hetzner/DigitalOcean)       |
+| Data       | Sample data 5 công ty mẫu với đầy đủ dữ liệu VN      |
+| Reset      | Tự động reset mỗi 24h                                |
+| Accounts   | demo@vierp.dev / demo123 (read-only + limited write) |
 
 ---
 
@@ -655,14 +669,14 @@ apps/docs/content/
 
 ### Rủi ro & Giảm thiểu
 
-| # | Rủi ro | Xác suất | Tác động | Giảm thiểu |
-|---|---|---|---|---|
-| R1 | Breaking changes khi nâng cấp Next.js | Trung bình | Cao | Nâng cấp từng app, giữ version lock, E2E regression |
-| R2 | Performance degradation với metrics | Thấp | Trung bình | Sampling rate 10%, async metrics collection |
-| R3 | Terraform state conflicts | Trung bình | Cao | Remote state (S3 backend), state locking (DynamoDB) |
-| R4 | NATS message loss khi thêm event flows | Thấp | Cao | JetStream persistence, DLQ retry, idempotent consumers |
-| R5 | Database migration failures | Trung bình | Cao | Dry-run trong CI, backup trước migrate, rollback scripts |
-| R6 | Contributor conflicts | Thấp | Thấp | Branch protection, PR reviews, coding standards doc |
+| #   | Rủi ro                                 | Xác suất   | Tác động   | Giảm thiểu                                               |
+| --- | -------------------------------------- | ---------- | ---------- | -------------------------------------------------------- |
+| R1  | Breaking changes khi nâng cấp Next.js  | Trung bình | Cao        | Nâng cấp từng app, giữ version lock, E2E regression      |
+| R2  | Performance degradation với metrics    | Thấp       | Trung bình | Sampling rate 10%, async metrics collection              |
+| R3  | Terraform state conflicts              | Trung bình | Cao        | Remote state (S3 backend), state locking (DynamoDB)      |
+| R4  | NATS message loss khi thêm event flows | Thấp       | Cao        | JetStream persistence, DLQ retry, idempotent consumers   |
+| R5  | Database migration failures            | Trung bình | Cao        | Dry-run trong CI, backup trước migrate, rollback scripts |
+| R6  | Contributor conflicts                  | Thấp       | Thấp       | Branch protection, PR reviews, coding standards doc      |
 
 ### Rollback Strategy
 
@@ -679,6 +693,7 @@ Mỗi phase có chiến lược rollback riêng:
 ## Checklist Tổng quan / Master Checklist
 
 ### Phase 1 (Tuần 1–3)
+
 - [ ] E2E tests: Accounting (8 specs)
 - [ ] E2E tests: Ecommerce (6 specs)
 - [ ] E2E tests: PM (4 specs)
@@ -693,6 +708,7 @@ Mỗi phase có chiến lược rollback riêng:
 - [ ] DX: .devcontainer/
 
 ### Phase 2 (Tuần 4–6)
+
 - [ ] Package: @vierp/openapi
 - [ ] Swagger UI trên 14 apps
 - [ ] API docs portal tập trung
@@ -707,6 +723,7 @@ Mỗi phase có chiến lược rollback riêng:
 - [ ] Zod validation 100%
 
 ### Phase 3 (Tuần 7–9)
+
 - [ ] Dockerfile cho tất cả 14 apps
 - [ ] docker-compose.prod.yml
 - [ ] GitHub Container Registry pipeline
@@ -718,6 +735,7 @@ Mỗi phase có chiến lược rollback riêng:
 - [ ] Terraform: GCP module (tuỳ chọn)
 
 ### Phase 4 (Tuần 10–14)
+
 - [ ] PM: Backend API
 - [ ] Accounting: Báo cáo tài chính PDF
 - [ ] CRM: AI Lead Scoring
@@ -729,6 +747,7 @@ Mỗi phase có chiến lược rollback riêng:
 - [ ] Audit Trail
 
 ### Phase 5 (Tuần 15–16)
+
 - [ ] Docs app nâng cấp (MDX content)
 - [ ] Architecture Decision Records
 - [ ] ER diagrams tự động
@@ -739,5 +758,5 @@ Mỗi phase có chiến lược rollback riêng:
 
 ---
 
-*Kế hoạch triển khai này là phần bổ sung cho [ROADMAP.md](./ROADMAP.md). Cập nhật tiến độ hàng tuần.*
-*This upgrade plan supplements [ROADMAP.md](./ROADMAP.md). Progress tracked weekly.*
+_Kế hoạch triển khai này là phần bổ sung cho [ROADMAP.md](./ROADMAP.md). Cập nhật tiến độ hàng tuần._
+_This upgrade plan supplements [ROADMAP.md](./ROADMAP.md). Progress tracked weekly._

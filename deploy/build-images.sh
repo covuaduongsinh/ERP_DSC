@@ -8,7 +8,7 @@
 #
 # Chạy từ THƯ MỤC GỐC repo:
 #   bash deploy/build-images.sh            # build tất cả (tuần tự)
-#   bash deploy/build-images.sh CRM HRM    # build vài app theo TÊN THƯ MỤC
+#   bash deploy/build-images.sh CRM HRM-unified  # build vài app theo TÊN THƯ MỤC
 # ============================================================
 set -euo pipefail
 
@@ -29,9 +29,7 @@ BASE_DOMAIN="$(read_env BASE_DOMAIN)"; BASE_DOMAIN="${BASE_DOMAIN:-erp.example.v
 
 # DIR(thư mục apps/) | PKG(name trong package.json) | IMG(tên image compose)
 ROWS=(
-  "HRM-AI|vierp-hrm-ai|vierp-hrm-ai"
   "HRM-unified|erp-hrm|vierp-hrm-unified"
-  "HRM|vierp-hrm|vierp-hrm"
   "Accounting|erp-accounting|vierp-accounting"
   "CRM|crm|vierp-crm"
   "Ecommerce|erp-ecommerce|vierp-ecommerce"

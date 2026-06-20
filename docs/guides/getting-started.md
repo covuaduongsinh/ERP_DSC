@@ -41,9 +41,10 @@ make setup
 ```
 
 This will:
+
 - Install root dependencies
-- Install app dependencies (apps/*)
-- Install shared packages (packages/*)
+- Install app dependencies (apps/\*)
+- Install shared packages (packages/\*)
 - Generate Prisma clients
 
 ### 3. Configure Environment Variables / Cấu hình biến môi trường
@@ -127,20 +128,19 @@ npm run dev
 make dev
 
 # Or start individual app / Hoặc khởi động ứng dụng riêng lẻ
-cd apps/HRM
+cd apps/HRM-unified
 npm run dev
 ```
 
 Turbo will run all apps concurrently. Output shows each app's port:
 
 ```
- █  apps/HRM                  | ready - started server on 0.0.0.0:3001
+ █  apps/HRM-unified          | ready - started server on 0.0.0.0:3003
  █  apps/CRM                  | ready - started server on 0.0.0.0:3002
- █  apps/MRP                  | ready - started server on 0.0.0.0:3003
+ █  apps/MRP                  | ready - started server on 0.0.0.0:3004
  █  apps/PM                   | ready - started server on 0.0.0.0:3005
  █  apps/Accounting           | ready - started server on 0.0.0.0:3007
  █  apps/Ecommerce            | ready - started server on 0.0.0.0:3008
- █  apps/HRM-AI               | ready - started server on 0.0.0.0:3009
  █  apps/ExcelAI              | ready - started server on 0.0.0.0:3010
  █  apps/OTB                  | ready - started server on 0.0.0.0:3011
  █  apps/TPM-web              | ready - started server on 0.0.0.0:3012
@@ -150,32 +150,31 @@ Turbo will run all apps concurrently. Output shows each app's port:
 
 ### Port Reference / Tham chiếu cổng
 
-| Module | Port | URL | Description |
-|--------|------|-----|-------------|
-| HRM | 3001 | http://localhost:3001 | Human Resource Management |
-| CRM | 3002 | http://localhost:3002 | Customer Relationship Management |
-| MRP | 3003 | http://localhost:3003 | Manufacturing Resource Planning |
-| PM | 3005 | http://localhost:3005 | Project Management |
-| Accounting | 3007 | http://localhost:3007 | Accounting (VAS compliance) |
-| Ecommerce | 3008 | http://localhost:3008 | E-Commerce Platform |
-| HRM-AI | 3009 | http://localhost:3009 | AI-powered HRM |
-| ExcelAI | 3010 | http://localhost:3010 | AI Excel Analysis |
-| OTB | 3011 | http://localhost:3011 | Open-To-Buy Planning |
-| TPM | 3012 | http://localhost:3012 | Trade Promotion Management |
-| Admin | 3013 | http://localhost:3013 | System Administration |
-| Docs | 3014 | http://localhost:3014 | Documentation Portal |
+| Module      | Port | URL                   | Description                               |
+| ----------- | ---- | --------------------- | ----------------------------------------- |
+| HRM-unified | 3003 | http://localhost:3003 | Human Resource Management (AI-integrated) |
+| CRM         | 3002 | http://localhost:3002 | Customer Relationship Management          |
+| MRP         | 3004 | http://localhost:3004 | Manufacturing Resource Planning           |
+| PM          | 3005 | http://localhost:3005 | Project Management                        |
+| Accounting  | 3007 | http://localhost:3007 | Accounting (VAS compliance)               |
+| Ecommerce   | 3008 | http://localhost:3008 | E-Commerce Platform                       |
+| ExcelAI     | 3010 | http://localhost:3010 | AI Excel Analysis                         |
+| OTB         | 3011 | http://localhost:3011 | Open-To-Buy Planning                      |
+| TPM         | 3012 | http://localhost:3012 | Trade Promotion Management                |
+| Admin       | 3013 | http://localhost:3013 | System Administration                     |
+| Docs        | 3014 | http://localhost:3014 | Documentation Portal                      |
 
 ### Infrastructure Services / Dịch vụ cơ sở hạ tầng
 
-| Service | Port | URL | Description |
-|---------|------|-----|-------------|
-| PostgreSQL | 5432 | postgresql://localhost:5432 | Primary database |
-| Redis | 6379 | redis://localhost:6379 | Cache & sessions |
-| NATS | 4222 | nats://localhost:4222 | Event streaming |
-| NATS HTTP | 8222 | http://localhost:8222 | NATS monitoring |
-| Keycloak | 8080 | http://localhost:8080/auth | SSO & authentication |
-| Kong | 8000 | http://localhost:8000 | API Gateway (proxy) |
-| Kong Admin | 8001 | http://localhost:8001 | Kong administration |
+| Service    | Port | URL                         | Description          |
+| ---------- | ---- | --------------------------- | -------------------- |
+| PostgreSQL | 5432 | postgresql://localhost:5432 | Primary database     |
+| Redis      | 6379 | redis://localhost:6379      | Cache & sessions     |
+| NATS       | 4222 | nats://localhost:4222       | Event streaming      |
+| NATS HTTP  | 8222 | http://localhost:8222       | NATS monitoring      |
+| Keycloak   | 8080 | http://localhost:8080/auth  | SSO & authentication |
+| Kong       | 8000 | http://localhost:8000       | API Gateway (proxy)  |
+| Kong Admin | 8001 | http://localhost:8001       | Kong administration  |
 
 ## First Steps / Các bước đầu tiên
 
@@ -186,6 +185,7 @@ http://localhost:3013
 ```
 
 Default credentials / Thông tin đăng nhập mặc định:
+
 - Email: `admin@vierp.local`
 - Password: `admin123` (change this in production / đổi điều này trong sản xuất)
 
@@ -213,6 +213,7 @@ http://localhost:3001
 ```
 
 **Key sections:**
+
 - **Employees** / **Nhân viên** - Add and manage employees
 - **Attendance** / **Chấm công** - Track attendance
 - **Payroll** / **Bảng lương** - Manage salaries
@@ -253,7 +254,7 @@ npm run test:e2e
 npm run test:e2e -- --headed
 
 # Specific app / Ứng dụng cụ thể
-npm run test:e2e -- apps/HRM
+npm run test:e2e -- apps/HRM-unified
 ```
 
 ## Building for Production / Xây dựng cho sản xuất
@@ -308,13 +309,13 @@ redis-cli ping
 
 ```bash
 # Check logs for specific app
-npm run dev -- --filter=apps/HRM
+npm run dev -- --filter=apps/HRM-unified
 
 # Check node_modules installation
 npm ls @vierp/auth
 
 # Rebuild specific app
-cd apps/HRM && npm run build
+cd apps/HRM-unified && npm run build
 ```
 
 ## Next Steps / Bước tiếp theo

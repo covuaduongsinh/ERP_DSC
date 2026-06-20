@@ -7,7 +7,7 @@ on:
     branches: [main, develop]
 
 env:
-  NODE_VERSION: '20'
+  NODE_VERSION: "20"
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
   TURBO_TEAM: ${{ vars.TURBO_TEAM }}
 
@@ -23,7 +23,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: "npm"
       - run: npm ci --legacy-peer-deps
       - run: npx turbo lint
 
@@ -35,7 +35,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: "npm"
       - run: npm ci --legacy-peer-deps
       - run: npx turbo typecheck
 
@@ -63,7 +63,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: "npm"
       - run: npm ci --legacy-peer-deps
       - run: npx turbo test
 
@@ -76,7 +76,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: "npm"
       - run: npm ci --legacy-peer-deps
       - run: npx turbo build
 
@@ -108,7 +108,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: "npm"
       - run: npm ci --legacy-peer-deps
       - name: Run tests with coverage
         run: npx turbo test -- --coverage
@@ -127,7 +127,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: "npm"
       - run: npm ci --legacy-peer-deps
       - name: npm audit (critical vulnerabilities)
         run: npm audit --audit-level=critical
@@ -135,16 +135,16 @@ jobs:
       - name: Trivy filesystem scan
         uses: aquasecurity/trivy-action@master
         with:
-          scan-type: 'fs'
-          scan-ref: '.'
-          severity: 'CRITICAL,HIGH'
-          format: 'sarif'
-          output: 'trivy-results.sarif'
+          scan-type: "fs"
+          scan-ref: "."
+          severity: "CRITICAL,HIGH"
+          format: "sarif"
+          output: "trivy-results.sarif"
       - name: Upload Trivy SARIF to GitHub Security
         uses: github/codeql-action/upload-sarif@v3
         if: always()
         with:
-          sarif_file: 'trivy-results.sarif'
+          sarif_file: "trivy-results.sarif"
 
   docker-build:
     name: Docker Build — ${{ matrix.app }}
@@ -152,7 +152,20 @@ jobs:
     needs: build
     strategy:
       matrix:
-        app: [HRM-AI, HRM-unified, TPM-api-nestjs, HRM, Accounting, CRM, Ecommerce, MRP, OTB, docs, ExcelAI, PM, TPM-web]
+        app:
+          [
+            HRM-unified,
+            TPM-api-nestjs,
+            Accounting,
+            CRM,
+            Ecommerce,
+            MRP,
+            OTB,
+            docs,
+            ExcelAI,
+            PM,
+            TPM-web,
+          ]
       fail-fast: false
     steps:
       - uses: actions/checkout@v4
@@ -176,7 +189,20 @@ jobs:
     if: github.ref == 'refs/heads/main'
     strategy:
       matrix:
-        app: [HRM-AI, HRM-unified, TPM-api-nestjs, HRM, Accounting, CRM, Ecommerce, MRP, OTB, docs, ExcelAI, PM, TPM-web]
+        app:
+          [
+            HRM-unified,
+            TPM-api-nestjs,
+            Accounting,
+            CRM,
+            Ecommerce,
+            MRP,
+            OTB,
+            docs,
+            ExcelAI,
+            PM,
+            TPM-web,
+          ]
       fail-fast: false
     permissions:
       contents: read
@@ -194,7 +220,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # Transform app name: HRM-AI → hrm-ai (lowercase, hyphens)
+      # Transform app name: HRM-unified → hrm-unified (lowercase, hyphens)
       - name: Set image tag variables
         id: vars
         run: |

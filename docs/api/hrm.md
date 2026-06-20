@@ -12,8 +12,9 @@ Production:   https://api.vierp.vn/api/v1/hrm
 ```
 
 Direct module:
+
 ```
-Development:  http://localhost:3001/api/v1
+Development:  http://localhost:3003/api/v1
 ```
 
 ## Authentication / Xác thực
@@ -26,6 +27,7 @@ X-Tenant-ID: <tenant-id>
 ```
 
 Required permissions:
+
 - `read:hrm` - View employee data
 - `write:hrm` - Create/edit records
 - `manage:payroll` - Payroll operations
@@ -105,6 +107,7 @@ GET /hrm/employees
 ```
 
 **Parameters:**
+
 - `department` - Filter by department
 - `position` - Filter by position
 - `status` - active, inactive, on_leave
@@ -168,6 +171,7 @@ POST /hrm/attendance
 ```
 
 **Statuses:**
+
 - `present` - Employee present
 - `absent` - Employee absent
 - `late` - Employee late
@@ -198,6 +202,7 @@ GET /hrm/attendance/report
 ```
 
 **Parameters:**
+
 - `employeeId` - Filter by employee (optional)
 - `dateFrom`, `dateTo` - Date range
 - `department` - Filter by department
@@ -310,6 +315,7 @@ GET /hrm/leave-requests
 ```
 
 **Parameters:**
+
 - `employeeId` - Filter by employee
 - `status` - pending, approved, rejected, cancelled
 - `leaveType` - Filter by leave type
@@ -417,6 +423,7 @@ POST /hrm/payroll/{payrollId}/disburse
 ```
 
 Transfers salary to employee bank accounts. Creates accounting journal entries:
+
 - Debit: Salary Expense
 - Credit: Bank Account
 
@@ -500,6 +507,7 @@ GET /hrm/performance-reviews/{employeeId}
 ```
 
 **Parameters:**
+
 - `reviewType` - annual, mid-year, probation
 - `year` - Filter by year
 
@@ -677,30 +685,33 @@ POST /hrm/overtime
 
 ## Error Codes / Mã lỗi
 
-| Code | HTTP | Description |
-|------|------|-------------|
-| `EMPLOYEE_NOT_FOUND` | 404 | Employee doesn't exist |
-| `INSUFFICIENT_LEAVE_BALANCE` | 422 | Not enough leave balance |
-| `LEAVE_PERIOD_OVERLAP` | 422 | Leave dates overlap with existing request |
-| `INVALID_SALARY` | 400 | Salary amount invalid |
-| `PAYROLL_ALREADY_PROCESSED` | 422 | Payroll already processed for this month |
-| `MISSING_BANK_ACCOUNT` | 422 | Employee has no bank account for disbursement |
+| Code                         | HTTP | Description                                   |
+| ---------------------------- | ---- | --------------------------------------------- |
+| `EMPLOYEE_NOT_FOUND`         | 404  | Employee doesn't exist                        |
+| `INSUFFICIENT_LEAVE_BALANCE` | 422  | Not enough leave balance                      |
+| `LEAVE_PERIOD_OVERLAP`       | 422  | Leave dates overlap with existing request     |
+| `INVALID_SALARY`             | 400  | Salary amount invalid                         |
+| `PAYROLL_ALREADY_PROCESSED`  | 422  | Payroll already processed for this month      |
+| `MISSING_BANK_ACCOUNT`       | 422  | Employee has no bank account for disbursement |
 
 ## Integration with Accounting / Tích hợp với kế toán
 
 Payroll automatically creates accounting entries:
 
 **On Payroll Disbursal:**
+
 - Debit: Salary Expense (6211) + Insurance Expense (6212)
 - Credit: Bank Account + Employee Benefits Payable
 
 **Example:**
+
 - Gross salary: 30,000,000 VND
 - Social insurance: 2,360,000 VND
 - Income tax: 2,028,000 VND
 - Net salary: 13,642,000 VND
 
 Creates journal entry:
+
 ```
 Debit: Salary Expense 6211 = 30,000,000
 Debit: Social Insurance Expense 6212 = 2,360,000

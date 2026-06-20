@@ -54,9 +54,7 @@
         "reduceOptions": {
           "values": false,
           "fields": "",
-          "calcs": [
-            "lastNotNull"
-          ]
+          "calcs": ["lastNotNull"]
         },
         "text": {},
         "textMode": "auto"
@@ -64,7 +62,7 @@
       "pluginVersion": "10.4.0",
       "targets": [
         {
-          "expr": "count(count by (user_id) (vierp_http_requests_total{app=\"hrm\"}))",
+          "expr": "count(count by (user_id) (vierp_http_requests_total{app=\"hrm-unified\"}))",
           "refId": "A"
         }
       ],
@@ -107,9 +105,7 @@
         "reduceOptions": {
           "values": false,
           "fields": "",
-          "calcs": [
-            "lastNotNull"
-          ]
+          "calcs": ["lastNotNull"]
         },
         "text": {},
         "textMode": "auto"
@@ -168,9 +164,7 @@
         "reduceOptions": {
           "values": false,
           "fields": "",
-          "calcs": [
-            "lastNotNull"
-          ]
+          "calcs": ["lastNotNull"]
         },
         "text": {},
         "textMode": "auto"
@@ -221,9 +215,7 @@
         "reduceOptions": {
           "values": false,
           "fields": "",
-          "calcs": [
-            "lastNotNull"
-          ]
+          "calcs": ["lastNotNull"]
         },
         "text": {},
         "textMode": "auto"
@@ -659,11 +651,7 @@
   "refresh": "30s",
   "schemaVersion": 39,
   "style": "dark",
-  "tags": [
-    "vierp",
-    "business",
-    "kpi"
-  ],
+  "tags": ["vierp", "business", "kpi"],
   "templating": {
     "list": []
   },

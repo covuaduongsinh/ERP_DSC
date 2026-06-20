@@ -21,16 +21,6 @@ rule_files:
 
 scrape_configs:
   # ==================== VietERP Applications ====================
-  - job_name: hrm
-    static_configs:
-      - targets: ["localhost:3001"]
-    metrics_path: /api/metrics
-
-  - job_name: hrm-ai
-    static_configs:
-      - targets: ["localhost:3002"]
-    metrics_path: /api/metrics
-
   - job_name: hrm-unified
     static_configs:
       - targets: ["localhost:3003"]

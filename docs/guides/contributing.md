@@ -9,6 +9,7 @@ Thank you for your interest in contributing to VietERP! This guide outlines the 
 VietERP follows the [Contributor Covenant](../CODE_OF_CONDUCT.md). By participating, you agree to uphold this code.
 
 **Key principles:**
+
 - Be respectful and inclusive
 - Provide constructive feedback
 - Focus on ideas, not individuals
@@ -58,15 +59,15 @@ git checkout -b docs/documentation-update
 
 Use conventional branch names:
 
-| Type | Pattern | Example |
-|------|---------|---------|
-| Feature | `feature/*` | `feature/add-payroll-calculation` |
-| Bug Fix | `fix/*` | `fix/accounting-rounding-error` |
-| Documentation | `docs/*` | `docs/update-api-reference` |
-| Refactor | `refactor/*` | `refactor/auth-middleware` |
-| Performance | `perf/*` | `perf/optimize-database-query` |
-| Tests | `test/*` | `test/add-customer-crud-tests` |
-| Chore | `chore/*` | `chore/update-dependencies` |
+| Type          | Pattern      | Example                           |
+| ------------- | ------------ | --------------------------------- |
+| Feature       | `feature/*`  | `feature/add-payroll-calculation` |
+| Bug Fix       | `fix/*`      | `fix/accounting-rounding-error`   |
+| Documentation | `docs/*`     | `docs/update-api-reference`       |
+| Refactor      | `refactor/*` | `refactor/auth-middleware`        |
+| Performance   | `perf/*`     | `perf/optimize-database-query`    |
+| Tests         | `test/*`     | `test/add-customer-crud-tests`    |
+| Chore         | `chore/*`    | `chore/update-dependencies`       |
 
 ## Commit Conventions / Quy ước commit
 
@@ -349,7 +350,7 @@ npm run typecheck
 npm run lint
 
 # Lint specific package
-npm run lint -- apps/HRM
+npm run lint -- apps/HRM-unified
 
 # Fix linting issues
 npm run lint -- --fix
@@ -403,27 +404,31 @@ npm run test:e2e
 ### Code Comments / Bình luận code
 
 Write comments for:
+
 - **Why**, not **what** - what should be obvious from code
 - Complex algorithms or business logic
 - Non-obvious dependencies or side effects
 - Workarounds for known issues
 
 **Good comment:**
+
 ```typescript
 // Per TT200, sales invoices must use account 5111
 // not account 5112 which is reserved for services
-const revenueAccount = '5111';
+const revenueAccount = "5111";
 ```
 
 **Bad comment:**
+
 ```typescript
 // Set revenue account
-const revenueAccount = '5111';
+const revenueAccount = "5111";
 ```
 
 ### API Documentation / Tài liệu API
 
 Document endpoints with:
+
 - Endpoint path and method
 - Request/response schemas
 - Authentication requirements
@@ -451,6 +456,7 @@ export const GET = withAuth(async (req: NextRequest) => {
 ### README Guidelines / Hướng dẫn README
 
 Each module should have a README with:
+
 - Description
 - Features
 - API overview
@@ -480,12 +486,14 @@ PR will fail if any check doesn't pass. Fix and push again.
 - Consider pagination for large result sets
 
 Bad:
+
 ```typescript
 const users = await prisma.user.findMany();
 // Get all users - could be thousands!
 ```
 
 Good:
+
 ```typescript
 const users = await prisma.user.findMany({
   select: { id: true, name: true, email: true },
@@ -498,11 +506,13 @@ const users = await prisma.user.findMany({
 ### Caching Strategy / Chiến lược bộ nhớ đệm
 
 Use Redis for:
+
 - User sessions
 - Frequently accessed reference data
 - Expensive query results
 
 Cache invalidation:
+
 - On data mutation (create/update/delete)
 - Time-based (TTL)
 - Event-driven (via NATS)
@@ -525,6 +535,7 @@ Cache invalidation:
 ## Recognition / Ghi nhận
 
 Contributors will be:
+
 - Listed in CONTRIBUTORS.md
 - Credited in release notes
 - Acknowledged in documentation

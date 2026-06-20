@@ -4,16 +4,16 @@
 # Build BẤT KỲ app nào từ monorepo bằng `turbo prune` (xử lý gọn
 # workspace deps + lockfile), giữ node_modules đầy đủ và chạy
 # `npm start` của chính app => đúng cho mọi kiểu app:
-#   - Next standalone / next start         (HRM-AI, CRM, OTB...)
+#   - Next standalone / next start         (CRM, OTB...)
 #   - Next + custom server (tsc, socket.io) (MRP: node dist/server.js)
-#   - Next + @prisma/adapter-pg             (HRM: cần full node_modules)
+#   - Next + @prisma/adapter-pg             (HRM-unified: cần full node_modules)
 #   - NestJS                                (TPM-api-nestjs: node dist/main)
 #
 # Build:
 #   docker build -f infrastructure/docker/Dockerfile.turbo \
 #     --build-arg PKG=<package-name> -t <image> .
 # PKG = trường "name" trong apps/<App>/package.json
-#   (vd: crm, vierp-mrp, vierp-hrm, erp-accounting, vierp-pm, vierp-hrm-ai)
+#   (vd: crm, vierp-mrp, erp-hrm, erp-accounting, vierp-pm)
 # ============================================================
 ARG NODE_VERSION=20
 

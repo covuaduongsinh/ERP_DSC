@@ -88,7 +88,7 @@ Mục tiêu: gõ `crm.tenmiencuaban.vn` trên trình duyệt sẽ tới đúng m
    | A    | `crm`       | `<IP>`          |
    | A    | `ketoan`    | `<IP>`          |
 
-   (Sau này thêm dần: `hrm`, `mrp`, `pm`, `sso`, `api`… cũng trỏ về cùng IP.)
+   (Sau này thêm dần: `hrm-unified`, `mrp`, `pm`, `sso`, `api`… cũng trỏ về cùng IP.)
 
 3. Lưu lại. Chờ 1–5 phút cho cập nhật.
 
@@ -120,7 +120,7 @@ Mục tiêu: gõ `crm.tenmiencuaban.vn` trên trình duyệt sẽ tới đúng m
      AUTH_SECRET=<dán lại đúng chuỗi NEXTAUTH_SECRET ở trên>
      BASE_DOMAIN=tenmiencuaban.vn
      ```
-   - `ANTHROPIC_API_KEY=` → để trống cũng được (chỉ HRM-AI/ExcelAI cần).
+   - `ANTHROPIC_API_KEY=` → để trống cũng được (chỉ ExcelAI/HRM-unified cần).
    - Lưu lại: bấm **Ctrl+O** rồi **Enter**, thoát: **Ctrl+X**.
 
 ✅ **Xong khi:** chạy `cat .env` thấy các dòng đã điền (không còn chữ `ĐỔI_...`).
@@ -217,8 +217,8 @@ docker compose -f docker-compose.prod.yml -f deploy/docker-compose.auth.yml up -
 
 Rồi thêm bản ghi DNS `pm` (Giai đoạn 4) và dòng tương ứng đã có sẵn trong Caddyfile.
 
-> Lưu ý: **HRM-AI / HRM-unified** còn vài lỗi mã nguồn cần vá trước khi build (đã ghi trong README).
-> Khi tới lượt 2 app này, nhắn tôi xử lý.
+> Lưu ý: **HRM-unified** còn vài lỗi mã nguồn cần vá trước khi build (đã ghi trong README).
+> Khi tới lượt app này, nhắn tôi xử lý.
 
 ---
 

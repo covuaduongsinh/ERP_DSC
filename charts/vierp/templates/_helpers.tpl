@@ -53,8 +53,6 @@ Get app name from app key
 */}}
 {{- define "vierp.appName" -}}
 {{- $appKey := . }}
-{{- if eq $appKey "hrm" }}hrm{{ end }}
-{{- if eq $appKey "hrm_ai" }}hrm-ai{{ end }}
 {{- if eq $appKey "hrm_unified" }}hrm-unified{{ end }}
 {{- if eq $appKey "mrp" }}mrp{{ end }}
 {{- if eq $appKey "accounting" }}accounting{{ end }}

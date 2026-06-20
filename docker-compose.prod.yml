@@ -195,52 +195,6 @@ services:
   # MICROSERVICES / MICROSERVICE APPLICATIONS
   # ═══════════════════════════════════════════════════════════════
 
-  # Quản lý nhân sự AI / HRM AI Service
-  hrm-ai:
-    image: ghcr.io/nclamvn/vierp-hrm-ai:${IMAGE_TAG:-latest}
-    container_name: vierp-hrm-ai
-    restart: unless-stopped
-    environment:
-      NODE_ENV: production
-      PORT: 3000
-      DATABASE_URL: postgresql://${POSTGRES_USER:-vierp}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-vierp_prod}
-      REDIS_URL: redis://redis:6379
-      NATS_URL: nats://nats:4222
-      SSO_URL: http://keycloak:8080
-      SSO_REALM: ${SSO_REALM:-vierp}
-      SSO_CLIENT_ID: ${SSO_CLIENT_ID:-hrm-ai}
-      SSO_CLIENT_SECRET: ${SSO_CLIENT_SECRET}
-      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
-    ports:
-      - "3001:3000"
-    depends_on:
-      postgres:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-      nats:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
-      interval: 15s
-      timeout: 5s
-      retries: 5
-    deploy:
-      resources:
-        limits:
-          cpus: "1"
-          memory: 512M
-        reservations:
-          cpus: "0.5"
-          memory: 256M
-    logging:
-      driver: json-file
-      options:
-        max-size: "10m"
-        max-file: "3"
-    networks:
-      - vierp-network
-
   # Quản lý nhân sự thống nhất / HRM Unified Service
   hrm-unified:
     image: ghcr.io/nclamvn/vierp-hrm-unified:${IMAGE_TAG:-latest}
@@ -303,51 +257,6 @@ services:
       SSO_CLIENT_SECRET: ${SSO_CLIENT_SECRET}
     ports:
       - "3003:3000"
-    depends_on:
-      postgres:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-      nats:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
-      interval: 15s
-      timeout: 5s
-      retries: 5
-    deploy:
-      resources:
-        limits:
-          cpus: "1"
-          memory: 512M
-        reservations:
-          cpus: "0.5"
-          memory: 256M
-    logging:
-      driver: json-file
-      options:
-        max-size: "10m"
-        max-file: "3"
-    networks:
-      - vierp-network
-
-  # Quản lý nhân sự / HRM Service
-  hrm:
-    image: ghcr.io/nclamvn/vierp-hrm:${IMAGE_TAG:-latest}
-    container_name: vierp-hrm
-    restart: unless-stopped
-    environment:
-      NODE_ENV: production
-      PORT: 3000
-      DATABASE_URL: postgresql://${POSTGRES_USER:-vierp}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-vierp_prod}
-      REDIS_URL: redis://redis:6379
-      NATS_URL: nats://nats:4222
-      SSO_URL: http://keycloak:8080
-      SSO_REALM: ${SSO_REALM:-vierp}
-      SSO_CLIENT_ID: ${SSO_CLIENT_ID:-hrm}
-      SSO_CLIENT_SECRET: ${SSO_CLIENT_SECRET}
-    ports:
-      - "3004:3000"
     depends_on:
       postgres:
         condition: service_healthy
