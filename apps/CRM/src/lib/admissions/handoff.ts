@@ -1,12 +1,12 @@
 import { prisma } from "@/lib/prisma";
-import { convertAdmission } from "@/lib/integrations/covua";
+import { convertAdmission } from "@/lib/integrations/clb";
 import { fullNameOf } from "@/lib/erp-integration/master-data";
 
 /**
- * Handoff CRM → CoVua khi một Deal "Tuyển sinh Đào tạo" được chốt (vào stage isWon).
+ * Handoff CRM → CLB khi một Deal "Tuyển sinh Đào tạo" được chốt (vào stage isWon).
  *
- * Tạo Phụ huynh + Học viên + Ghi danh bên CoVua (qua endpoint nội bộ), rồi lưu
- * cross-id về CRM để chống tạo trùng lần sau. Best-effort: nếu CoVua offline / lỗi,
+ * Tạo Phụ huynh + Học viên + Ghi danh bên CLB (qua endpoint nội bộ), rồi lưu
+ * cross-id về CRM để chống tạo trùng lần sau. Best-effort: nếu CLB offline / lỗi,
  * KHÔNG đánh dấu đã chuyển đổi ⇒ lần "chốt" sau sẽ thử lại.
  *
  * Các sự kiện NATS (customer canonical + crm.lead.converted) được nạp qua dynamic
@@ -19,7 +19,7 @@ export async function handleAdmissionWon(dealId: string): Promise<void> {
       contacts: { include: { contact: true }, orderBy: { isPrimary: "desc" } },
     },
   });
-  if (!deal || deal.covuaStudentId) return; // không có deal hoặc đã chuyển đổi
+  if (!deal || deal.clbStudentId) return; // không có deal hoặc đã chuyển đổi
 
   const primary = deal.contacts[0]?.contact;
   if (!primary || !primary.phone) {
@@ -53,7 +53,7 @@ export async function handleAdmissionWon(dealId: string): Promise<void> {
 
   if (!result) {
     console.warn(
-      `[CRM] Handoff CoVua chưa thành công cho deal ${dealId} — sẽ thử lại lần chốt sau.`,
+      `[CRM] Handoff CLB chưa thành công cho deal ${dealId} — sẽ thử lại lần chốt sau.`,
     );
     return;
   }
@@ -63,21 +63,21 @@ export async function handleAdmissionWon(dealId: string): Promise<void> {
     prisma.deal.update({
       where: { id: deal.id },
       data: {
-        covuaParentId: result.parentId,
-        covuaStudentId: result.studentId,
-        covuaEnrollmentId: result.enrollmentId ?? null,
+        clbParentId: result.parentId,
+        clbStudentId: result.studentId,
+        clbEnrollmentId: result.enrollmentId ?? null,
         convertedAt: new Date(),
       },
     }),
     prisma.contact.update({
       where: { id: primary.id },
-      data: { covuaParentId: result.parentId, status: "CUSTOMER" },
+      data: { clbParentId: result.parentId, status: "CUSTOMER" },
     }),
     ...(child
       ? [
           prisma.contactChild.update({
             where: { id: child.id },
-            data: { covuaStudentId: result.studentId },
+            data: { clbStudentId: result.studentId },
           }),
         ]
       : []),
@@ -96,8 +96,8 @@ export async function handleAdmissionWon(dealId: string): Promise<void> {
     await publishCRMEvent(CRM_NATS_SUBJECTS.LEAD_CONVERTED, {
       dealId: deal.id,
       contactId: primary.id,
-      covuaParentId: result.parentId,
-      covuaStudentId: result.studentId,
+      clbParentId: result.parentId,
+      clbStudentId: result.studentId,
     });
   } catch (e) {
     console.error("[CRM] publish customer/lead.converted lỗi:", e);

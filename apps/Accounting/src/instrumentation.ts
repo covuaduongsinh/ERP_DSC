@@ -1,6 +1,6 @@
 /**
  * Next.js instrumentation — chạy MỘT LẦN khi server Accounting khởi động.
- * Dùng để bật NATS event subscriber (auto-journal từ các module ERP, gồm CoVua).
+ * Dùng để bật NATS event subscriber (auto-journal từ các module ERP, gồm CLB).
  *
  * Guard:
  *  - Chỉ chạy ở Node runtime (không phải Edge).
@@ -16,7 +16,7 @@ export async function register() {
   try {
     const { ensureStreams } = await import("@vierp/events");
     const { startAccountingEventHandlers } = await import("./lib/integration");
-    // Đảm bảo các JetStream stream (gồm VIERP_COVUA) tồn tại trước khi gắn consumer.
+    // Đảm bảo các JetStream stream (gồm VIERP_CLB) tồn tại trước khi gắn consumer.
     await ensureStreams();
     await startAccountingEventHandlers();
   } catch (err) {

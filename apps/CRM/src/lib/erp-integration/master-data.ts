@@ -1,5 +1,5 @@
 // ============================================================
-// CRM ↔ Master Data (chống trùng "khách" giữa CRM / CoVua / Ecommerce).
+// CRM ↔ Master Data (chống trùng "khách" giữa CRM / CLB / Ecommerce).
 //
 // Phụ huynh trong CRM (Contact) ⇄ Customer canonical (@vierp/master-data). CRM
 // tham chiếu Contact.customerId; khi tạo/chốt lead, CRM map Contact → Customer rồi

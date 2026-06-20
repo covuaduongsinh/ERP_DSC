@@ -1,8 +1,8 @@
 /**
- * Pipeline "Tuyển sinh Đào tạo" — phễu chăm lead đào tạo cờ vua được tách từ CoVua
+ * Pipeline "Tuyển sinh Đào tạo" — phễu chăm lead đào tạo cờ vua được tách từ CLB
  * (collection `Leads`, admin group "Tuyển sinh & CRM") sang CRM.
  *
- * Các stage gương theo `Leads.status` của CoVua để di trú dữ liệu 1-1.
+ * Các stage gương theo `Leads.status` của CLB để di trú dữ liệu 1-1.
  */
 import { prisma } from "@/lib/prisma";
 
@@ -11,7 +11,7 @@ export const ADMISSIONS_PIPELINE_NAME = "Tuyển sinh Đào tạo";
 /** Deal.dealType cho hồ sơ tuyển sinh (phân biệt với deal bán sách). */
 export const ADMISSION_DEAL_TYPE = "ADMISSION";
 
-/** Tên các stage — khớp Leads.status bên CoVua (moi/da_lien_he/dang_ky_hoc_thu/da_chot/khong_phu_hop). */
+/** Tên các stage — khớp Leads.status bên CLB (moi/da_lien_he/dang_ky_hoc_thu/da_chot/khong_phu_hop). */
 export const ADMISSION_STAGES = {
   NEW: "Mới",
   CONTACTED: "Đã liên hệ",

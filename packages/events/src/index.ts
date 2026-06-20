@@ -5,9 +5,7 @@
 // ============================================================
 
 // ─── Core Types ─────────────────────────────────────────────
-export {
-  Module,
-} from './types';
+export { Module } from "./types";
 export type {
   BaseEvent,
   EventHandler,
@@ -16,11 +14,11 @@ export type {
   PublishOptions,
   SubscriptionOptions,
   EventFlowMeta,
-} from './types';
+} from "./types";
 
 // ─── Event Schemas ──────────────────────────────────────────
-export { AllEventSchemas } from './schemas';
-export type { AllEventTypes } from './schemas';
+export { AllEventSchemas } from "./schemas";
+export type { AllEventTypes } from "./schemas";
 
 // CRM Event Schemas
 export {
@@ -30,14 +28,14 @@ export {
   DealWonSchema,
   DealLostSchema,
   CRMEventSchemas,
-} from './schemas/crm.events';
+} from "./schemas/crm.events";
 export type {
   LeadCreated,
   LeadScored,
   LeadConverted,
   DealWon,
   DealLost,
-} from './schemas/crm.events';
+} from "./schemas/crm.events";
 
 // Accounting Event Schemas
 export {
@@ -47,14 +45,14 @@ export {
   PaymentReceivedSchema,
   JournalEntryPostedSchema,
   AccountingEventSchemas,
-} from './schemas/accounting.events';
+} from "./schemas/accounting.events";
 export type {
   InvoiceCreated,
   InvoiceApproved,
   InvoicePaid,
   PaymentReceived,
   JournalEntryPosted,
-} from './schemas/accounting.events';
+} from "./schemas/accounting.events";
 
 // Ecommerce Event Schemas
 export {
@@ -64,14 +62,14 @@ export {
   OrderCancelledSchema,
   PaymentCompletedSchema,
   EcommerceEventSchemas,
-} from './schemas/ecommerce.events';
+} from "./schemas/ecommerce.events";
 export type {
   OrderPlaced,
   OrderShipped,
   OrderDelivered,
   OrderCancelled,
   PaymentCompleted,
-} from './schemas/ecommerce.events';
+} from "./schemas/ecommerce.events";
 
 // MRP Event Schemas
 export {
@@ -81,14 +79,14 @@ export {
   StockLowSchema,
   QualityCheckPassedSchema,
   MRPEventSchemas,
-} from './schemas/mrp.events';
+} from "./schemas/mrp.events";
 export type {
   ProductionOrderCreated,
   ProductionCompleted,
   InventoryUpdated,
   StockLow,
   QualityCheckPassed,
-} from './schemas/mrp.events';
+} from "./schemas/mrp.events";
 
 // HRM Event Schemas
 export {
@@ -98,37 +96,37 @@ export {
   PayrollProcessedSchema,
   AttendanceRecordedSchema,
   HRMEventSchemas,
-} from './schemas/hrm.events';
+} from "./schemas/hrm.events";
 export type {
   EmployeeOnboarded,
   LeaveRequested,
   LeaveApproved,
   PayrollProcessed,
   AttendanceRecorded,
-} from './schemas/hrm.events';
+} from "./schemas/hrm.events";
 
-// CoVua (Cờ vua Dương Sinh) Event Schemas
+// CLB (Cờ vua Dương Sinh) Event Schemas
 export {
   TuitionPaymentReceivedSchema,
   CoachUpsertedSchema,
   LeadCapturedSchema,
-  CoVuaEventSchemas,
-} from './schemas/covua.events';
+  CLBEventSchemas,
+} from "./schemas/clb.events";
 export type {
   TuitionPaymentReceived,
   CoachUpserted,
   LeadCaptured,
-} from './schemas/covua.events';
+} from "./schemas/clb.events";
 
 // ─── Event Bus ──────────────────────────────────────────────
-export { EventBus, createEventBus } from './event-bus';
+export { EventBus, createEventBus } from "./event-bus";
 
 // ─── Event Flows ────────────────────────────────────────────
 export {
   mapDealWonToInvoice,
   CRMToAccountingFlow,
   validateInvoiceMapping,
-} from './flows/crm-to-accounting';
+} from "./flows/crm-to-accounting";
 
 export {
   checkInventoryAndCreateProductionOrder,
@@ -136,37 +134,33 @@ export {
   EcommerceToMRPFlows,
   validateProductionOrder,
   validateInventoryUpdate,
-} from './flows/ecommerce-to-mrp';
+} from "./flows/ecommerce-to-mrp";
 
 export {
   mapPayrollToJournalEntry,
   HRMToAccountingFlow,
   validatePayrollJournal,
   getAccountReconciliation,
-} from './flows/hrm-to-accounting';
+} from "./flows/hrm-to-accounting";
 
 export {
   mapTuitionPaymentToJournalEntry,
-  CoVuaToAccountingFlow,
+  CLBToAccountingFlow,
   validateTuitionJournal,
-} from './flows/covua-to-accounting';
+} from "./flows/clb-to-accounting";
 
-export {
-  AllEventFlows,
-  getFlowsByTrigger,
-  FlowRegistry,
-} from './flows';
+export { AllEventFlows, getFlowsByTrigger, FlowRegistry } from "./flows";
 
 // ─── Legacy API (backward compatibility) ────────────────────
-export { publish, publishBatch } from './publisher';
-export { subscribe } from './subscriber';
-export type { EventHandler as SubscriberEventHandler } from './subscriber';
+export { publish, publishBatch } from "./publisher";
+export { subscribe } from "./subscriber";
+export type { EventHandler as SubscriberEventHandler } from "./subscriber";
 export {
   getConnection,
   getJetStream,
   ensureStreams,
   closeConnection,
-} from './connection';
+} from "./connection";
 
 // ─── DLQ (Dead Letter Queue) ────────────────────────────────
 export {
@@ -175,8 +169,8 @@ export {
   calculateRetryDelay,
   shouldRetry,
   RETRY_POLICIES,
-} from './dlq';
-export type { DLQEntry, DLQStats, RetryPolicy } from './dlq';
+} from "./dlq";
+export type { DLQEntry, DLQStats, RetryPolicy } from "./dlq";
 
 // ─── Event Versioning + Idempotency ────────────────────────
 export {
@@ -187,5 +181,9 @@ export {
   processIncomingEvent,
   generateCorrelationId,
   generateCausationId,
-} from './versioning';
-export type { EventSchema, VersionedEnvelope, IdempotencyRecord } from './versioning';
+} from "./versioning";
+export type {
+  EventSchema,
+  VersionedEnvelope,
+  IdempotencyRecord,
+} from "./versioning";

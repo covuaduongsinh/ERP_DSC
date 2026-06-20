@@ -1,33 +1,42 @@
-'use client'
+"use client";
 
-import { useDroppable } from '@dnd-kit/core'
-import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
-import { cn } from '@/lib/utils'
-import { formatShortCurrency } from '@/lib/constants'
-import { DealCard } from './DealCard'
-import type { StageWithDeals } from '@/types'
+import { useDroppable } from "@dnd-kit/core";
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { cn } from "@/lib/utils";
+import { formatShortCurrency } from "@/lib/constants";
+import { DealCard } from "./DealCard";
+import type { StageWithDeals } from "@/types";
 
 interface KanbanColumnProps {
-  stage: StageWithDeals
+  stage: StageWithDeals;
+  basePath?: string;
+  showValue?: boolean;
 }
 
-export function KanbanColumn({ stage }: KanbanColumnProps) {
+export function KanbanColumn({
+  stage,
+  basePath = "/pipeline",
+  showValue = true,
+}: KanbanColumnProps) {
   const { setNodeRef, isOver } = useDroppable({
     id: stage.id,
-    data: { type: 'stage', stage },
-  })
+    data: { type: "stage", stage },
+  });
 
-  const totalValue = stage.deals.reduce((sum, d) => sum + Number(d.value), 0)
-  const dealIds = stage.deals.map((d) => d.id)
+  const totalValue = stage.deals.reduce((sum, d) => sum + Number(d.value), 0);
+  const dealIds = stage.deals.map((d) => d.id);
 
-  const isWon = stage.isWon
-  const isLost = stage.isLost
+  const isWon = stage.isWon;
+  const isLost = stage.isLost;
 
   return (
     <div
       className={cn(
-        'kanban-column flex flex-col',
-        isOver && 'border-[var(--crm-accent-ring)] bg-[var(--crm-accent-bg)]'
+        "kanban-column flex flex-col",
+        isOver && "border-[var(--crm-accent-ring)] bg-[var(--crm-accent-bg)]",
       )}
     >
       {/* Column header */}
@@ -44,16 +53,20 @@ export function KanbanColumn({ stage }: KanbanColumnProps) {
             {stage.deals.length}
           </span>
         </div>
-        <p className="text-xs text-[var(--crm-text-muted)]">{formatShortCurrency(totalValue)}</p>
+        {showValue && (
+          <p className="text-xs text-[var(--crm-text-muted)]">
+            {formatShortCurrency(totalValue)}
+          </p>
+        )}
       </div>
 
       {/* Droppable deal area */}
       <div
         ref={setNodeRef}
         className={cn(
-          'flex-1 p-2 space-y-2 overflow-y-auto min-h-[120px]',
-          isWon && 'bg-emerald-500/[0.02]',
-          isLost && 'bg-red-500/[0.02]'
+          "flex-1 p-2 space-y-2 overflow-y-auto min-h-[120px]",
+          isWon && "bg-emerald-500/[0.02]",
+          isLost && "bg-red-500/[0.02]",
         )}
       >
         <SortableContext items={dealIds} strategy={verticalListSortingStrategy}>
@@ -62,10 +75,17 @@ export function KanbanColumn({ stage }: KanbanColumnProps) {
               Kéo deal vào đây
             </div>
           ) : (
-            stage.deals.map((deal) => <DealCard key={deal.id} deal={deal} />)
+            stage.deals.map((deal) => (
+              <DealCard
+                key={deal.id}
+                deal={deal}
+                basePath={basePath}
+                showValue={showValue}
+              />
+            ))
           )}
         </SortableContext>
       </div>
     </div>
-  )
+  );
 }

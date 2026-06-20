@@ -58,9 +58,9 @@ export async function startAccountingEventHandlers(): Promise<void> {
     subscribeToInvoiceEvents(),
     // HRM events
     subscribeToPayrollEvents(),
-    // CoVua (Cờ vua Dương Sinh) events
-    subscribeToCoVuaPaymentEvents(),
-    subscribeToCoVuaCoachSession(),
+    // CLB (Cờ vua Dương Sinh) events
+    subscribeToCLBPaymentEvents(),
+    subscribeToCLBCoachSession(),
   ]);
 
   console.log(
@@ -344,14 +344,14 @@ async function subscribeToPayrollEvents(): Promise<void> {
   );
 }
 
-// ==================== CoVua Events (Cờ vua Dương Sinh) ====================
+// ==================== CLB Events (Cờ vua Dương Sinh) ====================
 
-async function subscribeToCoVuaPaymentEvents(): Promise<void> {
+async function subscribeToCLBPaymentEvents(): Promise<void> {
   // Thu học phí → ghi nhận doanh thu
   // Nợ 1111 (Tiền mặt) / Có 5113 (DT dịch vụ) + 5111 (DT bán sách) + 711 (TN khác)
   await subscribe(
-    "covua.payment.received",
-    `${CONSUMER_PREFIX}-covua-payment`,
+    "clb.payment.received",
+    `${CONSUMER_PREFIX}-clb-payment`,
     async (event) => {
       const data = event.data as Record<string, unknown>;
       const tuition = Number(data.tuitionAmount) || 0;
@@ -359,12 +359,12 @@ async function subscribeToCoVuaPaymentEvents(): Promise<void> {
       const other = Number(data.otherAmount) || 0;
       const total = Number(data.totalAmount) || tuition + book + other;
       const ref = (data.code as string) || (data.paymentId as string);
-      console.log(`[ACCOUNTING] CoVua payment received: ${ref} = ${total}`);
+      console.log(`[ACCOUNTING] CLB payment received: ${ref} = ${total}`);
 
       const lines: GLJournalEntry["lines"] = [
         {
           accountId: DEFAULT_ACCOUNTS.CASH_VND,
-          description: `Thu học phí CoVua - HV ${data.studentName || data.studentId}`,
+          description: `Thu học phí CLB - HV ${data.studentName || data.studentId}`,
           debitAmount: total,
           creditAmount: 0,
         },
@@ -391,9 +391,9 @@ async function subscribeToCoVuaPaymentEvents(): Promise<void> {
           : new Date(),
         journalType: "CASH_RECEIPT",
         source: "SYSTEM",
-        sourceModule: "covua",
+        sourceModule: "clb",
         sourceRef: data.paymentId as string,
-        description: `Ghi nhận doanh thu học phí CoVua - ${ref}`,
+        description: `Ghi nhận doanh thu học phí CLB - ${ref}`,
         lines,
       };
 
@@ -402,12 +402,12 @@ async function subscribeToCoVuaPaymentEvents(): Promise<void> {
   );
 }
 
-async function subscribeToCoVuaCoachSession(): Promise<void> {
+async function subscribeToCLBCoachSession(): Promise<void> {
   // HLV dạy xong một buổi → ghi nhận chi phí lương theo buổi.
   // Nợ 642 (CP quản lý — lương HLV) / Có 3341 (Phải trả NLĐ)
   await subscribe(
-    "covua.coach.session.completed",
-    `${CONSUMER_PREFIX}-covua-coach-session`,
+    "clb.coach.session.completed",
+    `${CONSUMER_PREFIX}-clb-coach-session`,
     async (event) => {
       const data = event.data as Record<string, unknown>;
       const pay = Number(data.pay) || 0;
@@ -416,16 +416,16 @@ async function subscribeToCoVuaCoachSession(): Promise<void> {
       const who =
         (data.employeeId as string) || (data.coachId as string) || "—";
       console.log(
-        `[ACCOUNTING] CoVua coach session: GV ${who} buổi ${ref} = ${pay}`,
+        `[ACCOUNTING] CLB coach session: GV ${who} buổi ${ref} = ${pay}`,
       );
 
       const journalEntry: GLJournalEntry = {
         entryDate: data.date ? new Date(data.date as string) : new Date(),
         journalType: "PAYROLL",
         source: "SYSTEM",
-        sourceModule: "covua",
+        sourceModule: "clb",
         sourceRef: ref,
-        description: `Lương HLV theo buổi (CoVua) - GV ${who}, buổi ${ref}`,
+        description: `Lương HLV theo buổi (CLB) - GV ${who}, buổi ${ref}`,
         lines: [
           {
             accountId: DEFAULT_ACCOUNTS.ADMIN_EXPENSE,

@@ -46,7 +46,7 @@ ARG NEXT_PUBLIC_SUPABASE_URL=""
 ARG NEXT_PUBLIC_SUPABASE_ANON_KEY=""
 ENV NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL}
 ENV NEXT_PUBLIC_SUPABASE_ANON_KEY=${NEXT_PUBLIC_SUPABASE_ANON_KEY}
-# CoVua (Payload CMS) có trang SSG đọc CMS lúc build → cần PAYLOAD_SECRET + DATABASE_URI
+# CLB (Payload CMS) có trang SSG đọc CMS lúc build → cần PAYLOAD_SECRET + DATABASE_URI
 # (DB phải REACHABLE lúc build; vd build với `--network vierp-network` để gọi postgres:5432).
 # Các app khác để RỖNG → vô hại.
 ARG PAYLOAD_SECRET=""
@@ -55,7 +55,7 @@ ARG NEXT_PUBLIC_SERVER_URL=""
 ENV PAYLOAD_SECRET=${PAYLOAD_SECRET}
 ENV DATABASE_URI=${DATABASE_URI}
 ENV NEXT_PUBLIC_SERVER_URL=${NEXT_PUBLIC_SERVER_URL}
-# CoVua: bật plugin S3 LÚC BUILD (payload.config bật khi có S3_BUCKET+S3_ENDPOINT) để
+# CLB: bật plugin S3 LÚC BUILD (payload.config bật khi có S3_BUCKET+S3_ENDPOINT) để
 # `generate:importmap` gồm S3ClientUploadHandler — thiếu nó thì admin trắng lúc chạy.
 ARG S3_BUCKET=""
 ARG S3_ENDPOINT=""

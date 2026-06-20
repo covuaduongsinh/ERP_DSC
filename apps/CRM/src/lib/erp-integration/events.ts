@@ -3,7 +3,7 @@
 //
 // - Publish: sự kiện front-office CRM (lead.converted, deal.won) + upsert Customer
 //   canonical lên kênh master-data (erp.customer.*) để chống trùng giữa các app.
-// - Subscribe: sự kiện vận hành từ CoVua (covua.>) để cập nhật view 360° trên
+// - Subscribe: sự kiện vận hành từ CLB (clb.>) để cập nhật view 360° trên
 //   Contact phụ huynh (đóng học phí, gia hạn, điểm danh).
 //
 // CHỈ chạy ở Node runtime (server). Được nạp qua dynamic import từ instrumentation
@@ -82,25 +82,25 @@ export async function publishCustomerUpsert(
   );
 }
 
-// ==================== Subscribers (reverse-sync CoVua → CRM) ====================
+// ==================== Subscribers (reverse-sync CLB → CRM) ====================
 
 /** Gắn toàn bộ consumer của CRM. Gọi một lần lúc khởi động (instrumentation). */
 export async function startCrmEventHandlers(): Promise<void> {
   console.log("[CRM] Starting event handlers…");
   await Promise.all([
-    subscribeCovuaPayment(),
-    subscribeCovuaRenewal(),
-    subscribeCovuaAttendance(),
-    subscribeCovuaStudentUpdated(),
+    subscribeClbPayment(),
+    subscribeClbRenewal(),
+    subscribeClbAttendance(),
+    subscribeClbStudentUpdated(),
   ]);
-  console.log("[CRM] Event handlers ready — listening covua.>");
+  console.log("[CRM] Event handlers ready — listening clb.>");
 }
 
-/** Điểm danh từ CoVua → cập nhật "hoạt động gần nhất" trên Contact phụ huynh (không tạo Activity để tránh nhiễu). */
-async function subscribeCovuaAttendance(): Promise<void> {
+/** Điểm danh từ CLB → cập nhật "hoạt động gần nhất" trên Contact phụ huynh (không tạo Activity để tránh nhiễu). */
+async function subscribeClbAttendance(): Promise<void> {
   await subscribe(
-    "covua.attendance.recorded",
-    `${CONSUMER_PREFIX}-covua-attendance`,
+    "clb.attendance.recorded",
+    `${CONSUMER_PREFIX}-clb-attendance`,
     async (event) => {
       const contact = await findParentContact(
         event.data as Record<string, unknown>,
@@ -114,28 +114,28 @@ async function subscribeCovuaAttendance(): Promise<void> {
   );
 }
 
-/** Học viên đổi cấp/trạng thái bên CoVua → cập nhật cache level trên ContactChild (cho 360°). */
-async function subscribeCovuaStudentUpdated(): Promise<void> {
+/** Học viên đổi cấp/trạng thái bên CLB → cập nhật cache level trên ContactChild (cho 360°). */
+async function subscribeClbStudentUpdated(): Promise<void> {
   await subscribe(
-    "covua.student.updated",
-    `${CONSUMER_PREFIX}-covua-student`,
+    "clb.student.updated",
+    `${CONSUMER_PREFIX}-clb-student`,
     async (event) => {
       const data = event.data as Record<string, unknown>;
       const studentId = data.studentId as string | undefined;
       if (!studentId) return;
       await prisma.contactChild.updateMany({
-        where: { covuaStudentId: studentId },
+        where: { clbStudentId: studentId },
         data: { level: (data.levelId as string) ?? undefined },
       });
     },
   );
 }
 
-/** Học phí từ CoVua → ghi nhận hoạt động + cập nhật 360° trên Contact phụ huynh. */
-async function subscribeCovuaPayment(): Promise<void> {
+/** Học phí từ CLB → ghi nhận hoạt động + cập nhật 360° trên Contact phụ huynh. */
+async function subscribeClbPayment(): Promise<void> {
   await subscribe(
-    "covua.payment.received",
-    `${CONSUMER_PREFIX}-covua-payment`,
+    "clb.payment.received",
+    `${CONSUMER_PREFIX}-clb-payment`,
     async (event) => {
       const data = event.data as Record<string, unknown>;
       const total =
@@ -158,7 +158,7 @@ async function subscribeCovuaPayment(): Promise<void> {
                 data: {
                   type: "NOTE",
                   subject: `Đã đóng học phí: ${total.toLocaleString("vi-VN")}đ`,
-                  description: `Đồng bộ từ CoVua (HV ${data.studentName ?? data.studentId ?? "—"}).`,
+                  description: `Đồng bộ từ CLB (HV ${data.studentName ?? data.studentId ?? "—"}).`,
                   isCompleted: true,
                   completedAt: new Date(),
                   contactId: contact.id,
@@ -172,11 +172,11 @@ async function subscribeCovuaPayment(): Promise<void> {
   );
 }
 
-/** Yêu cầu gia hạn từ CoVua → đánh dấu để chăm sóc giữ chân. */
-async function subscribeCovuaRenewal(): Promise<void> {
+/** Yêu cầu gia hạn từ CLB → đánh dấu để chăm sóc giữ chân. */
+async function subscribeClbRenewal(): Promise<void> {
   await subscribe(
-    "covua.renewal.requested",
-    `${CONSUMER_PREFIX}-covua-renewal`,
+    "clb.renewal.requested",
+    `${CONSUMER_PREFIX}-clb-renewal`,
     async (event) => {
       const data = event.data as Record<string, unknown>;
       const contact = await findParentContact(data);
@@ -187,7 +187,7 @@ async function subscribeCovuaRenewal(): Promise<void> {
         data: {
           type: "FOLLOW_UP",
           subject: "Phụ huynh yêu cầu gia hạn — cần chăm sóc",
-          description: `Đồng bộ từ CoVua (HV ${data.studentName ?? data.studentId ?? "—"}).`,
+          description: `Đồng bộ từ CLB (HV ${data.studentName ?? data.studentId ?? "—"}).`,
           dueAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
           contactId: contact.id,
           userId: systemUserId,
@@ -197,19 +197,19 @@ async function subscribeCovuaRenewal(): Promise<void> {
   );
 }
 
-/** Tìm Contact phụ huynh từ payload CoVua: ưu tiên covuaParentId, rồi qua con (covuaStudentId). */
+/** Tìm Contact phụ huynh từ payload CLB: ưu tiên clbParentId, rồi qua con (clbStudentId). */
 async function findParentContact(data: Record<string, unknown>) {
   const parentId = data.parentId as string | undefined;
   if (parentId) {
     const byParent = await prisma.contact.findFirst({
-      where: { covuaParentId: parentId },
+      where: { clbParentId: parentId },
     });
     if (byParent) return byParent;
   }
   const studentId = data.studentId as string | undefined;
   if (studentId) {
     const child = await prisma.contactChild.findFirst({
-      where: { covuaStudentId: studentId },
+      where: { clbStudentId: studentId },
       select: { contactId: true },
     });
     if (child)

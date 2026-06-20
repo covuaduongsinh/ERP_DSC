@@ -69,11 +69,11 @@ const MODULE_REGISTRY: Record<string, ModuleConfig> = {
     icon: "Mail",
     description: "Email thông minh",
   },
-  covua: {
-    name: "covua",
-    label: "CoVua",
+  clb: {
+    name: "clb",
+    label: "CLB",
     port: 3020,
-    baseUrl: process.env.NEXT_PUBLIC_COVUA_URL || "http://localhost:3020",
+    baseUrl: process.env.NEXT_PUBLIC_CLB_URL || "http://localhost:3020",
     color: "#14B8A6",
     icon: "GraduationCap",
     description: "Đào tạo cờ vua (CLB)",

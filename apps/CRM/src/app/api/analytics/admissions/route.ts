@@ -75,9 +75,9 @@ export async function GET(req: NextRequest) {
     const lost = funnel
       .filter((f) => f.isLost)
       .reduce((sum, f) => sum + f.count, 0);
-    // "Đã chuyển đổi" = thực sự đã tạo Học viên bên CoVua (handoff thành công).
+    // "Đã chuyển đổi" = thực sự đã tạo Học viên bên CLB (handoff thành công).
     const converted = await prisma.deal.count({
-      where: { ...baseWhere, covuaStudentId: { not: null } },
+      where: { ...baseWhere, clbStudentId: { not: null } },
     });
 
     return apiSuccess({

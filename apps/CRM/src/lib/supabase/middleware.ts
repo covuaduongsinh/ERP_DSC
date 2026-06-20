@@ -14,7 +14,7 @@ export async function updateSession(request: NextRequest) {
     pathname.startsWith("/callback") ||
     pathname.startsWith("/api/auth/register") ||
     pathname.startsWith("/api/docs/openapi") ||
-    pathname.startsWith("/api/intake"); // Form tuyển sinh công khai (thay submitConsultation/Trial của CoVua)
+    pathname.startsWith("/api/intake"); // Form tuyển sinh công khai (thay submitConsultation/Trial của CLB)
 
   // Portal routes have their own auth — don't touch
   const isPortalRoute =

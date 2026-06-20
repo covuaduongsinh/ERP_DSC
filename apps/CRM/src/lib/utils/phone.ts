@@ -1,7 +1,7 @@
 /**
  * Chuẩn hóa & kiểm tra SĐT Việt Nam.
- * Port từ CoVua (apps/CoVua/src/lib/phone.ts) để dò trùng Contact↔Parent nhất quán
- * giữa CRM và CoVua khi nhận lead từ form web.
+ * Port từ CLB (apps/CLB/src/lib/phone.ts) để dò trùng Contact↔Parent nhất quán
+ * giữa CRM và CLB khi nhận lead từ form web.
  */
 
 /** Bỏ khoảng trắng, dấu chấm, gạch, ngoặc. */

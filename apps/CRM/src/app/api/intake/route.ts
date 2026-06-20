@@ -19,7 +19,7 @@ export const dynamic = "force-dynamic";
 /**
  * POST /api/intake — Tiếp nhận lead tuyển sinh đào tạo từ form web CÔNG KHAI
  * (tư vấn / đăng ký học thử). Đây là cửa thay thế cho submitConsultation /
- * submitTrialRequest của CoVua sau khi tách "Tuyển sinh/CRM" sang CRM.
+ * submitTrialRequest của CLB sau khi tách "Tuyển sinh/CRM" sang CRM.
  *
  * Tạo Contact(status=LEAD) + Deal trong pipeline "Tuyển sinh Đào tạo". Dò trùng
  * theo SĐT đã chuẩn hóa để không tạo nhiều phụ huynh cho cùng một số.

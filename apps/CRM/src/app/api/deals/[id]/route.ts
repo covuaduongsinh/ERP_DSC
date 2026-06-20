@@ -42,6 +42,16 @@ export async function GET(
             contact: {
               include: {
                 tags: { include: { tag: true } },
+                // Con của phụ huynh — phục vụ view chi tiết lead tuyển sinh.
+                children: {
+                  orderBy: { createdAt: "asc" },
+                  select: {
+                    id: true,
+                    fullName: true,
+                    level: true,
+                    clbStudentId: true,
+                  },
+                },
               },
             },
           },
@@ -235,11 +245,11 @@ export async function PATCH(
         })
         .catch(() => {});
 
-      // Handoff tuyển sinh: Deal đào tạo "Đã chốt" → tạo Parent+Student+Enrollment bên CoVua
-      // (idempotent; best-effort — không chặn cập nhật deal nếu CoVua offline).
-      if (existing.dealType === ADMISSION_DEAL_TYPE && !deal.covuaStudentId) {
+      // Handoff tuyển sinh: Deal đào tạo "Đã chốt" → tạo Parent+Student+Enrollment bên CLB
+      // (idempotent; best-effort — không chặn cập nhật deal nếu CLB offline).
+      if (existing.dealType === ADMISSION_DEAL_TYPE && !deal.clbStudentId) {
         await handleAdmissionWon(deal.id).catch((e) =>
-          console.error("[CRM] handoff CoVua thất bại:", e),
+          console.error("[CRM] handoff CLB thất bại:", e),
         );
       }
     }

@@ -2,22 +2,22 @@
 // @vierp/events - Core Event Types
 // ============================================================
 
-import type { z } from 'zod';
+import type { z } from "zod";
 
 /**
  * Module identifier enum for event source/routing
  * Các module trong hệ thống ERP
  */
 export enum Module {
-  CRM = 'crm',
-  ACCOUNTING = 'accounting',
-  ECOMMERCE = 'ecommerce',
-  MRP = 'mrp',
-  HRM = 'hrm',
-  OTB = 'otb',
-  TPM = 'tpm',
-  PM = 'pm',
-  COVUA = 'covua',
+  CRM = "crm",
+  ACCOUNTING = "accounting",
+  ECOMMERCE = "ecommerce",
+  MRP = "mrp",
+  HRM = "hrm",
+  OTB = "otb",
+  TPM = "tpm",
+  PM = "pm",
+  CLB = "clb",
 }
 
 /**
@@ -58,7 +58,7 @@ export type EventHandler<T = unknown> = (event: BaseEvent<T>) => Promise<void>;
  * Hàm xử lý sự kiện có kiểm tra kiểu
  */
 export type TypedEventHandler<S extends z.ZodType> = (
-  event: BaseEvent<z.infer<S>>
+  event: BaseEvent<z.infer<S>>,
 ) => Promise<void>;
 
 /**

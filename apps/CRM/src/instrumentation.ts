@@ -1,6 +1,6 @@
 /**
  * Next.js instrumentation — chạy MỘT LẦN khi server CRM khởi động.
- * Bật NATS event subscriber để đồng bộ ngược dữ liệu vận hành từ CoVua (covua.>)
+ * Bật NATS event subscriber để đồng bộ ngược dữ liệu vận hành từ CLB (clb.>)
  * về CRM (view 360° trên Contact phụ huynh).
  *
  * Guard:
@@ -19,7 +19,7 @@ export async function register() {
     const { ensureStreams } = await import("@vierp/events");
     const { startCrmEventHandlers } =
       await import("./lib/erp-integration/events");
-    // Đảm bảo các JetStream stream (gồm VIERP_COVUA) tồn tại trước khi gắn consumer.
+    // Đảm bảo các JetStream stream (gồm VIERP_CLB) tồn tại trước khi gắn consumer.
     await ensureStreams();
     await startCrmEventHandlers();
   } catch (err) {
